@@ -119,8 +119,11 @@ public final class WcpeLib extends JavaPlugin {
         }, WcpeLib.getInstance());
 
         PlayerServerMapper playerServerMapper = session.getMapper(PlayerServerMapper.class);
-        playerServerMapper.dropTable();
-        playerServerMapper.createTable();
+        if (playerServerMapper.existTable() == 0) {
+            playerServerMapper.createTable();
+        }else{
+            playerServerMapper.dropTable();
+        }
         WcpeLib.getInstance().getServer().getPluginManager().registerEvents(new Listener() {
             @EventHandler(priority = EventPriority.HIGH)
             public void join(PlayerJoinEvent e) {
