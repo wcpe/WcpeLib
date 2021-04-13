@@ -1,0 +1,5 @@
+name: WcpeLib
+main: top.wcpe.wcpelib.WcpeLib
+version: 1.0.0
+author: QQ1837019522
+commands:
