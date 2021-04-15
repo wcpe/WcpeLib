@@ -86,6 +86,25 @@ public class Slot<E extends SlotExtend> {
 		public Builder() {
 		}
 
+		@SuppressWarnings("deprecation")
+		public Builder(ItemStack item) {
+			if (item != null) {
+				this.id = item.getTypeId();
+				this.data = item.getData().getData();
+				ItemMeta itemMeta = item.getItemMeta();
+				if (itemMeta != null) {
+					if (itemMeta.hasDisplayName())
+						this.name = itemMeta.getDisplayName();
+					if (itemMeta.hasLore())
+						this.lore = itemMeta.getLore();
+					this.unbreakable = itemMeta.isUnbreakable();
+				}
+				this.amount = item.getAmount();
+				this.durability = item.getDurability();
+				this.enchantments = item.getEnchantments();
+			}
+		}
+
 		public Builder<E> name(String name) {
 			this.name = name;
 			return this;

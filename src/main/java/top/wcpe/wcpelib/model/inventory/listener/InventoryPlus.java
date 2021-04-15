@@ -99,7 +99,10 @@ public class InventoryPlus {
 
 	public void refreshInventory() {
 		for (Entry<Integer, Slot<?>> entry : this.slotMap.entrySet()) {
-			this.rawInventory.setItem(entry.getKey(), entry.getValue().getItemStack());
+			if (entry.getValue() == null)
+				this.rawInventory.setItem(entry.getKey(), null);
+			else
+				this.rawInventory.setItem(entry.getKey(), entry.getValue().getItemStack());
 		}
 	}
 

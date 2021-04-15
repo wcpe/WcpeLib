@@ -40,12 +40,13 @@ public class InventoryListener implements Listener {
 			if (inventoryPlus.isDisDoubleClick() && e.getClick() == ClickType.DOUBLE_CLICK) {
 				e.setCancelled(true);
 			}
-
 			int rawSlot = e.getRawSlot();
-			int min = inventoryPlus.getRow() * 9;
-			int max = inventoryPlus.getRow() * 9 + 35;
-			if (rawSlot >= min && rawSlot <= max) {
-				e.setCancelled(true);
+			if (inventoryPlus.isDisClickPlayerGui()) {
+				int min = inventoryPlus.getRow() * 9;
+				int max = inventoryPlus.getRow() * 9 + 35;
+				if (rawSlot >= min && rawSlot <= max) {
+					e.setCancelled(true);
+				}
 			}
 			Slot<?> slot = inventoryPlus.getSlotMap().get(rawSlot);
 			if (slot == null) {
