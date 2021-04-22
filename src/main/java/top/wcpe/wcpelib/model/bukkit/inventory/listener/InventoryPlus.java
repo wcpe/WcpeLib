@@ -1,4 +1,4 @@
-package top.wcpe.wcpelib.model.inventory.listener;
+package top.wcpe.wcpelib.model.bukkit.inventory.listener;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -11,10 +11,10 @@ import org.bukkit.inventory.InventoryView;
 
 import lombok.Getter;
 import lombok.Setter;
-import top.wcpe.wcpelib.model.inventory.entity.Slot;
-import top.wcpe.wcpelib.model.inventory.listener.inter.InventoryCloseEventFunctional;
-import top.wcpe.wcpelib.model.inventory.listener.inter.InventoryOpenEventFunctional;
-import top.wcpe.wcpelib.model.inventory.listener.inter.RefreshInventoryPlusFunctional;
+import top.wcpe.wcpelib.model.bukkit.inventory.entity.Slot;
+import top.wcpe.wcpelib.model.bukkit.inventory.listener.inter.InventoryCloseEventFunctional;
+import top.wcpe.wcpelib.model.bukkit.inventory.listener.inter.InventoryOpenEventFunctional;
+import top.wcpe.wcpelib.model.bukkit.inventory.listener.inter.RefreshInventoryPlusFunctional;
 
 /**
  * {@link Inventory}增强版 233

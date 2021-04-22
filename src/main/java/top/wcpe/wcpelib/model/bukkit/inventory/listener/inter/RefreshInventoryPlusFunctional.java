@@ -1,10 +1,10 @@
-package top.wcpe.wcpelib.model.inventory.listener.inter;
+package top.wcpe.wcpelib.model.bukkit.inventory.listener.inter;
 
 import java.util.stream.Stream;
 
 import org.bukkit.entity.Player;
 
-import top.wcpe.wcpelib.model.inventory.listener.InventoryPlus;
+import top.wcpe.wcpelib.model.bukkit.inventory.listener.InventoryPlus;
 /**
  * {@link InventoryPlus}刷新函数接口
  * @author WCPE

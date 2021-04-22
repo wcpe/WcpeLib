@@ -1,4 +1,4 @@
-package top.wcpe.wcpelib.model.inventory.listener;
+package top.wcpe.wcpelib.model.bukkit.inventory.listener;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;

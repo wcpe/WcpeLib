@@ -1,4 +1,4 @@
-package top.wcpe.wcpelib.model.vault;
+package top.wcpe.wcpelib.model.bukkit.otherpluginapi.vault;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;

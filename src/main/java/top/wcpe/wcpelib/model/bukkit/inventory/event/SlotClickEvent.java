@@ -1,12 +1,12 @@
-package top.wcpe.wcpelib.model.inventory.event;
+package top.wcpe.wcpelib.model.bukkit.inventory.event;
 
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-import top.wcpe.wcpelib.model.inventory.entity.Slot;
-import top.wcpe.wcpelib.model.inventory.listener.InventoryPlus;
+import top.wcpe.wcpelib.model.bukkit.inventory.entity.Slot;
+import top.wcpe.wcpelib.model.bukkit.inventory.listener.InventoryPlus;
 /**
  * {@link InventoryPlus}中 {@link Slot}的点击事件
  * @author WCPE

@@ -1,4 +1,4 @@
-package top.wcpe.wcpelib.model.bukkit.builder;
+package top.wcpe.wcpelib.model.bukkit.itemstack;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

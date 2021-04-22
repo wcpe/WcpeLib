@@ -1,4 +1,4 @@
-package top.wcpe.wcpelib.model.inventory.listener;
+package top.wcpe.wcpelib.model.bukkit.inventory.listener;
 
 import java.util.Map.Entry;
 
@@ -10,14 +10,14 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
-import top.wcpe.wcpelib.model.inventory.entity.InventoryCloseEventDTO;
-import top.wcpe.wcpelib.model.inventory.entity.InventoryOpenEventDTO;
-import top.wcpe.wcpelib.model.inventory.entity.Slot;
-import top.wcpe.wcpelib.model.inventory.entity.SlotDTO;
-import top.wcpe.wcpelib.model.inventory.listener.InventoryManager.InventoryPlusMap;
-import top.wcpe.wcpelib.model.inventory.listener.inter.InventoryCloseEventFunctional;
-import top.wcpe.wcpelib.model.inventory.listener.inter.InventoryOpenEventFunctional;
-import top.wcpe.wcpelib.model.inventory.listener.inter.SlotEventFunctional;
+import top.wcpe.wcpelib.model.bukkit.inventory.entity.InventoryCloseEventDTO;
+import top.wcpe.wcpelib.model.bukkit.inventory.entity.InventoryOpenEventDTO;
+import top.wcpe.wcpelib.model.bukkit.inventory.entity.Slot;
+import top.wcpe.wcpelib.model.bukkit.inventory.entity.SlotDTO;
+import top.wcpe.wcpelib.model.bukkit.inventory.listener.InventoryManager.InventoryPlusMap;
+import top.wcpe.wcpelib.model.bukkit.inventory.listener.inter.InventoryCloseEventFunctional;
+import top.wcpe.wcpelib.model.bukkit.inventory.listener.inter.InventoryOpenEventFunctional;
+import top.wcpe.wcpelib.model.bukkit.inventory.listener.inter.SlotEventFunctional;
 
 /**
  * {@link InventoryPlus}的监听事件

@@ -1,6 +1,6 @@
-package top.wcpe.wcpelib.model.inventory.entity;
+package top.wcpe.wcpelib.model.bukkit.inventory.entity;
 
-import top.wcpe.wcpelib.model.inventory.listener.InventoryPlus;
+import top.wcpe.wcpelib.model.bukkit.inventory.listener.InventoryPlus;
 
 /**
  * {@link InventoryPlus}中{@link Slot}的扩展对象

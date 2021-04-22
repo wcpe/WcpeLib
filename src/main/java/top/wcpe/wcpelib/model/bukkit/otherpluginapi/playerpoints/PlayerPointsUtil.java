@@ -1,4 +1,4 @@
-package top.wcpe.wcpelib.model.playerpoints;
+package top.wcpe.wcpelib.model.bukkit.otherpluginapi.playerpoints;
 
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;

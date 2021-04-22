@@ -1,7 +1,7 @@
-package top.wcpe.wcpelib.model.inventory.listener.inter;
+package top.wcpe.wcpelib.model.bukkit.inventory.listener.inter;
 
-import top.wcpe.wcpelib.model.inventory.entity.InventoryCloseEventDTO;
-import top.wcpe.wcpelib.model.inventory.listener.InventoryPlus;
+import top.wcpe.wcpelib.model.bukkit.inventory.entity.InventoryCloseEventDTO;
+import top.wcpe.wcpelib.model.bukkit.inventory.listener.InventoryPlus;
 
 /**
  * {@link InventoryPlus}关闭函数接口

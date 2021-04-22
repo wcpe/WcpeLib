@@ -1,4 +1,4 @@
-package top.wcpe.wcpelib.model.inventory.entity;
+package top.wcpe.wcpelib.model.bukkit.inventory.entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import lombok.Getter;
-import top.wcpe.wcpelib.model.inventory.listener.InventoryPlus;
-import top.wcpe.wcpelib.model.inventory.listener.inter.SlotEventFunctional;
+import top.wcpe.wcpelib.model.bukkit.inventory.listener.InventoryPlus;
+import top.wcpe.wcpelib.model.bukkit.inventory.listener.inter.SlotEventFunctional;
 
 /**
  * {@link InventoryPlus}中的格子

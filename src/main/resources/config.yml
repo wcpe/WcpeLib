@@ -1,8 +1,8 @@
 ServerName: "xxx"
 Mysql:
-  Enable: false
-  Url: "localhost"
-  User: "root"
-  Port: 3306
-  Password: "root"
-  Database: "test"
+  enable: false
+  url: "localhost"
+  user: "root"
+  port: 3306
+  password: "root"
+  database: "test"

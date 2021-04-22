@@ -1,9 +1,9 @@
-package top.wcpe.wcpelib.model.inventory.entity;
+package top.wcpe.wcpelib.model.bukkit.inventory.entity;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import lombok.Data;
-import top.wcpe.wcpelib.model.inventory.listener.InventoryPlus;
+import top.wcpe.wcpelib.model.bukkit.inventory.listener.InventoryPlus;
 /**
  * {@link InventoryPlus}中格子数据传输对象
  * @author WCPE
