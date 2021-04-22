@@ -159,7 +159,6 @@ public class JSONArray implements Iterable<Object> {
      *             If there is a syntax error.
      */
     public JSONArray(String source) throws JSONException {
-
         this(new JSONTokener(source));
     }
 
@@ -174,9 +173,37 @@ public class JSONArray implements Iterable<Object> {
             this.myArrayList = new ArrayList<Object>();
         } else {
             this.myArrayList = new ArrayList<Object>(collection.size());
-        	for (Object o: collection){
-        		this.myArrayList.add(JSONObject.wrap(o));
-        	}
+            this.addAll(collection, true);
+        }
+    }
+
+    /**
+     * Construct a JSONArray from an Iterable. This is a shallow copy.
+     *
+     * @param iter
+     *            A Iterable collection.
+     */
+    public JSONArray(Iterable<?> iter) {
+        this();
+        if (iter == null) {
+            return;
+        }
+        this.addAll(iter, true);
+    }
+
+    /**
+     * Construct a JSONArray from another JSONArray. This is a shallow copy.
+     *
+     * @param array
+     *            A array.
+     */
+    public JSONArray(JSONArray array) {
+        if (array == null) {
+            this.myArrayList = new ArrayList<Object>();
+        } else {
+            // shallow copy directly the internal array lists as any wrapping
+            // should have been done already in the original JSONArray
+            this.myArrayList = new ArrayList<Object>(array.myArrayList);
         }
     }
 
@@ -194,16 +221,27 @@ public class JSONArray implements Iterable<Object> {
      */
     public JSONArray(Object array) throws JSONException {
         this();
-        if (array.getClass().isArray()) {
-            int length = Array.getLength(array);
-            this.myArrayList.ensureCapacity(length);
-            for (int i = 0; i < length; i += 1) {
-                this.put(JSONObject.wrap(Array.get(array, i)));
-            }
-        } else {
+        if (!array.getClass().isArray()) {
             throw new JSONException(
                     "JSONArray initial value should be a string or collection or array.");
         }
+        this.addAll(array, true);
+    }
+
+    /**
+     * Construct a JSONArray with the specified initial capacity.
+     *
+     * @param initialCapacity
+     *            the initial capacity of the JSONArray.
+     * @throws JSONException
+     *             If the initial capacity is negative.
+     */
+    public JSONArray(int initialCapacity) throws JSONException {
+    	if (initialCapacity < 0) {
+            throw new JSONException(
+                    "JSONArray initial capacity cannot be negative.");
+    	}
+    	this.myArrayList = new ArrayList<Object>(initialCapacity);
     }
 
     @Override
@@ -527,6 +565,14 @@ public class JSONArray implements Iterable<Object> {
      */
     public int length() {
         return this.myArrayList.size();
+    }
+
+    /**
+     * Removes all of the elements from this JSONArray.
+     * The JSONArray will be empty after this call returns.
+     */
+    public void clear() {
+        this.myArrayList.clear();
     }
 
     /**
@@ -1159,6 +1205,62 @@ public class JSONArray implements Iterable<Object> {
         }
         return this.put(value);
     }
+
+    /**
+     * Put a collection's elements in to the JSONArray.
+     *
+     * @param collection
+     *            A Collection.
+     * @return this. 
+     */
+    public JSONArray putAll(Collection<?> collection) {
+        this.addAll(collection, false);
+        return this;
+    }
+    
+    /**
+     * Put an Iterable's elements in to the JSONArray.
+     *
+     * @param iter
+     *            An Iterable.
+     * @return this. 
+     */
+    public JSONArray putAll(Iterable<?> iter) {
+        this.addAll(iter, false);
+        return this;
+    }
+
+    /**
+     * Put a JSONArray's elements in to the JSONArray.
+     *
+     * @param array
+     *            A JSONArray.
+     * @return this. 
+     */
+    public JSONArray putAll(JSONArray array) {
+        // directly copy the elements from the source array to this one
+        // as all wrapping should have been done already in the source.
+        this.myArrayList.addAll(array.myArrayList);
+        return this;
+    }
+
+    /**
+     * Put an array's elements in to the JSONArray.
+     *
+     * @param array
+     *            Array. If the parameter passed is null, or not an array or Iterable, an
+     *            exception will be thrown.
+     * @return this. 
+     *
+     * @throws JSONException
+     *            If not an array, JSONArray, Iterable or if an value is non-finite number.
+     * @throws NullPointerException
+     *            Thrown if the array parameter is null.
+     */
+    public JSONArray putAll(Object array) throws JSONException {
+        this.addAll(array, false);
+        return this;
+    }
     
     /**
      * Creates a JSONPointer using an initialization string and tries to 
@@ -1280,6 +1382,8 @@ public class JSONArray implements Iterable<Object> {
                 if (!((JSONArray)valueThis).similar(valueOther)) {
                     return false;
                 }
+            } else if (valueThis instanceof Number && valueOther instanceof Number) {
+                return JSONObject.isNumberSimilar((Number)valueThis, (Number)valueOther);
             } else if (!valueThis.equals(valueOther)) {
                 return false;
             }
@@ -1334,7 +1438,7 @@ public class JSONArray implements Iterable<Object> {
     /**
      * Make a pretty-printed JSON text of this JSONArray.
      * 
-     * <p>If <code>indentFactor > 0</code> and the {@link JSONArray} has only
+     * <p>If <pre> {@code indentFactor > 0}</pre> and the {@link JSONArray} has only
      * one element, then the array will be output on a single line:
      * <pre>{@code [1]}</pre>
      * 
@@ -1356,7 +1460,7 @@ public class JSONArray implements Iterable<Object> {
      *         object, beginning with <code>[</code>&nbsp;<small>(left
      *         bracket)</small> and ending with <code>]</code>
      *         &nbsp;<small>(right bracket)</small>.
-     * @throws JSONException
+     * @throws JSONException if a called function fails
      */
     public String toString(int indentFactor) throws JSONException {
         StringWriter sw = new StringWriter();
@@ -1371,9 +1475,9 @@ public class JSONArray implements Iterable<Object> {
      * <p><b>
      * Warning: This method assumes that the data structure is acyclical.
      *</b>
-     *
+     * @param writer the writer object
      * @return The writer.
-     * @throws JSONException
+     * @throws JSONException if a called function fails
      */
     public Writer write(Writer writer) throws JSONException {
         return this.write(writer, 0, 0);
@@ -1382,7 +1486,7 @@ public class JSONArray implements Iterable<Object> {
     /**
      * Write the contents of the JSONArray as JSON text to a writer.
      * 
-     * <p>If <code>indentFactor > 0</code> and the {@link JSONArray} has only
+     * <p>If <pre>{@code indentFactor > 0}</pre> and the {@link JSONArray} has only
      * one element, then the array will be output on a single line:
      * <pre>{@code [1]}</pre>
      * 
@@ -1405,7 +1509,7 @@ public class JSONArray implements Iterable<Object> {
      * @param indent
      *            The indentation of the top level.
      * @return The writer.
-     * @throws JSONException
+     * @throws JSONException if a called function fails or unable to write
      */
     public Writer write(Writer writer, int indentFactor, int indent)
             throws JSONException {
@@ -1484,6 +1588,94 @@ public class JSONArray implements Iterable<Object> {
      */
     public boolean isEmpty() {
         return this.myArrayList.isEmpty();
+    }
+
+    /**
+     * Add a collection's elements to the JSONArray.
+     *
+     * @param collection
+     *            A Collection.
+     * @param wrap
+     *            {@code true} to call {@link JSONObject#wrap(Object)} for each item,
+     *            {@code false} to add the items directly
+     *            
+     */
+    private void addAll(Collection<?> collection, boolean wrap) {
+        this.myArrayList.ensureCapacity(this.myArrayList.size() + collection.size());
+        if (wrap) {
+            for (Object o: collection){
+                this.put(JSONObject.wrap(o));
+            }
+        } else {
+            for (Object o: collection){
+                this.put(o);
+            }
+        }
+    }
+
+    /**
+     * Add an Iterable's elements to the JSONArray.
+     *
+     * @param iter
+     *            An Iterable.
+     * @param wrap
+     *            {@code true} to call {@link JSONObject#wrap(Object)} for each item,
+     *            {@code false} to add the items directly
+     */
+    private void addAll(Iterable<?> iter, boolean wrap) {
+        if (wrap) {
+            for (Object o: iter){
+                this.put(JSONObject.wrap(o));
+            }
+        } else {
+            for (Object o: iter){
+                this.put(o);
+            }
+        }
+    }
+    
+    /**
+     * Add an array's elements to the JSONArray.
+     *
+     * @param array
+     *            Array. If the parameter passed is null, or not an array,
+     *            JSONArray, Collection, or Iterable, an exception will be
+     *            thrown.
+     * @param wrap
+     *            {@code true} to call {@link JSONObject#wrap(Object)} for each item,
+     *            {@code false} to add the items directly
+     *
+     * @throws JSONException
+     *            If not an array or if an array value is non-finite number.
+     * @throws NullPointerException
+     *            Thrown if the array parameter is null.
+     */
+    private void addAll(Object array, boolean wrap) throws JSONException {
+        if (array.getClass().isArray()) {
+            int length = Array.getLength(array);
+            this.myArrayList.ensureCapacity(this.myArrayList.size() + length);
+            if (wrap) {
+                for (int i = 0; i < length; i += 1) {
+                    this.put(JSONObject.wrap(Array.get(array, i)));
+                }
+            } else {
+                for (int i = 0; i < length; i += 1) {
+                    this.put(Array.get(array, i));
+                }
+            }
+        } else if (array instanceof JSONArray) {
+            // use the built in array list `addAll` as all object
+            // wrapping should have been completed in the original
+            // JSONArray
+            this.myArrayList.addAll(((JSONArray)array).myArrayList);
+        } else if (array instanceof Collection) {
+            this.addAll((Collection<?>)array, wrap);
+        } else if (array instanceof Iterable) {
+            this.addAll((Iterable<?>)array, wrap);
+        } else {
+            throw new JSONException(
+                    "JSONArray initial value should be a string or collection or array.");
+        }
     }
     
     /**

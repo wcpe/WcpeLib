@@ -68,6 +68,7 @@ public class JSONPointer {
         /**
          * Creates a {@code JSONPointer} instance using the tokens previously set using the
          * {@link #append(String)} method calls.
+         * @return a JSONPointer object
          */
         public JSONPointer build() {
             return new JSONPointer(this.refTokens);
@@ -186,10 +187,11 @@ public class JSONPointer {
         this.refTokens = new ArrayList<String>(refTokens);
     }
 
+    /**
+     * @see https://tools.ietf.org/html/rfc6901#section-3
+     */
     private static String unescape(String token) {
-        return token.replace("~1", "/").replace("~0", "~")
-                .replace("\\\"", "\"")
-                .replace("\\\\", "\\");
+        return token.replace("~1", "/").replace("~0", "~");
     }
 
     /**
@@ -262,21 +264,21 @@ public class JSONPointer {
     /**
      * Escapes path segment values to an unambiguous form.
      * The escape char to be inserted is '~'. The chars to be escaped 
-     * are ~, which maps to ~0, and /, which maps to ~1. Backslashes
-     * and double quote chars are also escaped.
+     * are ~, which maps to ~0, and /, which maps to ~1.
      * @param token the JSONPointer segment value to be escaped
      * @return the escaped value for the token
+     * 
+     * @see https://tools.ietf.org/html/rfc6901#section-3
      */
     private static String escape(String token) {
         return token.replace("~", "~0")
-                .replace("/", "~1")
-                .replace("\\", "\\\\")
-                .replace("\"", "\\\"");
+                .replace("/", "~1");
     }
 
     /**
      * Returns a string representing the JSONPointer path value using URI
      * fragment identifier representation
+     * @return a uri fragment string
      */
     public String toURIFragment() {
         try {
