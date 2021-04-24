@@ -6,7 +6,7 @@ import top.wcpe.wcpelib.model.mybatis.mapper.PlayerServerMapper;
 
 public class PlayerServerUtil {
     public static String getPlayerServer(String name) {
-        SqlSession sqlSession = WcpeLib.getSqlSessionFactory().openSession();
+        SqlSession sqlSession = WcpeLib.getMybatis().getSqlSessionFactory().openSession();
         try {
             PlayerServerMapper mapper = sqlSession.getMapper(PlayerServerMapper.class);
             return mapper.selectPlayerServer(name);
@@ -16,7 +16,7 @@ public class PlayerServerUtil {
     }
 
     public static boolean getPlayerIsOnline(String name) {
-        SqlSession sqlSession = WcpeLib.getSqlSessionFactory().openSession();
+        SqlSession sqlSession = WcpeLib.getMybatis().getSqlSessionFactory().openSession();
         try {
             PlayerServerMapper mapper = sqlSession.getMapper(PlayerServerMapper.class);
             return mapper.selectPlayerServer(name) == null ? false : true;

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class MapListUtil {
     public static String getString(String indexKey, String key) {
-        SqlSession sqlSession = WcpeLib.getSqlSessionFactory().openSession();
+        SqlSession sqlSession = WcpeLib.getMybatis().getSqlSessionFactory().openSession();
         try {
             MapListMapper mapper = sqlSession.getMapper(MapListMapper.class);
             return mapper.get(key, indexKey);
@@ -20,7 +20,7 @@ public class MapListUtil {
     }
 
     public static void addString(String indexKey, String key, String value) {
-        SqlSession sqlSession = WcpeLib.getSqlSessionFactory().openSession(true);
+        SqlSession sqlSession = WcpeLib.getMybatis().getSqlSessionFactory().openSession(true);
         try {
             MapListMapper mapper = sqlSession.getMapper(MapListMapper.class);
             mapper.insert(key, value, indexKey);
@@ -30,7 +30,7 @@ public class MapListUtil {
     }
 
     public static void putString(String indexKey, String key, String value) {
-        SqlSession sqlSession = WcpeLib.getSqlSessionFactory().openSession(true);
+        SqlSession sqlSession = WcpeLib.getMybatis().getSqlSessionFactory().openSession(true);
         try {
             MapListMapper mapper = sqlSession.getMapper(MapListMapper.class);
             String s = mapper.get(key, indexKey);
@@ -45,7 +45,7 @@ public class MapListUtil {
     }
 
     public static List<String> getList(String indexKey, String key) {
-        SqlSession sqlSession = WcpeLib.getSqlSessionFactory().openSession();
+        SqlSession sqlSession = WcpeLib.getMybatis().getSqlSessionFactory().openSession();
         try {
             MapListMapper mapper = sqlSession.getMapper(MapListMapper.class);
             String s = mapper.get(key, indexKey);
@@ -58,7 +58,7 @@ public class MapListUtil {
     }
 
     public static void getListAddValue(String indexKey, String key, String... value) {
-        SqlSession sqlSession = WcpeLib.getSqlSessionFactory().openSession(true);
+        SqlSession sqlSession = WcpeLib.getMybatis().getSqlSessionFactory().openSession(true);
         try {
             MapListMapper mapper = sqlSession.getMapper(MapListMapper.class);
             String s = mapper.get(key, indexKey);
@@ -83,7 +83,7 @@ public class MapListUtil {
     }
 
     public static void addList(String indexKey, String key, List<String> value) {
-        SqlSession sqlSession = WcpeLib.getSqlSessionFactory().openSession(true);
+        SqlSession sqlSession = WcpeLib.getMybatis().getSqlSessionFactory().openSession(true);
         try {
             MapListMapper mapper = sqlSession.getMapper(MapListMapper.class);
             String s = mapper.get(key, indexKey);
@@ -95,7 +95,7 @@ public class MapListUtil {
     }
 
     public static void putList(String indexKey, String key, List<String> value) {
-        SqlSession sqlSession = WcpeLib.getSqlSessionFactory().openSession(true);
+        SqlSession sqlSession = WcpeLib.getMybatis().getSqlSessionFactory().openSession(true);
         try {
             MapListMapper mapper = sqlSession.getMapper(MapListMapper.class);
             String s = mapper.get(key, indexKey);
@@ -111,7 +111,7 @@ public class MapListUtil {
     }
 
     public static void remove(String indexKey, String key) {
-        SqlSession sqlSession = WcpeLib.getSqlSessionFactory().openSession(true);
+        SqlSession sqlSession = WcpeLib.getMybatis().getSqlSessionFactory().openSession(true);
         try {
             MapListMapper mapper = sqlSession.getMapper(MapListMapper.class);
             mapper.delete(key, indexKey);
