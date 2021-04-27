@@ -1,9 +1,7 @@
 package top.wcpe.wcpelib.model.mybatis;
 
-import java.io.IOException;
 import java.util.List;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import lombok.Getter;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.apache.ibatis.mapping.Environment;
@@ -22,10 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import top.wcpe.wcpelib.WcpeLib;
-import top.wcpe.wcpelib.model.mybatis.mapper.MapListMapper;
 import top.wcpe.wcpelib.model.mybatis.mapper.PlayerServerMapper;
-import top.wcpe.wcpelib.model.mybatis.mapper.WorldAliasMapper;
-import top.wcpe.wcpelib.model.mybatis.utils.MapListUtil;
 
 public class Mybatis {
 
@@ -65,25 +60,8 @@ public class Mybatis {
 
 
     private void initDefault() {
-        addMapper(MapListMapper.class, PlayerServerMapper.class, WorldAliasMapper.class);
+        addMapper( PlayerServerMapper.class);
         SqlSession session = sqlSessionFactory.openSession();
-        MapListMapper mapListMapper = session.getMapper(MapListMapper.class);
-        if (mapListMapper.existTable() == 0) {
-            mapListMapper.createTable();
-        }
-        WcpeLib.getInstance().getServer().getPluginManager().registerEvents(new Listener() {
-            @EventHandler(priority = EventPriority.HIGH)
-            public void joinTip(PlayerJoinEvent e) {
-                Player p = e.getPlayer();
-                List<String> playerMessage = MapListUtil.getList("PlayerMessage", p.getName());
-                if (playerMessage != null) {
-                    for (String s : playerMessage) {
-                        WcpeLib.sendMessage(p, s);
-                    }
-                    MapListUtil.remove("PlayerMessage", p.getName());
-                }
-            }
-        }, WcpeLib.getInstance());
 
         PlayerServerMapper playerServerMapper = session.getMapper(PlayerServerMapper.class);
         if (playerServerMapper.existTable() == 0) {
@@ -132,13 +110,6 @@ public class Mybatis {
                 }
             }
         }, WcpeLib.getInstance());
-        WorldAliasMapper worldAliasMapper = session.getMapper(WorldAliasMapper.class);
-        worldAliasMapper.dropTable();
-        worldAliasMapper.createTable();
-        if (Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
-            MultiverseCore multiverseCore = MultiverseCore.class.cast(Bukkit.getPluginManager().getPlugin("Multiverse-Core"));
-            multiverseCore.getMVWorldManager().getMVWorlds().forEach(world -> worldAliasMapper.insertWorldAlias(world.getName(), world.getAlias()));
-        }
         session.commit();
     }
 

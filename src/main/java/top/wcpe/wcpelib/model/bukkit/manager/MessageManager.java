@@ -18,14 +18,15 @@ public class MessageManager {
 
     public MessageManager(Plugin plugin, String lang) {
         String fileName = "Message_" + lang + ".yml";
-
+        File dataFolder = plugin.getDataFolder();
+        if (!dataFolder.exists()) dataFolder.mkdirs();
         this.messageFile = new File(plugin.getDataFolder(), fileName);
         if (!this.messageFile.exists())
             try {
                 this.messageFile.createNewFile();
             } catch (IOException e) {
                 plugin.getLogger().log(Level.WARNING,
-                        "[" + plugin.getName() + "] create file " + fileName + " fail!");
+                        " create file " + fileName + " fail!");
 
                 e.printStackTrace();
             }

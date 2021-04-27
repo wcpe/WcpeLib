@@ -1,30 +1,14 @@
 package top.wcpe.wcpelib;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import lombok.Getter;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import top.wcpe.wcpelib.model.mybatis.Mybatis;
-import top.wcpe.wcpelib.model.mybatis.TypeHandlerRegistry;
-import top.wcpe.wcpelib.model.mybatis.mapper.MapListMapper;
-import top.wcpe.wcpelib.model.mybatis.mapper.PlayerServerMapper;
-import top.wcpe.wcpelib.model.mybatis.mapper.WorldAliasMapper;
-import top.wcpe.wcpelib.model.mybatis.utils.MapListUtil;
 import top.wcpe.wcpelib.model.bc.PluginMessageBase;
 import top.wcpe.wcpelib.model.bc.utils.ServerUtil;
 import top.wcpe.wcpelib.model.bukkit.utils.NmsUtil;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,8 +43,15 @@ public final class WcpeLib extends JavaPlugin {
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
-        enableMysql = getConfig().getBoolean("Mysql.enable");
-        this.mybatis = Mybatis.createMybatis();
+        if (enableMysql = getConfig().getBoolean("Mysql.enable")) {
+            log(" Mybatis 开启! 开始连接数据库");
+        }
+        try {
+            this.mybatis = Mybatis.createMybatis();
+            log(" Mybatis 链接成功!");
+        } catch (Exception e) {
+            log(" §c无法链接数据库! 请确认 WcpeLib 配置文件中的数据配置填写正确!");
+        }
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessageBase());
 
@@ -73,14 +64,6 @@ public final class WcpeLib extends JavaPlugin {
     @Override
     public void onDisable() {
         log(" Disable！！！");
-    }
-
-    public static void addPlayerMessage(String name, String msg) {
-        MapListUtil.getListAddValue("PlayerMessage", name, msg);
-    }
-
-    public static boolean delPlayerMessage(String name, String msg) {
-        return MapListUtil.removeListElement("PlayerMessage", name, msg);
     }
 
     public static void sendMessage(Player p, String... value) {
@@ -98,8 +81,10 @@ public final class WcpeLib extends JavaPlugin {
     public static void sendActionMessage(String prefix, Player p, String... value) {
         NmsUtil.sendAction_1_15(p, prefix + repString(value));
     }
-    private static final String[] regxString = new String[] { "$", "(", ")", "*", "+", ".", "[", "]", "?", "\\", "/",
-            "^" ,"{","}"};
+
+    private static final String[] regxString = new String[]{"$", "(", ")", "*", "+", ".", "[", "]", "?", "\\", "/",
+            "^", "{", "}"};
+
     /**
      * 替换value[0]里的变量 %1 替换为 value[1] %x替换为 value[x]
      *

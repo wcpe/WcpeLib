@@ -8,7 +8,7 @@ import lombok.Getter;
  * @author WCPE
  * @date 2021年4月24日 下午3:36:31
  */
-public class SubCommandArgument {
+public class CommandArgument {
 	/** 参数名称 */
 	@Getter
 	private final String name;
@@ -19,7 +19,7 @@ public class SubCommandArgument {
 	@Getter
 	private final String ignoreArg;
 
-	private SubCommandArgument(Builder builder) {
+	private CommandArgument(Builder builder) {
 		this.name = builder.name;
 		this.describe = builder.describe;
 		this.ignoreArg = builder.ignoreArg;
@@ -44,8 +44,8 @@ public class SubCommandArgument {
 			return this;
 		}
 
-		public SubCommandArgument build() {
-			return new SubCommandArgument(this);
+		public CommandArgument build() {
+			return new CommandArgument(this);
 		}
 	}
 }

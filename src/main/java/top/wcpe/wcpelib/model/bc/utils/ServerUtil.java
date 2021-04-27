@@ -2,7 +2,6 @@ package top.wcpe.wcpelib.model.bc.utils;
 
 import org.bukkit.entity.Player;
 import top.wcpe.wcpelib.WcpeLib;
-import top.wcpe.wcpelib.model.bc.impl.SendMessageToPlayerTask;
 import top.wcpe.wcpelib.model.bc.impl.SendServerTpLocationTask;
 import top.wcpe.wcpelib.model.bc.impl.SendTempMessageToPlayerTask;
 import top.wcpe.wcpelib.model.mybatis.utils.PlayerServerUtil;
@@ -46,17 +45,6 @@ public class ServerUtil {
     public static void sendTempMessageToPlayer(String serverName, String name, String msg) {
         sendTempMessageToPlayerTask.sendTaskToServer(serverName, name, msg);
     }
-
-    private static PluginMessageTask sendMessageToPlayerTask = new SendMessageToPlayerTask().register();
-
-    public static void sendMessageToPlayerOrElseAddMessage(String name, String msg) {
-        sendMessageToPlayerOrElseAddMessage(PlayerServerUtil.getPlayerServer(name), name, msg);
-    }
-
-    public static void sendMessageToPlayerOrElseAddMessage(String serverName, String name, String msg) {
-        sendMessageToPlayerTask.sendTaskToServer(serverName, name, msg);
-    }
-
 
     private static PluginMessageTask sendServerTpLocation = new SendServerTpLocationTask().register();
 
