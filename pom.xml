@@ -3,100 +3,38 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
+    <!--基本信息-->
     <groupId>top.wcpe</groupId>
-    <artifactId>WcpeLib</artifactId>
-    <version>1.0-Bukkit</version>
-    <repositories>
-    </repositories>
-    <dependencies>
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.5.6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>vault</groupId>
-            <artifactId>vault</artifactId>
-            <version>vault</version>
-            <systemPath>${basedir}/lib/Vault-1.7.2-b107.jar</systemPath>
-            <scope>system</scope>
-        </dependency>
-        <dependency>
-            <groupId>PlayerPoints</groupId>
-            <artifactId>PlayerPoints</artifactId>
-            <version>PlayerPoints</version>
-            <systemPath>${basedir}/lib/PlayerPoints-2.1.4.jar</systemPath>
-            <scope>system</scope>
-        </dependency>
-        <dependency>
-            <groupId>me.clip</groupId>
-            <artifactId>placeholderapi</artifactId>
-            <version>2.10.4</version>
-            <systemPath>${basedir}/lib/PlaceholderAPI-2.10.4.jar</systemPath>
-            <scope>system</scope>
-        </dependency>
-        <dependency>
-            <groupId>Multiverse-Core</groupId>
-            <artifactId>Multiverse-Core</artifactId>
-            <version>2.6.0</version>
-            <systemPath>${basedir}/lib/Multiverse-Core-2.6.0-SNAPSHOT.jar</systemPath>
-            <scope>system</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.16</version>
-        </dependency>
+    <artifactId>wcpelib</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0</version>
+    <modules>
+        <module>common</module>
+        <module>bukkit</module>
+        <module>nukkit</module>
+    </modules>
 
 
-    </dependencies>
+    <name>WcpeLib</name>
+    <description>插件依赖前置</description>
+
+    <!--定义属性值-->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
     </properties>
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                    <include>**/*.yml</include>
-                </includes>
-            </resource>
-        </resources>
 
+    <build>
         <plugins>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.0.0</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <descriptors> <!--描述文件路径-->
-                        <descriptor>src/main/ignore.xml</descriptor>
-                    </descriptors>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.wcpe.wcpelib.bukkit.mybatis.mapper.PlayerServerMapper">
+
+
+	<select id="existTable" resultType="Integer">
+		select count(*) from
+		information_schema.TABLES where
+		LCASE(table_name)='wcpelib_playerserver'
+	</select>
+
+	<update id="createTable">
+		CREATE TABLE `wcpelib_playerserver` ( `name`
+		varchar(255) NOT NULL, `servername` varchar(255) NOT NULL, PRIMARY KEY
+		(`name`));
+	</update>
+	<update id="dropTable">
+		DROP table `wcpelib_playerserver`;
+	</update>
+	<select id="listPlayer" resultType="string">
+		select name from `wcpelib_playerserver`
+	</select>
+
+	<select id="selectPlayerServer" parameterType="string"
+		resultType="string">
+		select servername from `wcpelib_playerserver` where `name`=#{name}
+	</select>
+
+
+
+	<update id="updatePlayerServer">
+		UPDATE `wcpelib_playerserver` set
+		name=#{name}, servername=#{servername} where `name`=#{name}
+	</update>
+	<insert id="insertPlayerServer">
+		INSERT INTO `wcpelib_playerserver`(name, servername)
+		values(#{name},#{servername})
+	</insert>
+	<update id="delPlayerServer">
+		delete from `wcpelib_playerserver` where `name`=#{name}
+	</update>
+</mapper>

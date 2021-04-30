@@ -1,0 +1,9 @@
+Setting:
+  serverName: "xxx"
+  mysql:
+    enable: false
+    url: "localhost"
+    user: "root"
+    port: 3306
+    password: "root"
+    database: "test"
