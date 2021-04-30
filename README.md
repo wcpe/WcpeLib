@@ -7,6 +7,7 @@
 > - Vault-1.7.2-b107.jar
 > - PlayerPoints-2.1.4.jar
 > - WcpeLib-Common-1.0.jar
+
 ### 目前包含模块
 > - BC跨服消息
 > - Mybatis框架
@@ -15,13 +16,17 @@
 > - <del>ItemStack物品创建</del>
 > - 消息I18N管理器
 > - 插件本地数据管理器
+
 ## WcpeLib-Common
 ### 依赖
 > - mybatis-3.5.6.jar
+
 ### 目前包含模块
 > - Mybatis框架
+
 ## WcpeLib-Nukkit
 ### 依赖
 > - Nukkit-1.0.jar
 > - WcpeLib-Common-1.0.jar
+
 ### 目前包含模块
