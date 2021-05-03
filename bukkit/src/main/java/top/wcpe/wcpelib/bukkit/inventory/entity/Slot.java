@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import lombok.Getter;
-import top.wcpe.wcpelib.bukkit.inventory.listener.InventoryPlus;
+import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
 import top.wcpe.wcpelib.bukkit.inventory.listener.inter.SlotEventFunctional;
 
 /**

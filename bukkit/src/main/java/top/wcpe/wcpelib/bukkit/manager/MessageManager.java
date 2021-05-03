@@ -10,6 +10,7 @@ import java.util.logging.Level;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import top.wcpe.wcpelib.common.utils.string.StringUtil;
 
 public class MessageManager {
     private final HashMap<String, String> messageMap = new HashMap<>();
@@ -66,8 +67,8 @@ public class MessageManager {
 
     }
 
-    public String getMessage(String loc) {
-        return messageMap.get(loc);
+    public String getMessage(String loc, String... rep) {
+        return StringUtil.replaceString(messageMap.get(loc), rep);
     }
 
 }

@@ -4,7 +4,7 @@ import java.util.stream.Stream;
 
 import org.bukkit.entity.Player;
 
-import top.wcpe.wcpelib.bukkit.inventory.listener.InventoryPlus;
+import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
 /**
  * {@link InventoryPlus}刷新函数接口
  * @author WCPE

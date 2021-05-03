@@ -49,8 +49,6 @@ public final class WcpeLib extends JavaPlugin {
         saveDefaultConfig();
         if (enableMysql = getConfig().getBoolean("Mysql.enable")) {
             log(" Mybatis 开启! 开始连接数据库");
-        }
-        if (enableMysql) {
             long start = System.currentTimeMillis();
             try {
                 this.mybatis = new Mybatis(getConfig().getString("Setting.mysql.url"), getConfig().getInt("Setting.mysql.port"), getConfig().getString("Setting.mysql.database"), getConfig().getString("Setting.mysql.user"), getConfig().getString("Setting.mysql.password"));
@@ -63,7 +61,6 @@ public final class WcpeLib extends JavaPlugin {
                 log(" §c无法链接数据库! 请确认 WcpeLib 配置文件中的数据配置填写正确!");
             }
         }
-
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessageBase());
 

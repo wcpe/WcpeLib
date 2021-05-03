@@ -53,7 +53,7 @@ public class CmdUtil {
 					pd[1] = PlaceholderAPI.setPlaceholders(p, pd[1]);
 				}
 				pd[1] = pd[1].replaceAll("%player%", p.getName());
-				NmsUtil.sendAction_1_15(p, pd[1]);
+				NmsUtil.sendAction(p, pd[1]);
 			}
 		} else if (pd[0].equals("[OP")) {
 			if (pd[0].equals("[OP")) {

@@ -10,6 +10,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
+import top.wcpe.wcpelib.bukkit.inventory.InventoryManager;
+import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
 import top.wcpe.wcpelib.bukkit.inventory.entity.InventoryCloseEventDTO;
 import top.wcpe.wcpelib.bukkit.inventory.listener.inter.InventoryCloseEventFunctional;
 import top.wcpe.wcpelib.bukkit.inventory.listener.inter.InventoryOpenEventFunctional;
@@ -17,7 +19,7 @@ import top.wcpe.wcpelib.bukkit.inventory.listener.inter.SlotEventFunctional;
 import top.wcpe.wcpelib.bukkit.inventory.entity.InventoryOpenEventDTO;
 import top.wcpe.wcpelib.bukkit.inventory.entity.Slot;
 import top.wcpe.wcpelib.bukkit.inventory.entity.SlotDTO;
-import top.wcpe.wcpelib.bukkit.inventory.listener.InventoryManager.InventoryPlusMap;
+import top.wcpe.wcpelib.bukkit.inventory.InventoryManager.InventoryPlusMap;
 
 /**
  * {@link InventoryPlus}的监听事件

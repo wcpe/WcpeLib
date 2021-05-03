@@ -1,20 +1,21 @@
-package top.wcpe.wcpelib.bukkit.command;
+package top.wcpe.wcpelib.nukkit.command;
+
+
+import cn.nukkit.Player;
+import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.PluginIdentifiableCommand;
+import cn.nukkit.command.data.CommandEnum;
+import cn.nukkit.command.data.CommandParameter;
+import cn.nukkit.plugin.Plugin;
+import lombok.Getter;
+import top.wcpe.wcpelib.common.utils.collector.ListUtil;
+import top.wcpe.wcpelib.common.utils.string.StringUtil;
+import top.wcpe.wcpelib.nukkit.command.entity.Command;
+import top.wcpe.wcpelib.nukkit.command.entity.CommandArgument;
+import top.wcpe.wcpelib.nukkit.command.intel.ExecuteComponentFunctional;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginIdentifiableCommand;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
-import lombok.Getter;
-import top.wcpe.wcpelib.bukkit.command.entity.Command;
-import top.wcpe.wcpelib.bukkit.command.entity.CommandArgument;
-import top.wcpe.wcpelib.bukkit.command.intel.ExecuteComponentFunctional;
-import top.wcpe.wcpelib.bukkit.command.intel.TabCompleterFunctional;
-import top.wcpe.wcpelib.common.utils.collector.ListUtil;
-import top.wcpe.wcpelib.common.utils.string.StringUtil;
 
 /**
  * 命令增强类
@@ -24,7 +25,7 @@ import top.wcpe.wcpelib.common.utils.string.StringUtil;
  * @author WCPE
  * @date 2021年4月23日 下午4:48:48
  */
-public class CommandPlus extends org.bukkit.command.Command implements PluginIdentifiableCommand {
+public class CommandPlus extends cn.nukkit.command.Command implements PluginIdentifiableCommand {
     public CommandPlus registerThis() {
         CommandManager.registerCommandPlus(this);
         return this;
@@ -32,8 +33,14 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
 
     @Getter
     private final Plugin plugin;
-    @Getter
+
     private final List<String> aliases;
+
+    @Override
+    public String[] getAliases() {
+        return aliases.toArray(new String[0]);
+    }
+
     @Getter
     private LinkedHashMap<String, Command> subCommandMap = new LinkedHashMap<>();
 
@@ -174,30 +181,6 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
 
     }
 
-    public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-        if (!this.plugin.isEnabled() || args.length < 1)
-            return null;
-        if (mainCommand != null) {
-            TabCompleterFunctional tabCompleter = mainCommand.getTabCompleter();
-            if (tabCompleter != null)
-                return tabCompleter.onTabComplete(sender, args);
-        }
-        if (args.length == 1) {
-            return subCommandMap.values().stream()
-                    .filter(sub -> sub.isHideNoPermissionHelp() ? sender.hasPermission(getSubPermission(sub)) : true)
-                    .filter(sub -> sub.getName().startsWith(args[0]))
-                    .map(Command::getName).collect(Collectors.toList());
-        }
-        return subCommandMap.values().stream()
-                .filter(sub -> (sub.isIgnoreCase() ? sub.getName().equalsIgnoreCase(args[0])
-                        : sub.getName().equals(args[0])) && (sub.isOnlyPlayerUse() ? sender instanceof Player : true))
-                .findFirst().map(sub -> {
-                    TabCompleterFunctional tabCompleter = sub.getTabCompleter();
-                    if (tabCompleter != null)
-                        return tabCompleter.onTabComplete(sender, Arrays.copyOfRange(args, 1, args.length));
-                    return new ArrayList<String>();
-                }).orElse(null);
-    }
 
     public static class Builder {
         private final String name;

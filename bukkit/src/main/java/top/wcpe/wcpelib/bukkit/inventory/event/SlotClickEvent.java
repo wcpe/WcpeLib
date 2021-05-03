@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import top.wcpe.wcpelib.bukkit.inventory.entity.Slot;
-import top.wcpe.wcpelib.bukkit.inventory.listener.InventoryPlus;
+import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
 /**
  * {@link InventoryPlus}中 {@link Slot}的点击事件
  * @author WCPE

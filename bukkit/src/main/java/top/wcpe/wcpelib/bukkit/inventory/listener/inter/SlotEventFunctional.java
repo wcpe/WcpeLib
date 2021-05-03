@@ -2,7 +2,7 @@ package top.wcpe.wcpelib.bukkit.inventory.listener.inter;
 
 import top.wcpe.wcpelib.bukkit.inventory.entity.SlotDTO;
 import top.wcpe.wcpelib.bukkit.inventory.entity.Slot;
-import top.wcpe.wcpelib.bukkit.inventory.listener.InventoryPlus;
+import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
 /**
  * {@link InventoryPlus}中的{@link Slot}点击函数接口
  * @author WCPE

@@ -3,7 +3,7 @@ package top.wcpe.wcpelib.bukkit.inventory.entity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import lombok.Data;
-import top.wcpe.wcpelib.bukkit.inventory.listener.InventoryPlus;
+import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
 
 /**
  * {@link InventoryPlus}中格子数据传输对象

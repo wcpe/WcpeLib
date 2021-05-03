@@ -1,4 +1,4 @@
-package top.wcpe.wcpelib.bukkit.inventory.listener;
+package top.wcpe.wcpelib.bukkit.inventory;
 
 import java.util.Collection;
 import java.util.HashMap;

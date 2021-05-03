@@ -1,4 +1,4 @@
-package top.wcpe.wcpelib.bukkit.inventory.listener;
+package top.wcpe.wcpelib.bukkit.inventory;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -11,6 +11,7 @@ import org.bukkit.inventory.InventoryView;
 
 import lombok.Getter;
 import lombok.Setter;
+import top.wcpe.wcpelib.bukkit.inventory.listener.WcpeLibInventoryHolder;
 import top.wcpe.wcpelib.bukkit.inventory.listener.inter.InventoryCloseEventFunctional;
 import top.wcpe.wcpelib.bukkit.inventory.listener.inter.InventoryOpenEventFunctional;
 import top.wcpe.wcpelib.bukkit.inventory.listener.inter.RefreshInventoryPlusFunctional;

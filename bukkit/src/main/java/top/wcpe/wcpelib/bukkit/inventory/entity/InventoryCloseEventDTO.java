@@ -3,7 +3,7 @@ package top.wcpe.wcpelib.bukkit.inventory.entity;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
 import lombok.Data;
-import top.wcpe.wcpelib.bukkit.inventory.listener.InventoryPlus;
+import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
 
 /**
  * {@link InventoryPlus}关闭事件的数据传输类
