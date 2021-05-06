@@ -11,6 +11,14 @@ import java.util.stream.Collectors;
  */
 public class StringUtil {
     /**
+     * 保留中文 数字 字母 下划线
+     * @param string
+     * @return {@link String}
+     */
+    public static String replace(String string){
+        return string.replaceAll("[^\\u4e00-\\u9fbba-zA-Z0-9_]", "");
+    }
+    /**
      * 获取重复的字符串
      *
      * @param string 重复的字符串

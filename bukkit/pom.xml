@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>top.wcpe.wcpelib</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>WcpeLib-Common</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>

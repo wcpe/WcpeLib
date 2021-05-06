@@ -1,5 +1,6 @@
 package top.wcpe.wcpelib.nukkit.manager;
 
+import cn.nukkit.Player;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.plugin.Plugin;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 
 /**
  * 皮肤管理类
@@ -31,9 +33,13 @@ public class SkinManager {
         }
     }
 
+    @Getter
+    private final HashMap<String, Skin> skinMap = new HashMap<>();
     Path skinFolderPath;
 
-    private Skin getSkin(String skinName) throws Exception {
+    public Skin getSkin(String skinName) throws Exception {
+        Skin s = skinMap.get(skinName);
+        if (s != null) return s;
         Skin skin = new Skin();
         Path skinDir = skinFolderPath.resolve(skinName);
         Path skinGeometryPath = skinDir.resolve(skinName + ".json");
@@ -57,10 +63,11 @@ public class SkinManager {
         skin.setGeometryName("geometry." + skinName);
         skin.setSkinData(skinData);
         skin.setSkinId(skinName);
-        skin.setPremium(true);
         skin.setTrusted(true);
+        skinMap.put(skinName, skin);
         return skin;
     }
+
     public CompoundTag getSkinTag(String skinName) throws Exception {
         Skin skin = getSkin(skinName);
         CompoundTag skinTag = new CompoundTag().putByteArray("Data", skin.getSkinData().data)
