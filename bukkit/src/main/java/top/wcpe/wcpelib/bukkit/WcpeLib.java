@@ -47,7 +47,7 @@ public final class WcpeLib extends JavaPlugin {
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
-        if (enableMysql = getConfig().getBoolean("Mysql.enable")) {
+        if (enableMysql = getConfig().getBoolean("Setting.mysql.enable")) {
             log(" Mybatis 开启! 开始连接数据库");
             long start = System.currentTimeMillis();
             try {

@@ -43,7 +43,7 @@ public final class WcpeLib extends PluginBase {
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
-        if (enableMysql = getConfig().getBoolean("Mysql.enable")) {
+        if (enableMysql = getConfig().getBoolean("Setting.mysql.enable")) {
             log(" Mybatis 开启! 开始连接数据库");
         }
         if (enableMysql) {
@@ -56,6 +56,7 @@ public final class WcpeLib extends PluginBase {
                 initDefaultMapper();
                 log(" 初始化默认 Mapper 成功! 共耗时:" + (System.currentTimeMillis() - end) + "Ms");
             } catch (Exception e) {
+                e.printStackTrace();
                 log(" §c无法链接数据库! 请确认 WcpeLib 配置文件中的数据配置填写正确!");
             }
         }
@@ -74,6 +75,7 @@ public final class WcpeLib extends PluginBase {
             playerServerMapper.createTable();
         } else {
             playerServerMapper.dropTable();
+            playerServerMapper.createTable();
         }
         WcpeLib.getInstance().getServer().getPluginManager().registerEvents(new Listener() {
             @EventHandler(priority = EventPriority.HIGH)

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.wcpe.wcpelib.bukkit.mybatis.mapper.PlayerServerMapper">
+<mapper namespace="top.wcpe.wcpelib.nukkit.mybatis.mapper.PlayerServerMapper">
 
 
 	<select id="existTable" resultType="Integer">
