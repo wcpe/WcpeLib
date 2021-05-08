@@ -57,7 +57,8 @@ public final class WcpeLib extends PluginBase {
                 log(" 初始化默认 Mapper 成功! 共耗时:" + (System.currentTimeMillis() - end) + "Ms");
             } catch (Exception e) {
                 e.printStackTrace();
-                log(" §c无法链接数据库! 请确认 WcpeLib 配置文件中的数据配置填写正确!");
+                log(" §c无法链接数据库! 请确认数据库开启，并且 WcpeLib 配置文件中的数据配置填写正确!");
+                this.enableMysql = false;
             }
         }
 
@@ -71,12 +72,10 @@ public final class WcpeLib extends PluginBase {
         SqlSession session = sqlSessionFactory.openSession();
 
         PlayerServerMapper playerServerMapper = session.getMapper(PlayerServerMapper.class);
-        if (playerServerMapper.existTable() == 0) {
-            playerServerMapper.createTable();
-        } else {
+        if (playerServerMapper.existTable() != 0) {
             playerServerMapper.dropTable();
-            playerServerMapper.createTable();
         }
+        playerServerMapper.createTable();
         WcpeLib.getInstance().getServer().getPluginManager().registerEvents(new Listener() {
             @EventHandler(priority = EventPriority.HIGH)
             public void join(PlayerJoinEvent e) {

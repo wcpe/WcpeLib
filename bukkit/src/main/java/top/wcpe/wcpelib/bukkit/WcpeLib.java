@@ -58,7 +58,8 @@ public final class WcpeLib extends JavaPlugin {
                 initDefaultMapper();
                 log(" 初始化默认 Mapper 成功! 共耗时:" + (System.currentTimeMillis() - end) + "Ms");
             } catch (Exception e) {
-                log(" §c无法链接数据库! 请确认 WcpeLib 配置文件中的数据配置填写正确!");
+                log(" §c无法链接数据库! 请确认数据库开启，并且 WcpeLib 配置文件中的数据配置填写正确!");
+                this.enableMysql = false;
             }
         }
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");

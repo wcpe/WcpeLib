@@ -169,8 +169,9 @@ public class CommandPlus extends cn.nukkit.command.Command implements PluginIden
                         return "<" + arg.getName() + ">";
                     }
                     return "[" + arg.getName() + "]";
-                }).collect(Collectors.joining(" ")) + " §a权限:§6 " + getSubPermission(subCommand));
+                }).collect(Collectors.joining(" ")));
                 sender.sendMessage("§6>" + StringUtil.getRepeatString(" ", getName().length()) + " §a描述:§6 " + subCommand.getDescribe());
+                sender.sendMessage("§6>" + StringUtil.getRepeatString(" ", getName().length()) + " §a权限:§c " + getSubPermission(subCommand));
             }
             sender.sendMessage("§6> []为选填参数 <>为必填参数");
             return true;

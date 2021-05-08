@@ -13,36 +13,43 @@ import java.util.TimerTask;
 public class OtherUtil {
     private static Timer timer = new Timer();
 
-    public static void putCountDownTask(CountDownTask task, int m) {
+    public static void putCountDownTask(CountDownPerSecondTask perSecondTask, CountDownFinishTask finishTask, int m) {
         long time = System.currentTimeMillis() + m * 1000;
         timer.schedule(new TimerTask() {
             int times = m;
 
             @Override
             public void run() {
-                if (System.currentTimeMillis() > time) {
+                if (System.currentTimeMillis() >= time) {
+                    finishTask.onRun();
                     cancel();
+                    return;
                 }
-                task.run(times--);
+                perSecondTask.onRun(times--);
 
             }
         }, 0, 1000);
     }
 
     @FunctionalInterface
-    public interface CountDownTask {
-        void run(int time);
+    public interface CountDownFinishTask {
+        void onRun();
     }
 
-    public static HashMap<String, Long> coolTimeMap = new HashMap<>();
+    @FunctionalInterface
+    public interface CountDownPerSecondTask {
+        void onRun(int time);
+    }
+
+    private static HashMap<String, Long> coolTimeMap = new HashMap<>();
 
     public static void putCoolTime(String key, long l) {
         coolTimeMap.put(key, System.currentTimeMillis() + l * 1000);
     }
 
-    public static boolean isCoolFinish(String key) {
+    public static long isCoolFinish(String key) {
         Long aLong = coolTimeMap.get(key);
-        if (aLong != null && aLong > System.currentTimeMillis()) return false;
-        return true;
+        if (aLong != null && aLong > System.currentTimeMillis()) return aLong - System.currentTimeMillis();
+        return -1;
     }
 }
