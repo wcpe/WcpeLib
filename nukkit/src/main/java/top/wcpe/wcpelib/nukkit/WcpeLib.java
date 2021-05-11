@@ -8,10 +8,12 @@ import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.plugin.PluginBase;
+import cn.nukkit.utils.ConfigSection;
 import lombok.Getter;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import top.wcpe.wcpelib.common.mybatis.Mybatis;
+import top.wcpe.wcpelib.common.readis.Redis;
 import top.wcpe.wcpelib.nukkit.mybatis.mapper.PlayerServerMapper;
 
 
@@ -27,9 +29,6 @@ public final class WcpeLib extends PluginBase {
     }
 
     @Getter
-    private static Mybatis mybatis;
-
-    @Getter
     private static WcpeLib instance;
 
     public static String getServerName() {
@@ -38,20 +37,26 @@ public final class WcpeLib extends PluginBase {
 
     @Getter
     public static boolean enableMysql;
+    @Getter
+    private static Mybatis mybatis;
+
+    @Getter
+    public static boolean enableRedis;
+    @Getter
+    private static Redis redis;
 
     @Override
     public void onEnable() {
+        long start = System.currentTimeMillis();
         instance = this;
         saveDefaultConfig();
         if (enableMysql = getConfig().getBoolean("Setting.mysql.enable")) {
             log(" Mybatis 开启! 开始连接数据库");
-        }
-        if (enableMysql) {
-            long start = System.currentTimeMillis();
+            long s = System.currentTimeMillis();
             try {
                 this.mybatis = new Mybatis(getConfig().getString("Setting.mysql.url"), getConfig().getInt("Setting.mysql.port"), getConfig().getString("Setting.mysql.database"), getConfig().getString("Setting.mysql.user"), getConfig().getString("Setting.mysql.password"));
                 long end = System.currentTimeMillis();
-                log(" Mybatis 链接成功! 共耗时:" + (end - start) + "Ms");
+                log(" Mybatis 链接成功! 共耗时:" + (end - s) + "Ms");
                 log(" 开始初始化默认 Mapper");
                 initDefaultMapper();
                 log(" 初始化默认 Mapper 成功! 共耗时:" + (System.currentTimeMillis() - end) + "Ms");
@@ -62,8 +67,30 @@ public final class WcpeLib extends PluginBase {
             }
         }
 
+        if (enableRedis = getConfig().getBoolean("Setting.redis.enable")) {
+            log(" Redis 开启! 开始连接!");
+        }
+        if (enableRedis) {
+            long s = System.currentTimeMillis();
+            try {
+                ConfigSection redisSection = getConfig().getSection("Setting").getSection("redis");
+                this.redis = new Redis(redisSection.getString("url"),redisSection.getInt("port"),redisSection.getInt("maxTotal"),redisSection.getInt("maxIdle"),redisSection.getInt("minIdle"),redisSection.getInt("maxWaitMillis"),redisSection.getBoolean("testOnBorrow"),redisSection.getBoolean("testOnReturn"));
+                log(" Redis 链接成功! 共耗时:" + (System.currentTimeMillis() - s) + "Ms");
+                log(" host->"+redisSection.getString("url")+",port->"+redisSection.getInt("port"));
+            } catch (Exception e) {
+                e.printStackTrace();
+                log(" §c无法链接 Redis ! 请确认 Redis 开启，并且 WcpeLib 配置文件中的 Redis 配置填写正确!");
+                this.enableRedis = false;
+            }
+        }
+        log("§aload time: §e" + (System.currentTimeMillis() - start) + " §ams");
+        getServer().getConsoleSender().sendMessage("§a  _       __                          __     _     __  ");
+        getServer().getConsoleSender().sendMessage("§a | |     / /  _____    ____   ___    / /    (_)   / /_ ");
+        getServer().getConsoleSender().sendMessage("§a | | /| / /  / ___/   / __ \\ / _ \\  / /    / /   / __ \\");
+        getServer().getConsoleSender().sendMessage("§a | |/ |/ /  / /__    / /_/ //  __/ / /___ / /   / /_/ /");
+        getServer().getConsoleSender().sendMessage("§a |__/|__/   \\___/   / .___/ \\___/ /_____//_/   /_.___/ ");
+        getServer().getConsoleSender().sendMessage("§a                   /_/                                 ");
 
-        log(" Enable！！！");
     }
 
     private void initDefaultMapper() {
