@@ -46,9 +46,13 @@ public class CommandPlus extends cn.nukkit.command.Command implements PluginIden
 
     private Command mainCommand;
 
-    public String getSubPermission(Command subCommand) {
-        return subCommand.getPermission() == null ? this.getName() + "." + subCommand.getName() + ".use"
-                : subCommand.getPermission();
+    public String getSubPermission(Command command) {
+        if (mainCommand != null) {
+            return command.getPermission() == null ? command.getName() + ".use"
+                    : command.getPermission();
+        }
+        return command.getPermission() == null ? this.getName() + "." + command.getName() + ".use"
+                : command.getPermission();
     }
 
 
@@ -64,26 +68,18 @@ public class CommandPlus extends cn.nukkit.command.Command implements PluginIden
         this.mainCommand = builder.mainCommand;
     }
 
-    private boolean executeJudge(Command mainCommand, CommandSender sender) {
-        if (mainCommand.isOnlyPlayerUse() && !(sender instanceof Player)) {
-            sender.sendMessage(mainCommand.getNoPlayerMessage());
+    private boolean executeJudge(Command command, CommandSender sender) {
+        if (command.isOnlyPlayerUse() && !(sender instanceof Player)) {
+            sender.sendMessage(command.getNoPlayerMessage());
             return false;
         }
-        String permission = mainCommand.getPermission();
-        if (permission == null) {
-            if (mainCommand instanceof Command) {
-                permission = getName() + "." + ((Command) mainCommand).getName() + ".use";
-            } else {
-                permission = getName() + ".use";
-            }
-        }
+        String permission = getSubPermission(command);
         if (!sender.hasPermission(permission)) {
-            sender.sendMessage(mainCommand.getNoPermissionMessage());
+            sender.sendMessage(StringUtil.replaceString(command.getNoPermissionMessage(), "permission:" + permission));
             return false;
         }
         return true;
     }
-
 
     public int requiredArgs(String[] args, List<CommandArgument> listCommandArgument) {
         if (args.length < listCommandArgument.size()) {
