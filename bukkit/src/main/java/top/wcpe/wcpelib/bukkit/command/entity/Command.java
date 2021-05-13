@@ -21,8 +21,6 @@ public class Command {
     private List<CommandArgument> args;
     /** 是否隐藏无权限帮助 */
     private boolean hideNoPermissionHelp;
-    /** 忽略大小写 */
-    private boolean ignoreCase;
     /** 介绍 */
     private String describe;
     /** 权限 */
@@ -43,7 +41,6 @@ public class Command {
         this.name = builder.name;
         this.hideNoPermissionHelp = builder.hideNoPermissionHelp;
         this.args = builder.args;
-        this.ignoreCase = builder.ignoreCase;
         this.describe = builder.describe;
         this.permission = builder.permission;
         this.noPermissionMessage = builder.noPermissionMessage;
@@ -57,10 +54,9 @@ public class Command {
         private final String name;
         private List<CommandArgument> args = new ArrayList<>();
         private boolean hideNoPermissionHelp = false;
-        private boolean ignoreCase = false;
         private final String describe;
         private String permission;
-        private String noPermissionMessage = "§c你莫得权限!";
+        private String noPermissionMessage = "§c你莫得 §6%permission% §c权限!";
         private boolean onlyPlayerUse = false;
         private String noPlayerMessage = "§c该指令只能玩家使用!";
         private ExecuteComponentFunctional executeComponent;
@@ -80,11 +76,6 @@ public class Command {
 
         public Builder hideNoPermissionHelp(boolean hideNoPermissionHelp) {
             this.hideNoPermissionHelp = hideNoPermissionHelp;
-            return this;
-        }
-
-        public Builder ignoreCase(boolean ignoreCase) {
-            this.ignoreCase = ignoreCase;
             return this;
         }
 

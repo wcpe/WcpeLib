@@ -46,9 +46,9 @@ public class MessageManager {
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            for (String s : yaml.getKeys(false)) {
+            for (String s : yaml.getKeys(true)) {
                 if (!messageYaml.isString(s))
-                    messageYaml.set(s, yaml.getString(s));
+                    messageYaml.set(s, yaml.get(s));
                 messageMap.put(s, yaml.getString(s));
             }
             try {
@@ -70,5 +70,4 @@ public class MessageManager {
     public String getMessage(String loc, String... rep) {
         return StringUtil.replaceString(messageMap.get(loc), rep);
     }
-
 }

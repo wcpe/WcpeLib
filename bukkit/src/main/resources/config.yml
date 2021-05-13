@@ -7,3 +7,4 @@ Setting:
     port: 3306
     password: "root"
     database: "test"
+  skullSaveTime: 10

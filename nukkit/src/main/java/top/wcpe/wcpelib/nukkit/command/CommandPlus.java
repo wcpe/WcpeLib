@@ -85,66 +85,76 @@ public class CommandPlus extends cn.nukkit.command.Command implements PluginIden
     }
 
 
+    public int requiredArgs(String[] args, List<CommandArgument> listCommandArgument) {
+        if (args.length < listCommandArgument.size()) {
+            args = Arrays.copyOf(args, listCommandArgument.size());
+        }
+        for (int i = 0; i < listCommandArgument.size(); i++) {
+            String ignoreArg = listCommandArgument.get(i).getIgnoreArg();
+            if (ignoreArg == null && args[i] == null) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public String[] ignoreArgReplace(String[] args, List<CommandArgument> listCommandArgument) {
+        if (args.length < listCommandArgument.size()) {
+            args = Arrays.copyOf(args, listCommandArgument.size());
+        }
+        for (int i = 0; i < listCommandArgument.size(); i++) {
+            String ignoreArg = listCommandArgument.get(i).getIgnoreArg();
+            if (ignoreArg != null && ((args[i] == null || "".equals(args[i]) || " ".equals(args[i])))) {
+                args[i] = ignoreArg;
+            }
+        }
+        return args;
+    }
+
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (!this.plugin.isEnabled()) {
             sender.sendMessage("§c插件§e " + this.plugin.getName() + " §c已被卸载 无法使用命令!");
             return true;
         }
+
         if (mainCommand != null) {
             if (!executeJudge(mainCommand, sender)) return true;
-            int validArg = 0;
-            for (CommandArgument arg : mainCommand.getArgs()) {
-                if (arg.getIgnoreArg() == null)
-                    validArg++;
-            }
-            if (args.length < validArg) {
-                sender.sendMessage("§c指令执行错误 请填写必填参数!");
+            List<CommandArgument> listCommandArgument = mainCommand.getArgs();
+            int i = requiredArgs(args, listCommandArgument);
+            if (i != -1) {
+                sender.sendMessage("§c指令执行错误 请填写必填参数 §6<" + listCommandArgument.get(i).getName() + "> §c!");
                 return true;
             }
+            args = ignoreArgReplace(args, listCommandArgument);
             ExecuteComponentFunctional executeComponent = mainCommand.getExecuteComponent();
             if (executeComponent != null) executeComponent.execute(sender, args);
             return true;
         }
-        if (args.length > 0)
-            for (Command subCommand : subCommandMap.values()) {
-                if (subCommand.isIgnoreCase() ? !subCommand.getName().equalsIgnoreCase(args[0])
-                        : !subCommand.getName().equals(args[0]))
-                    continue;
+        if (args.length > 0) {
+            Command subCommand = subCommandMap.get(args[0]);
+            if (subCommand != null) {
                 String[] subArgs;
                 if (args.length == 1)
                     subArgs = new String[]{};
                 else
                     subArgs = Arrays.copyOfRange(args, 1, args.length);
-                int validArg = 0;
-                List<CommandArgument> subArgLists = subCommand.getArgs();
-                for (int i = 0; i < subArgLists.size(); i++) {
-                    String ignoreArg = subArgLists.get(i).getIgnoreArg();
-                    if (subArgs.length <= i)
-                        subArgs = Arrays.copyOf(subArgs, i + 1);
-                    if ((subArgs[i] == null || "".equals(subArgs[i]) || " ".equals(subArgs[i])) && ignoreArg != null) {
-                        subArgs[i] = ignoreArg;
-                    }
-                    validArg++;
-                }
-                // 如果最后一个参数可忽略 减少一位输入参数
-                if (subArgLists != null && !subArgLists.isEmpty() && subArgLists.get(subArgLists.size() - 1).getIgnoreArg() != null) {
-                    validArg--;
-                }
-                if (args.length >= validArg) {
-                    for (String s : subArgs) {
-                        if (s == null) {
-                            sender.sendMessage("§c指令执行错误 请填写必填参数!");
-                            return true;
-                        }
-                    }
-                    if (!executeJudge(subCommand, sender)) return true;
-                    ExecuteComponentFunctional executeComponent = subCommand.getExecuteComponent();
-                    if (executeComponent != null)
-                        executeComponent.execute(sender, subArgs);
+                List<CommandArgument> listCommandArgument = subCommand.getArgs();
+                int i = requiredArgs(subArgs, listCommandArgument);
+                if (i != -1) {
+                    sender.sendMessage("§c指令执行错误 请填写必填参数 §6<" + listCommandArgument.get(i).getName() + "> §c!");
                     return true;
                 }
+                subArgs = ignoreArgReplace(subArgs, listCommandArgument);
+
+
+                if (!executeJudge(subCommand, sender)) return true;
+                ExecuteComponentFunctional executeComponent = subCommand.getExecuteComponent();
+                if (executeComponent != null)
+                    executeComponent.execute(sender, subArgs);
+                return true;
             }
+        }
 
         if (args.length == 0 || "help".equals(args[0])) {
             int page = 1;
@@ -181,7 +191,6 @@ public class CommandPlus extends cn.nukkit.command.Command implements PluginIden
         return true;
 
     }
-
 
     public static class Builder {
         private final String name;

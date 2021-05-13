@@ -14,9 +14,9 @@ public class ListUtil {
     /**
      * 按长度分割集合类
      *
-     * @param resList 源集合
+     * @param resList       源集合
      * @param subListLength 一个集合多少个参数
-     * @param <T> 集合存储元素类型
+     * @param <T>           集合存储元素类型
      * @return {@link List}
      */
     public static <T> List<List<T>> splitList(List<T> resList, int subListLength) {
@@ -46,5 +46,24 @@ public class ListUtil {
             }
         }
         return ret;
+    }
+
+    /**
+     * 替换字符串中的变量
+     *
+     * @param sours
+     * @param replaces
+     * @return List<String>
+     */
+    public static List<String> replaceString(List<String> sours, String... replaces) {
+        for (int i = 0; i < sours.size(); i++) {
+            for (String s : replaces) {
+                int index = s.indexOf(":");
+                if (index != -1) {
+                    sours.set(i, sours.get(i).replaceAll("\\%" + s.substring(0, index) + "\\%", s.substring(index + 1)));
+                }
+            }
+        }
+        return sours;
     }
 }

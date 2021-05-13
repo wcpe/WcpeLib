@@ -69,8 +69,6 @@ public final class WcpeLib extends PluginBase {
 
         if (enableRedis = getConfig().getBoolean("Setting.redis.enable")) {
             log(" Redis 开启! 开始连接!");
-        }
-        if (enableRedis) {
             long s = System.currentTimeMillis();
             try {
                 ConfigSection redisSection = getConfig().getSection("Setting").getSection("redis");

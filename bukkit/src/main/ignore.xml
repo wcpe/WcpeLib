@@ -18,6 +18,7 @@
                 <exclude>me.clip:placeholderapi</exclude>
                 <exclude>vault:vault</exclude>
                 <exclude>PlayerPoints:PlayerPoints</exclude>
+                <exclude>com.mojang:authlib</exclude>
             </excludes>
         </dependencySet>
     </dependencySets>

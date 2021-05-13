@@ -39,9 +39,14 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
 
     private Command mainCommand;
 
-    public String getSubPermission(Command subCommand) {
-        return subCommand.getPermission() == null ? this.getName() + "." + subCommand.getName() + ".use"
-                : subCommand.getPermission();
+
+    public String getSubPermission(Command command) {
+        if (mainCommand != null) {
+            return command.getPermission() == null ? command.getName() + ".use"
+                    : command.getPermission();
+        }
+        return command.getPermission() == null ? this.getName() + "." + command.getName() + ".use"
+                : command.getPermission();
     }
 
 
@@ -57,26 +62,44 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
         this.mainCommand = builder.mainCommand;
     }
 
-    private boolean executeJudge(Command mainCommand, CommandSender sender) {
-        if (mainCommand.isOnlyPlayerUse() && !(sender instanceof Player)) {
-            sender.sendMessage(mainCommand.getNoPlayerMessage());
+    private boolean executeJudge(Command command, CommandSender sender) {
+        if (command.isOnlyPlayerUse() && !(sender instanceof Player)) {
+            sender.sendMessage(command.getNoPlayerMessage());
             return false;
         }
-        String permission = mainCommand.getPermission();
-        if (permission == null) {
-            if (mainCommand instanceof Command) {
-                permission = getName() + "." + ((Command) mainCommand).getName() + ".use";
-            } else {
-                permission = getName() + ".use";
-            }
-        }
+        String permission = getSubPermission(command);
         if (!sender.hasPermission(permission)) {
-            sender.sendMessage(mainCommand.getNoPermissionMessage());
+            sender.sendMessage(StringUtil.replaceString(command.getNoPermissionMessage(), "permission:" + permission));
             return false;
         }
         return true;
     }
 
+    public int requiredArgs(String[] args, List<CommandArgument> listCommandArgument) {
+        if (args.length < listCommandArgument.size()) {
+            args = Arrays.copyOf(args, listCommandArgument.size());
+        }
+        for (int i = 0; i < listCommandArgument.size(); i++) {
+            String ignoreArg = listCommandArgument.get(i).getIgnoreArg();
+            if (ignoreArg == null && args[i] == null) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public String[] ignoreArgReplace(String[] args, List<CommandArgument> listCommandArgument) {
+        if (args.length < listCommandArgument.size()) {
+            args = Arrays.copyOf(args, listCommandArgument.size());
+        }
+        for (int i = 0; i < listCommandArgument.size(); i++) {
+            String ignoreArg = listCommandArgument.get(i).getIgnoreArg();
+            if (ignoreArg != null && ((args[i] == null || "".equals(args[i]) || " ".equals(args[i])))) {
+                args[i] = ignoreArg;
+            }
+        }
+        return args;
+    }
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
@@ -84,60 +107,44 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
             sender.sendMessage("§c插件§e " + this.plugin.getName() + " §c已被卸载 无法使用命令!");
             return true;
         }
+
         if (mainCommand != null) {
             if (!executeJudge(mainCommand, sender)) return true;
-            int validArg = 0;
-            for (CommandArgument arg : mainCommand.getArgs()) {
-                if (arg.getIgnoreArg() == null)
-                    validArg++;
-            }
-            if (args.length < validArg) {
-                sender.sendMessage("§c指令执行错误 请填写必填参数!");
+            List<CommandArgument> listCommandArgument = mainCommand.getArgs();
+            int i = requiredArgs(args, listCommandArgument);
+            if (i != -1) {
+                sender.sendMessage("§c指令执行错误 请填写必填参数 §6<" + listCommandArgument.get(i).getName() + "> §c!");
                 return true;
             }
+            args = ignoreArgReplace(args, listCommandArgument);
             ExecuteComponentFunctional executeComponent = mainCommand.getExecuteComponent();
             if (executeComponent != null) executeComponent.execute(sender, args);
             return true;
         }
-        if (args.length > 0)
-            for (Command subCommand : subCommandMap.values()) {
-                if (subCommand.isIgnoreCase() ? !subCommand.getName().equalsIgnoreCase(args[0])
-                        : !subCommand.getName().equals(args[0]))
-                    continue;
+        if (args.length > 0) {
+            Command subCommand = subCommandMap.get(args[0]);
+            if (subCommand != null) {
                 String[] subArgs;
                 if (args.length == 1)
                     subArgs = new String[]{};
                 else
                     subArgs = Arrays.copyOfRange(args, 1, args.length);
-                int validArg = 0;
-                List<CommandArgument> subArgLists = subCommand.getArgs();
-                for (int i = 0; i < subArgLists.size(); i++) {
-                    String ignoreArg = subArgLists.get(i).getIgnoreArg();
-                    if (subArgs.length <= i)
-                        subArgs = Arrays.copyOf(subArgs, i + 1);
-                    if ((subArgs[i] == null || "".equals(subArgs[i]) || " ".equals(subArgs[i])) && ignoreArg != null) {
-                        subArgs[i] = ignoreArg;
-                    }
-                    validArg++;
-                }
-                // 如果最后一个参数可忽略 减少一位输入参数
-                if (subArgLists != null && !subArgLists.isEmpty() && subArgLists.get(subArgLists.size() - 1).getIgnoreArg() != null) {
-                    validArg--;
-                }
-                if (args.length >= validArg) {
-                    for (String s : subArgs) {
-                        if (s == null) {
-                            sender.sendMessage("§c指令执行错误 请填写必填参数!");
-                            return true;
-                        }
-                    }
-                    if (!executeJudge(subCommand, sender)) return true;
-                    ExecuteComponentFunctional executeComponent = subCommand.getExecuteComponent();
-                    if (executeComponent != null)
-                        executeComponent.execute(sender, subArgs);
+                List<CommandArgument> listCommandArgument = subCommand.getArgs();
+                int i = requiredArgs(subArgs, listCommandArgument);
+                if (i != -1) {
+                    sender.sendMessage("§c指令执行错误 请填写必填参数 §6<" + listCommandArgument.get(i).getName() + "> §c!");
                     return true;
                 }
+                subArgs = ignoreArgReplace(subArgs, listCommandArgument);
+
+
+                if (!executeJudge(subCommand, sender)) return true;
+                ExecuteComponentFunctional executeComponent = subCommand.getExecuteComponent();
+                if (executeComponent != null)
+                    executeComponent.execute(sender, subArgs);
+                return true;
             }
+        }
 
         if (args.length == 0 || "help".equals(args[0])) {
             int page = 1;
@@ -178,7 +185,7 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
         if (!this.plugin.isEnabled() || args.length < 1)
             return null;
-        if (mainCommand != null) {
+        if (mainCommand != null && sender.hasPermission(getSubPermission(mainCommand))) {
             TabCompleterFunctional tabCompleter = mainCommand.getTabCompleter();
             if (tabCompleter != null)
                 return tabCompleter.onTabComplete(sender, args);
@@ -189,15 +196,15 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
                     .filter(sub -> sub.getName().startsWith(args[0]))
                     .map(Command::getName).collect(Collectors.toList());
         }
-        return subCommandMap.values().stream()
-                .filter(sub -> (sub.isIgnoreCase() ? sub.getName().equalsIgnoreCase(args[0])
-                        : sub.getName().equals(args[0])) && (sub.isOnlyPlayerUse() ? sender instanceof Player : true))
-                .findFirst().map(sub -> {
-                    TabCompleterFunctional tabCompleter = sub.getTabCompleter();
-                    if (tabCompleter != null)
-                        return tabCompleter.onTabComplete(sender, Arrays.copyOfRange(args, 1, args.length));
-                    return new ArrayList<String>();
-                }).orElse(null);
+        if (args.length > 1) {
+            Command command = subCommandMap.get(args[0]);
+            if (command != null && (command.isOnlyPlayerUse() ? sender instanceof Player : true)) {
+                TabCompleterFunctional tabCompleter = command.getTabCompleter();
+                if (tabCompleter != null)
+                    return tabCompleter.onTabComplete(sender, Arrays.copyOfRange(args, 1, args.length));
+            }
+        }
+        return null;
     }
 
     public static class Builder {

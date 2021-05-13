@@ -12,12 +12,14 @@ import java.util.stream.Collectors;
 public class StringUtil {
     /**
      * 保留中文 数字 字母 下划线
+     *
      * @param string
      * @return {@link String}
      */
-    public static String replace(String string){
+    public static String replace(String string) {
         return string.replaceAll("[^\\u4e00-\\u9fbba-zA-Z0-9_]", "");
     }
+
     /**
      * 获取重复的字符串
      *
@@ -36,7 +38,9 @@ public class StringUtil {
     /**
      * 合并字符串 添加分隔符
      *
-     * @return
+     * @param splitString
+     * @param strings
+     * @return String
      */
     public static String joining(String splitString, String... strings) {
         return Arrays.asList(strings).stream().collect(Collectors.joining(splitString));
@@ -47,12 +51,14 @@ public class StringUtil {
      *
      * @param sour
      * @param replaces
-     * @return
+     * @return String
      */
     public static String replaceString(String sour, String... replaces) {
         for (String s : replaces) {
-            String[] sSplit = s.split(":");
-            sour = sour.replaceFirst("\\%" + sSplit[0] + "\\%", sSplit[1]);
+            int i = s.indexOf(":");
+            if (i != -1) {
+                sour = sour.replaceAll("\\%" + s.substring(0, i) + "\\%", s.substring(i+1));
+            }
         }
         return sour;
     }

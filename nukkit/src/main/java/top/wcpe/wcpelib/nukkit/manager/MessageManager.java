@@ -39,9 +39,9 @@ public class MessageManager {
         } else {
             Config yaml = new Config();
             yaml.load(resource);
-            for (String s : yaml.getKeys(false)) {
+            for (String s : yaml.getKeys(true)) {
                 if (!messageYaml.isString(s))
-                    messageYaml.set(s, yaml.getString(s));
+                    messageYaml.set(s, yaml.get(s));
                 messageMap.put(s, yaml.getString(s));
             }
             messageYaml.save(messageFile);

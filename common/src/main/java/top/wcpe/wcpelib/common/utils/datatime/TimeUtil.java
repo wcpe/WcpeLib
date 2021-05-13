@@ -101,7 +101,7 @@ public class TimeUtil {
         s = s == null ? "秒" : s;
         m = m == null ? "分" : m;
         h = h == null ? "时" : h;
-        d = s == null ? "天" : d;
+        d = d == null ? "天" : d;
         long sec = date / 1000L;
         if (sec < 60L)
             return sec + s;
