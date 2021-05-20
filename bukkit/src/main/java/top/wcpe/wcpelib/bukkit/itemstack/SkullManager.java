@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.json.JSONObject;
 import top.wcpe.wcpelib.bukkit.WcpeLib;
-import top.wcpe.wcpelib.bukkit.utils.NmsUtil;
+import top.wcpe.wcpelib.bukkit.utils.NetMinecraftServerUtil;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
@@ -118,7 +118,7 @@ public class SkullManager {
 
     public static ItemStack getSkullItemStack() {
         ItemStack skull;
-        if (NmsUtil.getServerVersionNum() > 1122) {
+        if (NetMinecraftServerUtil.getServerVersionNum() > 1122) {
             skull = new ItemStack(Material.valueOf("PLAYER_HEAD"));
         } else {
             skull = new ItemStack(Material.getMaterial("SKULL_ITEM"), 1, (short) SkullType.PLAYER.ordinal());

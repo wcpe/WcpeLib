@@ -22,7 +22,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-public class NbtUtil {
+public class NameBinaryTagUtil {
 
     private static Method WRITE_NBT;
     private static Method READ_NBT;
@@ -38,20 +38,20 @@ public class NbtUtil {
     public static Class<?> NBTTagListClazz = Package.MINECRAFT_SERVER.getClass("NBTTagList");
     public static Class<?> CraftItemStackClazz = Package.CRAFTBUKKIT.getClass("inventory.CraftItemStack");
 
-    public NbtUtil() {
+    public NameBinaryTagUtil() {
         this.compound = create(NBTTagCompoundClazz);
     }
 
-    public NbtUtil(Object compound) {
+    public NameBinaryTagUtil(Object compound) {
         this.compound = compound;
     }
 
-    public NbtUtil(File file) {
+    public NameBinaryTagUtil(File file) {
         try {
             FileInputStream fis = new FileInputStream(file);
             this.compound = doStaticMethod(Package.MINECRAFT_SERVER.getClass("NBTCompressedStreamTools"), "a", new ParamGroup(fis, InputStream.class));
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(NbtUtil.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NameBinaryTagUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -90,9 +90,9 @@ public class NbtUtil {
         }
     }
 
-    public void setNBTList(String key, List<NbtUtil> list) {
+    public void setNBTList(String key, List<NameBinaryTagUtil> list) {
         Object nms = create(NBTTagListClazz);
-        for (NbtUtil nbt : list) {
+        for (NameBinaryTagUtil nbt : list) {
             doMethod(nms, "add", new ParamGroup(nbt.compound, NBTBaseClazz));
         }
         doMethod(compound, "set", new ParamGroup(key, String.class), new ParamGroup(nms, NBTBaseClazz));
@@ -118,14 +118,14 @@ public class NbtUtil {
         return ((Float) doMethod(compound, "getFloat", new ParamGroup(key)));
     }
 
-    public List<NbtUtil> getNBTList(String key) {
-        List<NbtUtil> nbts = new ArrayList<>();
+    public List<NameBinaryTagUtil> getNBTList(String key) {
+        List<NameBinaryTagUtil> nbts = new ArrayList<>();
         @SuppressWarnings("rawtypes")
 		Map map = (Map) getField(compound, "map");
         Object list = map.get(key);
         if (list != null) {
             for (int i = 0; i < (int) doMethod(list, "size"); i++) {
-                nbts.add(new NbtUtil(doMethod(list, "get", new ParamGroup(i, int.class))));
+                nbts.add(new NameBinaryTagUtil(doMethod(list, "get", new ParamGroup(i, int.class))));
             }
         }
         return nbts;
@@ -139,7 +139,7 @@ public class NbtUtil {
         return (ItemStack) doStaticMethod(CraftItemStackClazz, "asBukkitCopy", new ParamGroup(nmsItem));
     }
 
-    public NbtUtil readByItem(ItemStack item) {
+    public NameBinaryTagUtil readByItem(ItemStack item) {
         nmsItem = doStaticMethod(CraftItemStackClazz, "asNMSCopy", new ParamGroup(item, ItemStack.class));
         compound = ((Boolean) doMethod(nmsItem, "hasTag")) ? doMethod(nmsItem, "getTag") : create(NBTTagCompoundClazz);
         return this;
@@ -167,7 +167,7 @@ public class NbtUtil {
                 Object localNBTTagCompound = Package.MINECRAFT_SERVER.getClass("NBTTagCompound").getConstructor().newInstance();
                 if (localCraftItemStack != null) {
                     try {
-                        Object nmsItem = new NbtUtil().readByItem(item).nmsItem;
+                        Object nmsItem = new NameBinaryTagUtil().readByItem(item).nmsItem;
                         nmsItem.getClass().getMethod("save", Package.MINECRAFT_SERVER.getClass("NBTTagCompound")).invoke(nmsItem,
                                 localNBTTagCompound);
                     } catch (NullPointerException localNullPointerException) {

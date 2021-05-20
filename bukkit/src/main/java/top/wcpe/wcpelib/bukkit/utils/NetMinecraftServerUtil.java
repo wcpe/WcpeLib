@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class NmsUtil {
+public class NetMinecraftServerUtil {
     public static Class<?> getNmsClass(String Name) throws ClassNotFoundException {
         return Class.forName("net.minecraft.server."
                 + Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3] + "." + Name);
