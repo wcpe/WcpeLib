@@ -11,11 +11,10 @@ import java.util.TimerTask;
  * @create: 2021-05-03 17:24
  */
 public class OtherUtil {
-    private static Timer timer = new Timer();
 
     public static void putCountDownTask(CountDownPerSecondTask perSecondTask, CountDownFinishTask finishTask, int m) {
         long time = System.currentTimeMillis() + m * 1000;
-        timer.schedule(new TimerTask() {
+        new Timer().schedule(new TimerTask() {
             int times = m;
 
             @Override

@@ -11,8 +11,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
-import top.wcpe.wcpelib.bukkit.WcpeLib;
-import top.wcpe.wcpelib.bukkit.inventory.InventoryManager;
 import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
 import top.wcpe.wcpelib.bukkit.inventory.entity.InventoryCloseEventDTO;
 import top.wcpe.wcpelib.bukkit.inventory.listener.inter.InventoryCloseEventFunctional;
