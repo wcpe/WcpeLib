@@ -72,9 +72,9 @@ public final class WcpeLib extends PluginBase {
             long s = System.currentTimeMillis();
             try {
                 ConfigSection redisSection = getConfig().getSection("Setting").getSection("redis");
-                this.redis = new Redis(redisSection.getString("url"),redisSection.getInt("port"),redisSection.getInt("maxTotal"),redisSection.getInt("maxIdle"),redisSection.getInt("minIdle"),redisSection.getInt("maxWaitMillis"),redisSection.getBoolean("testOnBorrow"),redisSection.getBoolean("testOnReturn"));
+                this.redis = new Redis(redisSection.getString("url"), redisSection.getInt("port"), redisSection.getInt("maxTotal"), redisSection.getInt("maxIdle"), redisSection.getInt("minIdle"), redisSection.getInt("maxWaitMillis"), redisSection.getBoolean("testOnBorrow"), redisSection.getBoolean("testOnReturn"));
                 log(" Redis 链接成功! 共耗时:" + (System.currentTimeMillis() - s) + "Ms");
-                log(" host->"+redisSection.getString("url")+",port->"+redisSection.getInt("port"));
+                log(" host->" + redisSection.getString("url") + ",port->" + redisSection.getInt("port"));
             } catch (Exception e) {
                 e.printStackTrace();
                 log(" §c无法链接 Redis ! 请确认 Redis 开启，并且 WcpeLib 配置文件中的 Redis 配置填写正确!");
@@ -97,7 +97,7 @@ public final class WcpeLib extends PluginBase {
         SqlSession session = sqlSessionFactory.openSession();
 
         PlayerServerMapper playerServerMapper = session.getMapper(PlayerServerMapper.class);
-        if (playerServerMapper.existTable() != 0) {
+        if (playerServerMapper.existTable(getConfig().getString("Setting.mysql.database")) != 0) {
             playerServerMapper.dropTable();
         }
         playerServerMapper.createTable();

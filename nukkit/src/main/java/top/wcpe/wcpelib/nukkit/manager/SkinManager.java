@@ -1,6 +1,5 @@
 package top.wcpe.wcpelib.nukkit.manager;
 
-import cn.nukkit.Player;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.plugin.Plugin;

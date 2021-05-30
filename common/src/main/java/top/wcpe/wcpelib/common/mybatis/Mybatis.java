@@ -11,7 +11,7 @@ import lombok.Getter;
 
 public class Mybatis {
     public Mybatis(String url, int port, String database, String user, String password) {
-        this(url, port, database, "useSSL=false&characterEncoding=UTF-8", user, password);
+        this(url, port, database, "useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC", user, password);
     }
 
     public Mybatis(String url, int port, String database, String parameter, String user, String password) {

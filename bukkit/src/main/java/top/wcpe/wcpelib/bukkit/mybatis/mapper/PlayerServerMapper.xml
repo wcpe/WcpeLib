@@ -5,10 +5,8 @@
 <mapper namespace="top.wcpe.wcpelib.bukkit.mybatis.mapper.PlayerServerMapper">
 
 
-	<select id="existTable" resultType="Integer">
-		select count(*) from
-		information_schema.TABLES where
-		LCASE(table_name)='wcpelib_playerserver'
+	<select id="existTable" parameterType="string" resultType="Integer" >
+		select count(*) from information_schema.TABLES t where t.TABLE_SCHEMA =#{databaseName} and t.TABLE_NAME ='wcpelib_playerserver'
 	</select>
 
 	<update id="createTable">

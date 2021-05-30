@@ -106,11 +106,10 @@ public final class WcpeLib extends JavaPlugin {
         SqlSession session = sqlSessionFactory.openSession();
 
         PlayerServerMapper playerServerMapper = session.getMapper(PlayerServerMapper.class);
-        if (playerServerMapper.existTable() == 0) {
-            playerServerMapper.createTable();
-        } else {
+        if (playerServerMapper.existTable(getConfig().getString("Setting.mysql.database")) != 0) {
             playerServerMapper.dropTable();
         }
+        playerServerMapper.createTable();
         WcpeLib.getInstance().getServer().getPluginManager().registerEvents(new Listener() {
             @EventHandler(priority = EventPriority.HIGH)
             public void join(PlayerJoinEvent e) {

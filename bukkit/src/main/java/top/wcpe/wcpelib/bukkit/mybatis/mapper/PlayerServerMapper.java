@@ -5,17 +5,19 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface PlayerServerMapper {
-	int existTable();
+    int existTable(String databaseName);
 
-	void createTable();
-	void dropTable();
-	List<String> listPlayer();
+    void createTable();
 
-	String selectPlayerServer(@Param("name") String name);
+    void dropTable();
 
-	void updatePlayerServer(@Param("name") String name, @Param("servername") String serverName);
+    List<String> listPlayer();
 
-	void insertPlayerServer(@Param("name") String name, @Param("servername") String serverName);
+    String selectPlayerServer(@Param("name") String name);
 
-	void delPlayerServer(@Param("name") String name);
+    void updatePlayerServer(@Param("name") String name, @Param("servername") String serverName);
+
+    void insertPlayerServer(@Param("name") String name, @Param("servername") String serverName);
+
+    void delPlayerServer(@Param("name") String name);
 }
