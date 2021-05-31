@@ -19,7 +19,7 @@ public class StringActionUtil {
      * @param commands
      * @param p
      */
-    public static void executionCommands(List<String> commands, boolean hasPapi, Player p) {
+    public static void executionCommands(List<String> commands, Player p) {
         for (String command : commands) {
             executionCommands(command, p);
         }
