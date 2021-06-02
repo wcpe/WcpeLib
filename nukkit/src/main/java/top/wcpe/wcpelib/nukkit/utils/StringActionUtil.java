@@ -38,39 +38,45 @@ public class StringActionUtil {
      * @param p
      */
     public static void executionCommands(String command, Player p) {
-        command = command.replace("%player%", p.getName());
+        if (p != null)
+            command = command.replace("%player%", p.getName());
         if (command.startsWith("[CMD]")) {
             Server.getInstance().dispatchCommand(Server.getInstance().getConsoleSender(), command.substring(5));
             return;
         }
-        if (command.startsWith("[OP]")) {
-            boolean isOp = p.isOp();
-            try {
-                p.setOp(true);
-                p.chat(command.substring(4));
-            } catch (Exception e) {
-            } finally {
-                p.setOp(isOp);
+        if (p != null)
+            if (command.startsWith("[OP]")) {
+                boolean isOp = p.isOp();
+                try {
+                    p.setOp(true);
+                    p.chat(command.substring(4));
+                } catch (Exception e) {
+                } finally {
+                    p.setOp(isOp);
+                }
+                return;
             }
-            return;
-        }
-        if (command.startsWith("[CHAT]")) {
-            p.chat(command.substring(6));
-            return;
-        }
-        if (command.startsWith("[TITLE]")) {
-            String[] split = command.substring(7).split(";");
-            p.sendTitle(split[3], split[4], Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
-            return;
-        }
-        if (command.startsWith("[ACTION]")) {
-            p.sendActionBar(command.substring(8));
-            return;
-        }
+        if (p != null)
+            if (command.startsWith("[CHAT]")) {
+                p.chat(command.substring(6));
+                return;
+            }
+        if (p != null)
+            if (command.startsWith("[TITLE]")) {
+                String[] split = command.substring(7).split(";");
+                p.sendTitle(split[3], split[4], Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+                return;
+            }
+        if (p != null)
+            if (command.startsWith("[ACTION]")) {
+                p.sendActionBar(command.substring(8));
+                return;
+            }
         if (command.startsWith("[BD]")) {
             Server.getInstance().broadcastMessage(command.substring(4));
             return;
         }
-        p.sendMessage(command);
+        if (p != null)
+            p.sendMessage(command);
     }
 }
