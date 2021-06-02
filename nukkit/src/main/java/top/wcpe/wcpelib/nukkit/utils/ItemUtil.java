@@ -19,7 +19,7 @@ public class ItemUtil {
     public static boolean itemLoreContainLore(List<String> configLore, List<String> itemLore) {
         if (configLore == null || itemLore == null) return false;
         if (configLore.size() > itemLore.size()) return false;
-        for (int i = 0; i < itemLore.size(); i++) {
+        for (int i = 0; i < configLore.size(); i++) {
             if (!itemLore.contains(configLore.get(i))) {
                 return false;
             }
