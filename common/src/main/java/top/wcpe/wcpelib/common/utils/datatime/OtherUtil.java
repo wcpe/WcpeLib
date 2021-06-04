@@ -12,6 +12,13 @@ import java.util.TimerTask;
  */
 public class OtherUtil {
 
+    /**
+     * 创建倒计时任务
+     *
+     * @param perSecondTask
+     * @param finishTask
+     * @param m
+     */
     public static void putCountDownTask(CountDownPerSecondTask perSecondTask, CountDownFinishTask finishTask, int m) {
         long time = System.currentTimeMillis() + m * 1000;
         new Timer().schedule(new TimerTask() {
@@ -30,11 +37,34 @@ public class OtherUtil {
         }, 0, 1000);
     }
 
+    /**
+     * 创建倒计时任务
+     *
+     * @param perSecondTask
+     * @param finishTask
+     * @param period
+     */
+    public static void putCountDownTask(CountDownPerSecondJudgeTask perSecondTask, CountDownFinishTask finishTask, int period) {
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (!perSecondTask.onRun()) {
+                    finishTask.onRun();
+                    cancel();
+                    return;
+                }
+            }
+        }, 0, period);
+    }
+
     @FunctionalInterface
     public interface CountDownFinishTask {
         void onRun();
     }
-
+    @FunctionalInterface
+    public interface CountDownPerSecondJudgeTask {
+        boolean onRun();
+    }
     @FunctionalInterface
     public interface CountDownPerSecondTask {
         void onRun(int time);
