@@ -20,12 +20,12 @@ public final class LocationUtil {
      * @apiNote 判断needGo是否在AA BB之间
      */
     public static boolean isInAABB(Location needGo, Location AA, Location BB) {
-        double xMax = (Math.max(AA.getX(), BB.getX()));
-        double xMin = (Math.min(AA.getX(), BB.getX()));
-        double yMax = (Math.max(AA.getY(), BB.getY()));
-        double yMin = (Math.min(AA.getY(), BB.getY()));
-        double zMax = (Math.max(AA.getZ(), BB.getZ()));
-        double zMin = (Math.min(AA.getZ(), BB.getZ()));
+        int xMax = (int) Math.max(AA.getX(), BB.getX()) + 1;
+        int xMin = (int) (Math.min(AA.getX(), BB.getX()));
+        int yMax = (int) (Math.max(AA.getY(), BB.getY()));
+        int yMin = (int) (Math.min(AA.getY(), BB.getY()));
+        int zMax = (int) (Math.max(AA.getZ(), BB.getZ())) + 1;
+        int zMin = (int) (Math.min(AA.getZ(), BB.getZ()));
         return (needGo.getX() >= xMin) && (needGo.getX() <= xMax) && (needGo.getY() >= yMin) && (needGo.getY() <= yMax)
                 && (needGo.getZ() >= zMin) && (needGo.getZ() <= zMax);
     }
