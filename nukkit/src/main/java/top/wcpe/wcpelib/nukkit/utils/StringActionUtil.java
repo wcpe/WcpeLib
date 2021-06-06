@@ -3,6 +3,7 @@ package top.wcpe.wcpelib.nukkit.utils;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.scheduler.Task;
 
 import java.util.List;
 
@@ -41,7 +42,13 @@ public class StringActionUtil {
         if (p != null)
             command = command.replace("%player%", p.getName());
         if (command.startsWith("[CMD]")) {
-            Server.getInstance().dispatchCommand(Server.getInstance().getConsoleSender(), command.substring(5));
+            String finalCommand = command;
+            Server.getInstance().getScheduler().scheduleTask(new Task() {
+                @Override
+                public void onRun(int i) {
+                    Server.getInstance().dispatchCommand(Server.getInstance().getConsoleSender(), finalCommand.substring(5));
+                }
+            });
             return;
         }
         if (p != null)
