@@ -34,7 +34,7 @@ public class SkinManager {
 
     @Getter
     private final HashMap<String, Skin> skinMap = new HashMap<>();
-    Path skinFolderPath;
+    private Path skinFolderPath;
 
     public Skin getSkin(String skinName) throws Exception {
         Skin s = skinMap.get(skinName);
@@ -46,7 +46,7 @@ public class SkinManager {
         if (Files.notExists(skinDir) || !Files.isDirectory(skinDir) || Files.notExists(skinGeometryPath)
                 || !Files.isRegularFile(skinGeometryPath) || Files.notExists(skinPath)
                 || !Files.isRegularFile(skinPath)) {
-            throw new Exception("Skin does not exist");
+            return null;
         }
 
         String geometry;
@@ -55,7 +55,7 @@ public class SkinManager {
             geometry = new String(Files.readAllBytes(skinGeometryPath), StandardCharsets.UTF_8);
             skinData = ImageIO.read(skinPath.toFile());
         } catch (IOException e) {
-            throw new Exception("Error loading data", e);
+            return null;
         }
 
         skin.setGeometryData(geometry);
@@ -69,7 +69,10 @@ public class SkinManager {
 
     public CompoundTag getSkinTag(String skinName) throws Exception {
         Skin skin = getSkin(skinName);
-        CompoundTag skinTag = new CompoundTag().putByteArray("Data", skin.getSkinData().data)
+        if (skin == null) {
+            return new CompoundTag();
+        }
+        return new CompoundTag().putByteArray("Data", skin.getSkinData().data)
                 .putInt("SkinImageWidth", skin.getSkinData().width).putInt("SkinImageHeight", skin.getSkinData().height)
                 .putString("ModelId", skin.getSkinId()).putString("CapeId", skin.getCapeId())
                 .putByteArray("CapeData", skin.getCapeData().data).putInt("CapeImageWidth", skin.getCapeData().width)
@@ -79,6 +82,5 @@ public class SkinManager {
                 .putByteArray("AnimationData", skin.getAnimationData().getBytes(StandardCharsets.UTF_8))
                 .putBoolean("PremiumSkin", skin.isPremium()).putBoolean("PersonaSkin", skin.isPersona())
                 .putBoolean("CapeOnClassicSkin", skin.isCapeOnClassic());
-        return skinTag;
     }
 }
