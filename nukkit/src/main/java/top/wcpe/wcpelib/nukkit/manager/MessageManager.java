@@ -34,7 +34,7 @@ public class MessageManager {
 
         if (resource == null) {
             plugin.getLogger().log(LogLevel.WARNING,
-                    "[" + plugin.getName() + "] default " + fileName + " no exists!");
+                    "default " + fileName + " no exists!");
 
         } else {
             Config yaml = new Config();
