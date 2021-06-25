@@ -31,8 +31,19 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.45</version>
         </dependency>
+        <dependency>
+            <groupId>me.onebone</groupId>
+            <artifactId>economyapi</artifactId>
+            <version>1.0.1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
-
+    <repositories>
+        <repository>
+            <id>onebone</id>
+            <url>http://jenkins.onebone.me/plugin/repository/everything/</url>
+        </repository>
+    </repositories>
     <build>
         <resources>
             <resource>
