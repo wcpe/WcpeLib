@@ -62,4 +62,15 @@ public class StringUtil {
         }
         return sour;
     }
+
+    /**
+     * 替换 Windows 文件名不能使用的特殊字符
+     * . \ / : * ? " < > |
+     *
+     * @param src
+     * @return
+     */
+    public static String replaceWindowsSpecialCharacters(String src) {
+        return src.replaceAll("[\\.\\\\\\/:\\*\\?\"\\<\\>\\|]", "#");
+    }
 }
