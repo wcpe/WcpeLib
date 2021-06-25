@@ -57,7 +57,7 @@ public class StringUtil {
         for (String s : replaces) {
             int i = s.indexOf(":");
             if (i != -1) {
-                sour = sour.replaceAll("\\%" + s.substring(0, i) + "\\%", s.substring(i+1));
+                sour = sour.replace("%" + s.substring(0, i) + "%", s.substring(i + 1));
             }
         }
         return sour;
