@@ -36,7 +36,7 @@ public class SkinManager {
     private final HashMap<String, Skin> skinMap = new HashMap<>();
     private Path skinFolderPath;
 
-    public Skin getSkin(String skinName) throws Exception {
+    public Skin getSkin(String skinName) {
         Skin s = skinMap.get(skinName);
         if (s != null) return s;
         Skin skin = new Skin();
@@ -67,7 +67,7 @@ public class SkinManager {
         return skin;
     }
 
-    public CompoundTag getSkinTag(String skinName) throws Exception {
+    public CompoundTag getSkinTag(String skinName) {
         Skin skin = getSkin(skinName);
         if (skin == null) {
             return new CompoundTag();
