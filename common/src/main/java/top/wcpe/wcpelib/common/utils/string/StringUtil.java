@@ -1,5 +1,7 @@
 package top.wcpe.wcpelib.common.utils.string;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -17,6 +19,9 @@ public class StringUtil {
      * @return {@link String}
      */
     public static String replace(String string) {
+        if (string == null) {
+            return null;
+        }
         return string.replaceAll("[^\\u4e00-\\u9fbba-zA-Z0-9_]", "");
     }
 
@@ -28,6 +33,9 @@ public class StringUtil {
      * @return {@link String}
      */
     public static String getRepeatString(String string, int length) {
+        if (string == null) {
+            return null;
+        }
         StringBuilder sb = new StringBuilder();
         for (; length > 0; length--) {
             sb.append(string);
@@ -54,6 +62,7 @@ public class StringUtil {
      * @return String
      */
     public static String replaceString(String sour, String... replaces) {
+        if (sour == null) return null;
         for (String s : replaces) {
             int i = s.indexOf(":");
             if (i != -1) {
@@ -71,6 +80,7 @@ public class StringUtil {
      * @return
      */
     public static String replaceWindowsSpecialCharacters(String src) {
+        if (src == null) return null;
         return src.replaceAll("[\\.\\\\\\/:\\*\\?\"\\<\\>\\|]", "#");
     }
 }
