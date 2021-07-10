@@ -1,8 +1,6 @@
 package top.wcpe.wcpelib.bukkit.inventory.listener;
 
-import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
