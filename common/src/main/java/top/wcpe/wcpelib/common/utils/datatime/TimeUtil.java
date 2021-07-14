@@ -18,6 +18,7 @@ public class TimeUtil {
 
     /**
      * 获取距离明天还有多久时间
+     *
      * @return
      */
     public static long getNextDayStamp() {
@@ -39,7 +40,7 @@ public class TimeUtil {
      *
      * @param time 时间戳
      */
-    public static Long timeToStamp(String time) {
+    public static Long timeToStamp(String time) throws ParseException {
         return timeToStamp(time, null);
     }
 
@@ -49,14 +50,8 @@ public class TimeUtil {
      * @param time   时间戳
      * @param format 格式
      */
-    public static Long timeToStamp(String time, String format) {
-        format = format == null ? "yyyy-MM-dd HH:mm:ss" : format;
-        try {
-            return new SimpleDateFormat(format).parse(time).getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public static Long timeToStamp(String time, String format) throws ParseException {
+        return new SimpleDateFormat(format == null ? "yyyy-MM-dd HH:mm:ss" : format).parse(time).getTime();
     }
 
     /**
@@ -75,8 +70,7 @@ public class TimeUtil {
      * @param format 格式
      */
     public static String stampToTime(long date, String format) {
-        format = format == null ? "yyyy-MM-dd HH:mm:ss" : format;
-        return String.valueOf(new SimpleDateFormat(format).format(new Date(date)));
+        return new SimpleDateFormat(format == null ? "yyyy-MM-dd HH:mm:ss" : format).format(new Date(date));
     }
 
     /**
