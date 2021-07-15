@@ -23,6 +23,16 @@ public class RandomUtil {
     }
 
     /**
+     * 生成 [min, max] 区间随机值
+     * @param min
+     * @param max
+     * @return
+     */
+    public double nextRandom(double min, double max) {
+        return min + Math.random() * max;
+    }
+
+    /**
      * 区间定位随机返回 List 中一个索引值
      *
      * @param mapList
