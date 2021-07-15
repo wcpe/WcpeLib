@@ -1,13 +1,30 @@
 package top.wcpe.wcpelib.nukkit.utils;
 
 
-
-
 import java.util.List;
 
 
 public class ItemUtil {
 
+
+    /**
+     * 获取 ItemLore 中 字符串的索引位置
+     *
+     * @param itemLore
+     * @param str
+     * @return
+     */
+    public int getStringInItemLoreIndex(List<String> itemLore, String str) {
+        if (itemLore == null) {
+            return -1;
+        }
+        for (int i = 0; i < itemLore.size(); i++) {
+            if (itemLore.get(i).contains(str)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
     /**
      * itemLore 中是否包含 configLore
