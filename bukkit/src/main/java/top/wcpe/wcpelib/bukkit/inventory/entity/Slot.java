@@ -2,6 +2,7 @@ package top.wcpe.wcpelib.bukkit.inventory.entity;
 
 import java.util.*;
 
+import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -20,29 +21,65 @@ import top.wcpe.wcpelib.bukkit.utils.NetMinecraftServerUtil;
  * @date 2021年4月8日 下午5:20:07
  */
 public class Slot<E extends SlotExtend> {
+    public ItemStack getItemStack() {
+        ItemStack itemStack;
+        if (NetMinecraftServerUtil.getServerVersionNum() >= 1130) {
+            itemStack = new ItemStack(this.type);
+            itemStack.setAmount(this.amount);
+            itemStack.setDurability((short) this.durability);
+        } else {
+            itemStack = new ItemStack(this.type.getId(), this.amount, (short) this.durability, (byte) this.data);
+        }
+        itemStack.addUnsafeEnchantments(this.enchantments);
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta != null) {
+            itemMeta.setUnbreakable(this.unbreakable);
+            itemMeta.setDisplayName(this.name);
+            itemMeta.setLore(this.lores);
+            itemStack.setItemMeta(itemMeta);
+        }
+        return itemStack;
+    }
+
     @Getter
-    private ItemStack itemStack;
+    @Setter
+    private Material type;
     @Getter
-    private final SlotEventFunctional onClick;
+    @Setter
+    private int data = 0;
+    @Getter
+    @Setter
+    private String name;
+    @Getter
+    @Setter
+    private List<String> lores;
+    @Getter
+    @Setter
+    private int durability;
+    @Getter
+    @Setter
+    private int amount;
+    @Getter
+    @Setter
+    private Map<Enchantment, Integer> enchantments;
+    @Getter
+    @Setter
+    private boolean unbreakable;
+    @Getter
+    @Setter
+    private SlotEventFunctional onClick;
 
     private final Object slotExtend;
 
     private Slot(Builder<E> builder) {
-        if (NetMinecraftServerUtil.getServerVersionNum() >= 1130) {
-            this.itemStack = new ItemStack(builder.type);
-            this.itemStack.setAmount(builder.amount);
-            this.itemStack.setDurability((short) builder.durability);
-        } else {
-            this.itemStack = new ItemStack(builder.type.getId(), builder.amount, (short) builder.durability, (byte) builder.data);
-        }
-        this.itemStack.addUnsafeEnchantments(builder.enchantments);
-        ItemMeta itemMeta = this.itemStack.getItemMeta();
-        if (itemMeta != null) {
-            itemMeta.setUnbreakable(builder.unbreakable);
-            itemMeta.setDisplayName(builder.name);
-            itemMeta.setLore(builder.lores);
-            this.itemStack.setItemMeta(itemMeta);
-        }
+        this.type = builder.type;
+        this.data = builder.data;
+        this.name = builder.name;
+        this.lores = builder.lores;
+        this.durability = builder.durability;
+        this.amount = builder.amount;
+        this.enchantments = builder.enchantments;
+        this.unbreakable = builder.unbreakable;
         this.onClick = builder.onClick;
         this.slotExtend = builder.slotExtend;
     }
