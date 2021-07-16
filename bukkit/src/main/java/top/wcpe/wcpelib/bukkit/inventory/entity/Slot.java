@@ -37,10 +37,12 @@ public class Slot<E extends SlotExtend> {
         }
         this.itemStack.addUnsafeEnchantments(builder.enchantments);
         ItemMeta itemMeta = this.itemStack.getItemMeta();
-        itemMeta.setUnbreakable(builder.unbreakable);
-        itemMeta.setDisplayName(builder.name);
-        itemMeta.setLore(builder.lores);
-        this.itemStack.setItemMeta(itemMeta);
+        if (itemMeta != null) {
+            itemMeta.setUnbreakable(builder.unbreakable);
+            itemMeta.setDisplayName(builder.name);
+            itemMeta.setLore(builder.lores);
+            this.itemStack.setItemMeta(itemMeta);
+        }
         this.onClick = builder.onClick;
         this.slotExtend = builder.slotExtend;
     }
