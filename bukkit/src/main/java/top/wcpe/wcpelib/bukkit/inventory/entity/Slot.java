@@ -35,7 +35,7 @@ public class Slot<E extends SlotExtend> {
         } else {
             this.itemStack = new ItemStack(builder.type.getId(), builder.amount, (short) builder.durability, (byte) builder.data);
         }
-        this.itemStack.getEnchantments().putAll(builder.enchantments);
+        this.itemStack.addUnsafeEnchantments(builder.enchantments);
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         itemMeta.setUnbreakable(builder.unbreakable);
         itemMeta.setDisplayName(builder.name);
