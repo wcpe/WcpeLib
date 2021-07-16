@@ -56,6 +56,10 @@ public class InventoryPlus {
     @Getter
     private InventoryCloseEventFunctional onClose;
 
+    @Getter
+    @Setter
+    private boolean close = true;
+
     public InventoryPlus setSlot(int index, Slot<?> slot) {
         slotMap.put(index, slot);
         return this;

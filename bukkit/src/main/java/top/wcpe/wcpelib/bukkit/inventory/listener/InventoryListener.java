@@ -64,8 +64,6 @@ public class InventoryListener implements Listener {
     public void inventoryDragEvent(InventoryDragEvent e) {
         if (!(e.getInventory().getHolder() instanceof WcpeLibInventoryHolder))
             return;
-        if (!(e.getInventory().getHolder() instanceof WcpeLibInventoryHolder))
-            return;
         InventoryPlus inventoryPlus = ((WcpeLibInventoryHolder) e.getInventory().getHolder()).getInventoryPlus();
         if (inventoryPlus == null) {
             return;
@@ -81,12 +79,11 @@ public class InventoryListener implements Listener {
     public void inventoryOpenEvent(InventoryOpenEvent e) {
         if (!(e.getInventory().getHolder() instanceof WcpeLibInventoryHolder))
             return;
-        if (!(e.getInventory().getHolder() instanceof WcpeLibInventoryHolder))
-            return;
         InventoryPlus inventoryPlus = ((WcpeLibInventoryHolder) e.getInventory().getHolder()).getInventoryPlus();
         if (inventoryPlus == null) {
             return;
         }
+        inventoryPlus.setClose(true);
         InventoryOpenEventFunctional onOpen = inventoryPlus.getOnOpen();
         if (onOpen == null) {
             return;
@@ -100,12 +97,13 @@ public class InventoryListener implements Listener {
     public void inventoryCloseEvent(InventoryCloseEvent e) {
         if (!(e.getInventory().getHolder() instanceof WcpeLibInventoryHolder))
             return;
-        if (!(e.getInventory().getHolder() instanceof WcpeLibInventoryHolder))
-            return;
         InventoryPlus inventoryPlus = ((WcpeLibInventoryHolder) e.getInventory().getHolder()).getInventoryPlus();
         if (inventoryPlus == null) {
             return;
         }
+        if (!inventoryPlus.isClose())
+            return;
+        inventoryPlus.setClose(false);
         InventoryCloseEventFunctional onClose = inventoryPlus.getOnClose();
         if (onClose == null) {
             return;
