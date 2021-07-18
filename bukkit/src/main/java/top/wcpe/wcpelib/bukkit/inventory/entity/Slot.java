@@ -21,6 +21,12 @@ import top.wcpe.wcpelib.bukkit.utils.NetMinecraftServerUtil;
  * @date 2021年4月8日 下午5:20:07
  */
 public class Slot<E extends SlotExtend> {
+
+
+    public Slot clone() {
+        return new Slot.Builder<>(getItemStack()).onClick(onClick).slotExtend(getSlotExtend()).build();
+    }
+
     public ItemStack getItemStack() {
         ItemStack itemStack;
         if (NetMinecraftServerUtil.getServerVersionNum() >= 1130) {
@@ -39,6 +45,23 @@ public class Slot<E extends SlotExtend> {
             itemStack.setItemMeta(itemMeta);
         }
         return itemStack;
+    }
+
+    public void setItemStack(ItemStack itemStack) {
+        if (itemStack == null) {
+            return;
+        }
+        this.type = itemStack.getType();
+        this.data = itemStack.getData().getData();
+        this.durability = itemStack.getDurability();
+        this.amount = itemStack.getAmount();
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta != null) {
+            this.name = itemMeta.getDisplayName();
+            this.lores = itemMeta.getLore();
+            this.enchantments = itemMeta.getEnchants();
+            this.unbreakable = itemMeta.isUnbreakable();
+        }
     }
 
     @Getter
@@ -107,15 +130,20 @@ public class Slot<E extends SlotExtend> {
         }
 
         public Builder(ItemStack item) {
+            if (item == null) {
+                return;
+            }
             this.type = item.getType();
             this.data = item.getData().getData();
             this.durability = item.getDurability();
             this.amount = item.getAmount();
             ItemMeta itemMeta = item.getItemMeta();
-            this.name = itemMeta.getDisplayName();
-            this.lores = itemMeta.getLore();
-            this.enchantments = itemMeta.getEnchants();
-            this.unbreakable = itemMeta.isUnbreakable();
+            if (itemMeta != null) {
+                this.name = itemMeta.getDisplayName();
+                this.lores = itemMeta.getLore();
+                this.enchantments = itemMeta.getEnchants();
+                this.unbreakable = itemMeta.isUnbreakable();
+            }
         }
 
         public Builder<E> name(String name) {
