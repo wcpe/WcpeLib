@@ -10,13 +10,8 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
 import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
-import top.wcpe.wcpelib.bukkit.inventory.entity.InventoryCloseEventDTO;
-import top.wcpe.wcpelib.bukkit.inventory.listener.inter.InventoryCloseEventFunctional;
-import top.wcpe.wcpelib.bukkit.inventory.listener.inter.InventoryOpenEventFunctional;
-import top.wcpe.wcpelib.bukkit.inventory.listener.inter.SlotEventFunctional;
-import top.wcpe.wcpelib.bukkit.inventory.entity.InventoryOpenEventDTO;
-import top.wcpe.wcpelib.bukkit.inventory.entity.Slot;
-import top.wcpe.wcpelib.bukkit.inventory.entity.SlotDTO;
+import top.wcpe.wcpelib.bukkit.inventory.entity.*;
+import top.wcpe.wcpelib.bukkit.inventory.listener.inter.*;
 
 /**
  * {@link InventoryPlus}的监听事件
@@ -34,10 +29,18 @@ public class InventoryListener implements Listener {
         if (inventoryPlus == null) {
             return;
         }
+        InventoryClickEventFunctional invOnClick = inventoryPlus.getOnClick();
+        if (invOnClick != null) {
+            invOnClick.run(new InventoryClickEventDTO(e, inventoryPlus));
+        }
         if (inventoryPlus.isDisDoubleClick() && e.getClick() == ClickType.DOUBLE_CLICK) {
             e.setCancelled(true);
         }
         int rawSlot = e.getRawSlot();
+        if (inventoryPlus.getIsLockSlot().contains(rawSlot)) {
+            e.setCancelled(true);
+            return;
+        }
         if (inventoryPlus.isDisClickPlayerGui()) {
             int min = inventoryPlus.getRow() * 9;
             int max = inventoryPlus.getRow() * 9 + 35;
@@ -68,6 +71,10 @@ public class InventoryListener implements Listener {
         if (inventoryPlus == null) {
             return;
         }
+        InventoryDragEventFunctional onDrag = inventoryPlus.getOnDrag();
+        if (onDrag != null) {
+            onDrag.run(new InventoryDragEventDTO(e, inventoryPlus));
+        }
         if (inventoryPlus.isDisDrag()) {
             e.setCancelled(true);
             return;
@@ -83,7 +90,7 @@ public class InventoryListener implements Listener {
         if (inventoryPlus == null) {
             return;
         }
-        inventoryPlus.setClose(true);
+        inventoryPlus.setClose(false);
         InventoryOpenEventFunctional onOpen = inventoryPlus.getOnOpen();
         if (onOpen == null) {
             return;
@@ -101,9 +108,9 @@ public class InventoryListener implements Listener {
         if (inventoryPlus == null) {
             return;
         }
-        if (!inventoryPlus.isClose())
+        if (inventoryPlus.isClose())
             return;
-        inventoryPlus.setClose(false);
+        inventoryPlus.setClose(true);
         InventoryCloseEventFunctional onClose = inventoryPlus.getOnClose();
         if (onClose == null) {
             return;

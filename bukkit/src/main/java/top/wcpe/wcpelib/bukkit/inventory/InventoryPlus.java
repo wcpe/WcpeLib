@@ -1,6 +1,8 @@
 package top.wcpe.wcpelib.bukkit.inventory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
 
@@ -14,9 +16,7 @@ import lombok.Setter;
 import top.wcpe.wcpelib.bukkit.WcpeLib;
 import top.wcpe.wcpelib.bukkit.inventory.listener.InventoryListener;
 import top.wcpe.wcpelib.bukkit.inventory.listener.WcpeLibInventoryHolder;
-import top.wcpe.wcpelib.bukkit.inventory.listener.inter.InventoryCloseEventFunctional;
-import top.wcpe.wcpelib.bukkit.inventory.listener.inter.InventoryOpenEventFunctional;
-import top.wcpe.wcpelib.bukkit.inventory.listener.inter.RefreshInventoryPlusFunctional;
+import top.wcpe.wcpelib.bukkit.inventory.listener.inter.*;
 import top.wcpe.wcpelib.bukkit.inventory.entity.Slot;
 
 /**
@@ -52,16 +52,29 @@ public class InventoryPlus {
     @Getter
     private boolean disClickNullSlot;
     @Getter
+    @Setter
     private InventoryOpenEventFunctional onOpen;
     @Getter
+    @Setter
+    private InventoryDragEventFunctional onDrag;
+    @Getter
+    @Setter
+    private InventoryClickEventFunctional onClick;
+    @Getter
+    @Setter
     private InventoryCloseEventFunctional onClose;
 
     @Getter
     @Setter
     private boolean close = true;
 
+    @Getter
+    @Setter
+    private List<Integer> isLockSlot = new ArrayList<>();
+
     public InventoryPlus setSlot(int index, Slot<?> slot) {
         slotMap.put(index, slot);
+        this.refreshInventory(index);
         return this;
     }
 
@@ -112,6 +125,10 @@ public class InventoryPlus {
         }
     }
 
+    public void refreshInventory(int i) {
+        this.rawInventory.setItem(i, getSlotMap().get(i).getItemStack());
+    }
+
     public Inventory getRawInventory() {
         refreshInventory();
         return this.rawInventory;
@@ -130,6 +147,8 @@ public class InventoryPlus {
         this.disDrag = builder.disDrag;
         this.disClickPlayerGui = builder.disClickPlayerGui;
         this.onOpen = builder.onOpen;
+        this.onDrag = builder.onDrag;
+        this.onClick = builder.onClick;
         this.onClose = builder.onClose;
     }
 
@@ -146,6 +165,8 @@ public class InventoryPlus {
         private boolean disClickPlayerGui;
 
         private InventoryOpenEventFunctional onOpen;
+        private InventoryDragEventFunctional onDrag;
+        private InventoryClickEventFunctional onClick;
         private InventoryCloseEventFunctional onClose;
 
         public Builder() {
@@ -189,6 +210,16 @@ public class InventoryPlus {
 
         public Builder onOpen(InventoryOpenEventFunctional onOpen) {
             this.onOpen = onOpen;
+            return this;
+        }
+
+        public Builder onDrag(InventoryDragEventFunctional onDrag) {
+            this.onDrag = onDrag;
+            return this;
+        }
+
+        public Builder onClick(InventoryClickEventFunctional onClick) {
+            this.onClick = onClick;
             return this;
         }
 
