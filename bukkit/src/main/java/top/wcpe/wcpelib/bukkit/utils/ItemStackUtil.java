@@ -92,7 +92,7 @@ public class ItemStackUtil {
      * @param str
      * @return
      */
-    public int getStringInItemLoreIndex(List<String> itemLore, String str) {
+    public static int getStringInItemLoreIndex(List<String> itemLore, String str) {
         if (itemLore == null) {
             return -1;
         }
@@ -121,7 +121,6 @@ public class ItemStackUtil {
             }
         }
         return true;
-
     }
 
     /**
