@@ -13,6 +13,20 @@ import java.util.stream.Collectors;
 public final class LocationUtil {
 
     /**
+     * 判断 entityLocation 是否在 targetLocation 周围 radius 格内
+     * @param targetLocation
+     * @param entityLocation
+     * @param radius
+     * @return
+     */
+    public static boolean isInRadius(Location targetLocation, Location entityLocation, double radius) {
+        if (targetLocation == null || entityLocation == null) {
+            return false;
+        }
+        return targetLocation.distance(entityLocation) < radius;
+    }
+
+    /**
      * @param needGo 点坐标
      * @param AA     一个对角点
      * @param BB     另一个对角点
