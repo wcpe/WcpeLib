@@ -23,16 +23,27 @@ public class SerializeClassUtil {
         sb.append(loc.getY());
         sb.append(";");
         sb.append(loc.getZ());
+        sb.append(";");
+        sb.append(loc.getYaw());
+        sb.append(";");
+        sb.append(loc.getPitch());
         return sb.toString();
     }
 
     public static Location stringToLocation(String stringLocation) {
         if (stringLocation == null) return null;
         String[] locStringSplit = stringLocation.split(";");
+        if (locStringSplit.length < 3) {
+            return null;
+        }
         World world = Bukkit.getWorld(locStringSplit[0]);
         if (world == null) return null;
         try {
-            return new Location(world, Double.parseDouble(locStringSplit[1]), Double.parseDouble(locStringSplit[2]), Double.parseDouble(locStringSplit[3]));
+            if (locStringSplit.length >= 5) {
+                return new Location(world, Double.parseDouble(locStringSplit[1]), Double.parseDouble(locStringSplit[2]), Double.parseDouble(locStringSplit[3]), Float.parseFloat(locStringSplit[4]), Float.parseFloat(locStringSplit[5]));
+            } else {
+                return new Location(world, Double.parseDouble(locStringSplit[1]), Double.parseDouble(locStringSplit[2]), Double.parseDouble(locStringSplit[3]));
+            }
         } catch (NumberFormatException e) {
             return null;
         }
