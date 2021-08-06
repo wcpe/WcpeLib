@@ -12,6 +12,7 @@ import lombok.Getter;
 import org.bukkit.material.MaterialData;
 import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
 import top.wcpe.wcpelib.bukkit.inventory.listener.inter.SlotEventFunctional;
+import top.wcpe.wcpelib.bukkit.utils.NameBinaryTagUtil;
 import top.wcpe.wcpelib.bukkit.utils.NetMinecraftServerUtil;
 
 /**
@@ -27,6 +28,8 @@ public class Slot<E extends SlotExtend> {
         return new Slot.Builder<>(getItemStack()).onClick(onClick).slotExtend(getSlotExtend()).build();
     }
 
+    private NameBinaryTagUtil nameBinaryTagUtil = new NameBinaryTagUtil();
+
     public ItemStack getItemStack() {
         ItemStack itemStack;
         if (NetMinecraftServerUtil.getServerVersionNum() >= 1130) {
@@ -36,6 +39,7 @@ public class Slot<E extends SlotExtend> {
         } else {
             itemStack = new ItemStack(this.type.getId(), this.amount, (short) this.durability, (byte) this.data);
         }
+        itemStack = nameBinaryTagUtil.writeToItemStack(itemStack);
         itemStack.addUnsafeEnchantments(this.enchantments);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta != null) {
@@ -51,6 +55,7 @@ public class Slot<E extends SlotExtend> {
         if (itemStack == null) {
             return;
         }
+        nameBinaryTagUtil = nameBinaryTagUtil.readByItem(itemStack);
         this.type = itemStack.getType();
         this.data = itemStack.getData().getData();
         this.durability = itemStack.getDurability();
@@ -105,6 +110,7 @@ public class Slot<E extends SlotExtend> {
         this.unbreakable = builder.unbreakable;
         this.onClick = builder.onClick;
         this.slotExtend = builder.slotExtend;
+        this.nameBinaryTagUtil = builder.nameBinaryTagUtil;
     }
 
 
@@ -123,6 +129,7 @@ public class Slot<E extends SlotExtend> {
         private Map<Enchantment, Integer> enchantments = new HashMap<>();
         private boolean unbreakable = false;
         private SlotEventFunctional onClick;
+        private NameBinaryTagUtil nameBinaryTagUtil = new NameBinaryTagUtil();
 
         private E slotExtend;
 
@@ -133,6 +140,7 @@ public class Slot<E extends SlotExtend> {
             if (item == null) {
                 return;
             }
+            nameBinaryTagUtil = nameBinaryTagUtil.readByItem(item);
             this.type = item.getType();
             this.data = item.getData().getData();
             this.durability = item.getDurability();

@@ -118,10 +118,18 @@ public class NameBinaryTagUtil {
         return ((Float) doMethod(compound, "getFloat", new ParamGroup(key)));
     }
 
+    public Object get(String key) {
+        return doMethod(compound, "get", new ParamGroup(key));
+    }
+
+    public Map getNBTList() {
+        return (Map) getField(compound, "map");
+    }
+
     public List<NameBinaryTagUtil> getNBTList(String key) {
         List<NameBinaryTagUtil> nbts = new ArrayList<>();
         @SuppressWarnings("rawtypes")
-		Map map = (Map) getField(compound, "map");
+        Map map = (Map) getField(compound, "map");
         Object list = map.get(key);
         if (list != null) {
             for (int i = 0; i < (int) doMethod(list, "size"); i++) {
@@ -139,7 +147,7 @@ public class NameBinaryTagUtil {
         return (ItemStack) doStaticMethod(CraftItemStackClazz, "asBukkitCopy", new ParamGroup(nmsItem));
     }
 
-    public NameBinaryTagUtil readByItem(ItemStack item) {
+    public  NameBinaryTagUtil readByItem(ItemStack item) {
         nmsItem = doStaticMethod(CraftItemStackClazz, "asNMSCopy", new ParamGroup(item, ItemStack.class));
         compound = ((Boolean) doMethod(nmsItem, "hasTag")) ? doMethod(nmsItem, "getTag") : create(NBTTagCompoundClazz);
         return this;
@@ -162,6 +170,9 @@ public class NameBinaryTagUtil {
         }
         try {
             for (ItemStack item : items) {
+                if (item == null) {
+                    continue;
+                }
                 Object localCraftItemStack = Package.CRAFTBUKKIT.getClass("inventory.CraftItemStack")
                         .getMethod("asCraftCopy", ItemStack.class).invoke(item, item);
                 Object localNBTTagCompound = Package.MINECRAFT_SERVER.getClass("NBTTagCompound").getConstructor().newInstance();
