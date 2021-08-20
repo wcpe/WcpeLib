@@ -27,12 +27,25 @@ public class CommandManager {
 		try {
 			bukkitSimpleCommandMap = (SimpleCommandMap) c.getDeclaredMethod("getCommandMap").invoke(Bukkit.getServer(),
 					null);
-			Field knownCommandsField = bukkitSimpleCommandMap.getClass().getDeclaredField("knownCommands");
+			Field knownCommandsField = getField(bukkitSimpleCommandMap.getClass(), "knownCommands");
 			knownCommandsField.setAccessible(true);
 			bukkitCommandMap = (HashMap<String, Command>) knownCommandsField.get(bukkitSimpleCommandMap);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException | NoSuchFieldException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private static Field getField(Class clazz, String fieldName) throws NoSuchFieldException {
+		try {
+			return clazz.getDeclaredField(fieldName);
+		} catch (NoSuchFieldException e) {
+			Class superClass = clazz.getSuperclass();
+			if (superClass == null) {
+				throw e;
+			} else {
+				return getField(superClass, fieldName);
+			}
 		}
 	}
 
