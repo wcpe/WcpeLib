@@ -70,7 +70,7 @@ public class SkinManager {
     public CompoundTag getSkinTag(String skinName) {
         Skin skin = getSkin(skinName);
         if (skin == null) {
-            return new CompoundTag();
+            return null;
         }
         return new CompoundTag().putByteArray("Data", skin.getSkinData().data)
                 .putInt("SkinImageWidth", skin.getSkinData().width).putInt("SkinImageHeight", skin.getSkinData().height)
