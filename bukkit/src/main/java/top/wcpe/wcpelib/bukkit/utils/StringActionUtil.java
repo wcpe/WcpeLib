@@ -11,6 +11,7 @@ public class StringActionUtil {
      * 解析执行操作 目前有以下操作
      * [CMD]say 我是后台执行的指令say
      * [OP]/say 我用OP权限执行了say
+     * [PLAYER]say hello
      * [CHAT]哈喽 我说了一句话
      * [TITLE]10;70;20;主标题;副标题
      * [ACTION]快捷栏消息
@@ -43,6 +44,7 @@ public class StringActionUtil {
      * 解析执行操作 目前有以下操作
      * [CMD]say 我是后台执行的指令say
      * [OP]/say 我用OP权限执行了say
+     * [PLAYER]say hello
      * [CHAT]哈喽 我说了一句话
      * [TITLE]10;70;20;主标题;副标题
      * [ACTION]快捷栏消息
@@ -58,7 +60,11 @@ public class StringActionUtil {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.substring(5));
             return;
         }
-        if (p != null)
+        if (command.startsWith("[BD]")) {
+            Bukkit.broadcastMessage(hasPapi ? setPlaceholders(p, command.substring(4)) : command.substring(4));
+            return;
+        }
+        if (p != null) {
             if (command.startsWith("[OP]")) {
                 boolean isOp = p.isOp();
                 try {
@@ -70,27 +76,29 @@ public class StringActionUtil {
                 }
                 return;
             }
-        if (p != null)
+
+            if (command.startsWith("[PLAYER]")) {
+                Bukkit.dispatchCommand(p, command.substring(8));
+                return;
+            }
+
             if (command.startsWith("[CHAT]")) {
                 p.chat(hasPapi ? setPlaceholders(p, command.substring(6)) : command.substring(6));
                 return;
             }
-        if (p != null)
+
             if (command.startsWith("[TITLE]")) {
                 String[] split = command.substring(7).split(";");
                 p.sendTitle(hasPapi ? setPlaceholders(p, split[3]) : split[3], hasPapi ? setPlaceholders(p, split[4]) : split[4], Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
                 return;
             }
-        if (p != null)
+
             if (command.startsWith("[ACTION]")) {
                 NetMinecraftServerUtil.sendAction(p, hasPapi ? setPlaceholders(p, command.substring(8)) : command.substring(8));
                 return;
             }
-        if (command.startsWith("[BD]")) {
-            Bukkit.broadcastMessage(hasPapi ? setPlaceholders(p, command.substring(4)) : command.substring(4));
-            return;
-        }
-        if (p != null)
+
             p.sendMessage(hasPapi ? setPlaceholders(p, command) : command);
+        }
     }
 }
