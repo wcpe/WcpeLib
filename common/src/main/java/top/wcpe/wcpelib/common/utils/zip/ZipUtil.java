@@ -19,24 +19,34 @@ public class ZipUtil {
         if (Files.notExists(sourcePath)) {
             return;
         }
-        new Thread(() -> {
-            ZipOutputStream zipOutputStream = null;
+        if (Files.notExists(outPath)) {
+            Path parent = outPath.getParent();
             try {
-                compress(sourcePath.toFile(), zipOutputStream = new ZipOutputStream(Files.newOutputStream(outPath)), sourcePath.toFile().getName(), keepDirStructure);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                if (Files.notExists(parent)) {
+                    Files.createDirectories(parent);
+                }
+                Files.createFile(outPath);
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                if (zipOutputStream != null) {
-                    try {
-                        zipOutputStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            }
+        }
+        ZipOutputStream zipOutputStream = null;
+        try {
+            compress(sourcePath.toFile(), zipOutputStream = new ZipOutputStream(Files.newOutputStream(outPath)), sourcePath.toFile().getName(), keepDirStructure);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (zipOutputStream != null) {
+                try {
+                    zipOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
-        }).start();
+        }
+
     }
 
     private static void compress(File sourceFile, ZipOutputStream zos, String name, boolean keepDirStructure) throws IOException {

@@ -3,15 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>wcpelib</artifactId>
-        <groupId>top.wcpe</groupId>
+        <artifactId>WcpeLib</artifactId>
+        <groupId>top.wcpe.wcpelib</groupId>
         <version>1.0</version>
     </parent>
 
     <properties>
         <junit.version>4.12</junit.version>
-        <kotlin.version>1.5.10</kotlin.version>
-        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
@@ -42,12 +40,6 @@
             <artifactId>lombok</artifactId>
             <version>1.18.16</version>
         </dependency>
-        <!-- kotlin -->
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
-            <version>${kotlin.version}</version>
-        </dependency>
     </dependencies>
     <build>
         <resources>
@@ -75,39 +67,6 @@
                         <goals>
                             <goal>single</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- kotlin start -->
-            <plugin>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-maven-plugin</artifactId>
-                <version>${kotlin.version}</version>
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
-                            </sourceDirs>
-                        </configuration>
-                    </execution>
-                    <!-- ### 测试目录 ### -->
-                    <execution>
-                        <id>test-compile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>test-compile</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <sourceDir>${project.basedir}/src/test/java</sourceDir>
-                            </sourceDirs>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
