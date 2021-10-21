@@ -1,0 +1,3 @@
+rootProject.name = 'WcpeLib'
+include("common","bukkit","nukkit")
+

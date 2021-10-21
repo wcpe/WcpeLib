@@ -26,7 +26,7 @@ public class CommandManager {
 		final Class<?> c = Bukkit.getServer().getClass();
 		try {
 			bukkitSimpleCommandMap = (SimpleCommandMap) c.getDeclaredMethod("getCommandMap").invoke(Bukkit.getServer(),
-					null);
+					new Object[]{});
 			Field knownCommandsField = getField(bukkitSimpleCommandMap.getClass(), "knownCommands");
 			knownCommandsField.setAccessible(true);
 			bukkitCommandMap = (HashMap<String, Command>) knownCommandsField.get(bukkitSimpleCommandMap);

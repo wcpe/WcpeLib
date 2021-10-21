@@ -1,0 +1,22 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.5.31'
+    id 'java'
+    id "com.github.johnrengelman.shadow" version "5.0.0"
+}
+
+group 'top.wcpe.wcpelib.nukkit'
+version '1.0.0'
+archivesBaseName = "wcpelib-nukkit"
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':common')
+    compileOnly"cn.nukkit:nukkit:1.0-SNAPSHOT"
+    compileOnly "me.onebone:economyapi:2.0.0"
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -3,14 +3,13 @@ package top.wcpe.wcpelib.bukkit.otherpluginapi.vault;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 /**
- * {@link Vault}的一个工具类
- * 
+ * Vault 的一个工具类
+ *
  * @author WCPE
  * @date 2021年4月8日 下午5:15:02
  */
