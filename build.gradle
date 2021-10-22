@@ -6,6 +6,14 @@ allprojects {
         mavenCentral()
         gradlePluginPortal()
     }
+    processResources {
+        from('src/main/java') {
+            include '**/*.xml'
+        }
+        from('src/main/kotlin') {
+            include '**/*.xml'
+        }
+    }
 }
 subprojects {
     sourceCompatibility = 1.8
