@@ -1,5 +1,5 @@
-Setting:
-  serverName: "xxx"
+setting:
+  server-name: "xxx"
   mysql:
     enable: false
     url: "localhost"

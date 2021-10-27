@@ -37,7 +37,7 @@ public final class WcpeLib extends JavaPlugin {
     private static ServerUtil serverUtil;
 
     public static String getServerName() {
-        return instance.getConfig().getString("ServerName");
+        return instance.getConfig().getString("server-name");
     }
 
     @Getter
