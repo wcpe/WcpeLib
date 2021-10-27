@@ -7,6 +7,9 @@ plugins {
 group 'top.wcpe.wcpelib.nukkit'
 version '1.0.0'
 archivesBaseName = "wcpelib-nukkit"
+
+apply from: '../../build-upload.gradle'
+
 repositories {
     mavenCentral()
 }
