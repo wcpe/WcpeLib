@@ -48,11 +48,24 @@ public final class WcpeLib extends PluginBase {
     @Getter
     private static Redis redis;
 
+    private static final HashMap<String, ServerInfo> serverInfoMap = new HashMap<>();
+
+    public static ServerInfo getServerInfo(String serverName) {
+        return serverInfoMap.get(serverName);
+    }
+
     @Override
     public void onEnable() {
         long start = System.currentTimeMillis();
         instance = this;
         saveDefaultConfig();
+        log("开始读取各个服务器信息");
+        ConfigSection serverInfoCfg = getConfig().getSection("setting.server.server-info");
+        for (String key : serverInfoCfg.getKeys(false)) {
+            ConfigSection serverInfoCfgSection = serverInfoCfg.getSection(key);
+            serverInfoMap.put(key, new ServerInfo(key, serverInfoCfgSection.getString("host"), serverInfoCfgSection.getInt("port")));
+            log(key + " -> " + serverInfoCfgSection.getString("host") + ":" + serverInfoCfgSection.getInt("port"));
+        }
         if (enableMysql = getConfig().getBoolean("setting.mysql.enable")) {
             log(" Mybatis 开启! 开始连接数据库");
             long s = System.currentTimeMillis();

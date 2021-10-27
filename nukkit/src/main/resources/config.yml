@@ -1,6 +1,10 @@
 setting:
   server:
     server-name: "xxx"
+    server-info:
+      "xxx":
+        host: "127.0.0.1"
+        port: 19132
   mysql:
     enable: false
     url: "localhost"
