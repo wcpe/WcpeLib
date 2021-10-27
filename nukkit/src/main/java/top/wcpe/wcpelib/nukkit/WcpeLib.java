@@ -15,6 +15,9 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import top.wcpe.wcpelib.common.mybatis.Mybatis;
 import top.wcpe.wcpelib.common.readis.Redis;
 import top.wcpe.wcpelib.nukkit.mybatis.mapper.PlayerServerMapper;
+import top.wcpe.wcpelib.nukkit.server.ServerInfo;
+
+import java.util.HashMap;
 
 
 /**
@@ -32,7 +35,7 @@ public final class WcpeLib extends PluginBase {
     private static WcpeLib instance;
 
     public static String getServerName() {
-        return instance.getConfig().getString("ServerName");
+        return instance.getConfig().getString("server.server-name");
     }
 
     @Getter
@@ -50,11 +53,11 @@ public final class WcpeLib extends PluginBase {
         long start = System.currentTimeMillis();
         instance = this;
         saveDefaultConfig();
-        if (enableMysql = getConfig().getBoolean("Setting.mysql.enable")) {
+        if (enableMysql = getConfig().getBoolean("setting.mysql.enable")) {
             log(" Mybatis 开启! 开始连接数据库");
             long s = System.currentTimeMillis();
             try {
-                this.mybatis = new Mybatis(getConfig().getString("Setting.mysql.url"), getConfig().getInt("Setting.mysql.port"), getConfig().getString("Setting.mysql.database"), getConfig().getString("Setting.mysql.user"), getConfig().getString("Setting.mysql.password"));
+                this.mybatis = new Mybatis(getConfig().getString("setting.mysql.url"), getConfig().getInt("setting.mysql.port"), getConfig().getString("setting.mysql.database"), getConfig().getString("setting.mysql.user"), getConfig().getString("setting.mysql.password"));
                 long end = System.currentTimeMillis();
                 log(" Mybatis 链接成功! 共耗时:" + (end - s) + "Ms");
                 log(" 开始初始化默认 Mapper");
@@ -67,12 +70,12 @@ public final class WcpeLib extends PluginBase {
             }
         }
 
-        if (enableRedis = getConfig().getBoolean("Setting.redis.enable")) {
+        if (enableRedis = getConfig().getBoolean("setting.redis.enable")) {
             log(" Redis 开启! 开始连接!");
             long s = System.currentTimeMillis();
             try {
-                ConfigSection redisSection = getConfig().getSection("Setting").getSection("redis");
-                this.redis = new Redis(redisSection.getString("url"), redisSection.getInt("port"), redisSection.getInt("maxTotal"), redisSection.getInt("maxIdle"), redisSection.getInt("minIdle"), redisSection.getInt("maxWaitMillis"), redisSection.getBoolean("testOnBorrow"), redisSection.getBoolean("testOnReturn"));
+                ConfigSection redisSection = getConfig().getSection("setting").getSection("redis");
+                this.redis = new Redis(redisSection.getString("url"), redisSection.getInt("port"), redisSection.getInt("max-total"), redisSection.getInt("max-idle"), redisSection.getInt("min-idle"), redisSection.getInt("max-wait-millis"), redisSection.getBoolean("test-on-borrow"), redisSection.getBoolean("test-on-return"));
                 log(" Redis 链接成功! 共耗时:" + (System.currentTimeMillis() - s) + "Ms");
                 log(" host->" + redisSection.getString("url") + ",port->" + redisSection.getInt("port"));
             } catch (Exception e) {
@@ -97,7 +100,7 @@ public final class WcpeLib extends PluginBase {
         SqlSession session = sqlSessionFactory.openSession();
 
         PlayerServerMapper playerServerMapper = session.getMapper(PlayerServerMapper.class);
-        if (playerServerMapper.existTable(getConfig().getString("Setting.mysql.database")) != 0) {
+        if (playerServerMapper.existTable(getConfig().getString("setting.mysql.database")) != 0) {
             playerServerMapper.dropTable();
         }
         playerServerMapper.createTable();
