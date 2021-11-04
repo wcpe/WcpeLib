@@ -43,7 +43,7 @@ public class SkullManager {
                     savePlayerSkullSkin(p);
             } catch (Exception exception) {
             }
-        }, (20 * WcpeLib.getInstance().getConfig().getInt("Setting.skullSaveTime")), (20 * WcpeLib.getInstance().getConfig().getInt("Setting.skullSaveTime")));
+        }, (20 * WcpeLib.getInstance().getConfig().getInt("skull-save-time")), (20 * WcpeLib.getInstance().getConfig().getInt("Setting.skullSaveTime")));
     }
 
     static void savePlayerSkullSkin(Player p) {

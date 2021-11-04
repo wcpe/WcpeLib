@@ -55,16 +55,12 @@ public final class WcpeLib extends JavaPlugin {
         long start = System.currentTimeMillis();
         instance = this;
         saveDefaultConfig();
-        if (enableMysql = getConfig().getBoolean("Setting.mysql.enable")) {
+        if (enableMysql = getConfig().getBoolean("mysql.enable")) {
             log(" Mybatis 开启! 开始连接数据库");
-            long s = System.currentTimeMillis();
             try {
-                this.mybatis = new Mybatis(getConfig().getString("Setting.mysql.url"), getConfig().getInt("Setting.mysql.port"), getConfig().getString("Setting.mysql.database"), getConfig().getString("Setting.mysql.user"), getConfig().getString("Setting.mysql.password"));
-                long end = System.currentTimeMillis();
-                log(" Mybatis 链接成功! 共耗时:" + (end - s) + "Ms");
-                log(" 开始初始化默认 Mapper");
+                this.mybatis = new Mybatis(getConfig().getString("mysql.url"), getConfig().getInt("mysql.port"), getConfig().getString("mysql.database"), getConfig().getString("mysql.user"), getConfig().getString("mysql.password"));
                 initDefaultMapper();
-                log(" 初始化默认 Mapper 成功! 共耗时:" + (System.currentTimeMillis() - end) + "Ms");
+                log(" Mybatis 链接成功! 初始化默认 Mapper 成功! 共耗时:" + (System.currentTimeMillis() - start) + "Ms");
             } catch (Exception e) {
                 log(" §c无法链接数据库! 请确认数据库开启，并且 WcpeLib 配置文件中的数据配置填写正确!");
                 this.enableMysql = false;
@@ -76,12 +72,12 @@ public final class WcpeLib extends JavaPlugin {
 
         serverUtil = new ServerUtil();
 
-        if (enableRedis = getConfig().getBoolean("Setting.redis.enable")) {
+        if (enableRedis = getConfig().getBoolean("redis.enable")) {
             log(" Redis 开启! 开始连接!");
             long s = System.currentTimeMillis();
             try {
-                ConfigurationSection redisSection = getConfig().getConfigurationSection("Setting").getConfigurationSection("redis");
-                this.redis = new Redis(redisSection.getString("url"), redisSection.getInt("port"), redisSection.getInt("maxTotal"), redisSection.getInt("maxIdle"), redisSection.getInt("minIdle"), redisSection.getInt("maxWaitMillis"), redisSection.getBoolean("testOnBorrow"), redisSection.getBoolean("testOnReturn"));
+                ConfigurationSection redisSection = getConfig().getConfigurationSection("setting").getConfigurationSection("redis");
+                this.redis = new Redis(redisSection.getString("url"), redisSection.getInt("port"), redisSection.getInt("max-total"), redisSection.getInt("max-idle"), redisSection.getInt("min-idle"), redisSection.getInt("max-wait-millis"), redisSection.getBoolean("test-on-borrow"), redisSection.getBoolean("test-on-return"));
                 log(" Redis 链接成功! 共耗时:" + (System.currentTimeMillis() - s) + "Ms");
                 log(" host->" + redisSection.getString("url") + ",port->" + redisSection.getInt("port"));
             } catch (Exception e) {
@@ -106,7 +102,7 @@ public final class WcpeLib extends JavaPlugin {
         SqlSession session = sqlSessionFactory.openSession();
 
         PlayerServerMapper playerServerMapper = session.getMapper(PlayerServerMapper.class);
-        if (playerServerMapper.existTable(getConfig().getString("Setting.mysql.database")) != 0) {
+        if (playerServerMapper.existTable(getConfig().getString("mysql.database")) != 0) {
             playerServerMapper.dropTable();
         }
         playerServerMapper.createTable();
