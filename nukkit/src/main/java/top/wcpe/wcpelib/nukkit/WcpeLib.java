@@ -8,6 +8,7 @@ import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.plugin.PluginBase;
+import cn.nukkit.utils.Config;
 import cn.nukkit.utils.ConfigSection;
 import lombok.Getter;
 import org.apache.ibatis.session.SqlSession;
@@ -17,6 +18,7 @@ import top.wcpe.wcpelib.common.readis.Redis;
 import top.wcpe.wcpelib.nukkit.mybatis.mapper.PlayerServerMapper;
 import top.wcpe.wcpelib.nukkit.server.ServerInfo;
 
+import java.io.File;
 import java.util.HashMap;
 
 
@@ -54,11 +56,26 @@ public final class WcpeLib extends PluginBase {
         return serverInfoMap.get(serverName);
     }
 
+    public void saveDefaultFile(File itemFile) {
+        if (!itemFile.exists()) {
+            this.saveResource(itemFile.getName(), false);
+        }
+    }
+
+    @Getter
+    private static Config itemConfig;
+
+
     @Override
     public void onEnable() {
         long start = System.currentTimeMillis();
         instance = this;
         saveDefaultConfig();
+
+        File itemFile = new File(this.getDataFolder(), "item.yml");
+        saveDefaultFile(itemFile);
+        itemConfig = new Config(itemFile);
+
         log("开始读取各个服务器信息");
         ConfigSection serverInfoCfg = getConfig().getSection("setting.server.server-info");
         for (String key : serverInfoCfg.getKeys(false)) {

@@ -1,6 +1,10 @@
 package top.wcpe.wcpelib.nukkit.utils;
 
 
+import cn.nukkit.item.Item;
+import cn.nukkit.utils.ConfigSection;
+import top.wcpe.wcpelib.nukkit.WcpeLib;
+
 import java.util.List;
 
 
@@ -69,5 +73,13 @@ public class ItemUtil {
             }
         }
         return true;
+    }
+
+    public String getItemCustomName(Item item) {
+        ConfigSection itemCustomNameCs = WcpeLib.getItemConfig().getSection("item-custom-name");
+        if (!itemCustomNameCs.exists(String.valueOf(item.getId()))) {
+            return item.getName();
+        }
+        return itemCustomNameCs.getString(String.valueOf(item.getId()));
     }
 }
