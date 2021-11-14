@@ -15,6 +15,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import top.wcpe.wcpelib.common.mybatis.Mybatis;
 import top.wcpe.wcpelib.common.readis.Redis;
+import top.wcpe.wcpelib.nukkit.mybatis.entity.PlayerServer;
 import top.wcpe.wcpelib.nukkit.mybatis.mapper.PlayerServerMapper;
 import top.wcpe.wcpelib.nukkit.server.ServerInfo;
 
@@ -77,17 +78,17 @@ public final class WcpeLib extends PluginBase {
         itemConfig = new Config(itemFile);
 
         log("开始读取各个服务器信息");
-        ConfigSection serverInfoCfg = getConfig().getSection("setting.server.server-info");
+        ConfigSection serverInfoCfg = getConfig().getSection("server.server-info");
         for (String key : serverInfoCfg.getKeys(false)) {
             ConfigSection serverInfoCfgSection = serverInfoCfg.getSection(key);
             serverInfoMap.put(key, new ServerInfo(key, serverInfoCfgSection.getString("host"), serverInfoCfgSection.getInt("port")));
             log(key + " -> " + serverInfoCfgSection.getString("host") + ":" + serverInfoCfgSection.getInt("port"));
         }
-        if (enableMysql = getConfig().getBoolean("setting.mysql.enable")) {
+        if (enableMysql = getConfig().getBoolean("mysql.enable")) {
             log(" Mybatis 开启! 开始连接数据库");
             long s = System.currentTimeMillis();
             try {
-                this.mybatis = new Mybatis(getConfig().getString("setting.mysql.url"), getConfig().getInt("setting.mysql.port"), getConfig().getString("setting.mysql.database"), getConfig().getString("setting.mysql.user"), getConfig().getString("setting.mysql.password"));
+                this.mybatis = new Mybatis(getConfig().getString("mysql.url"), getConfig().getInt("mysql.port"), getConfig().getString("mysql.database"), getConfig().getString("mysql.user"), getConfig().getString("mysql.password"));
                 long end = System.currentTimeMillis();
                 log(" Mybatis 链接成功! 共耗时:" + (end - s) + "Ms");
                 log(" 开始初始化默认 Mapper");
@@ -100,11 +101,11 @@ public final class WcpeLib extends PluginBase {
             }
         }
 
-        if (enableRedis = getConfig().getBoolean("setting.redis.enable")) {
+        if (enableRedis = getConfig().getBoolean("redis.enable")) {
             log(" Redis 开启! 开始连接!");
             long s = System.currentTimeMillis();
             try {
-                ConfigSection redisSection = getConfig().getSection("setting").getSection("redis");
+                ConfigSection redisSection = getConfig().getSection("redis");
                 this.redis = new Redis(redisSection.getString("url"), redisSection.getInt("port"), redisSection.getInt("max-total"), redisSection.getInt("max-idle"), redisSection.getInt("min-idle"), redisSection.getInt("max-wait-millis"), redisSection.getBoolean("test-on-borrow"), redisSection.getBoolean("test-on-return"));
                 log(" Redis 链接成功! 共耗时:" + (System.currentTimeMillis() - s) + "Ms");
                 log(" host->" + redisSection.getString("url") + ",port->" + redisSection.getInt("port"));
@@ -130,49 +131,38 @@ public final class WcpeLib extends PluginBase {
         SqlSession session = sqlSessionFactory.openSession();
 
         PlayerServerMapper playerServerMapper = session.getMapper(PlayerServerMapper.class);
-        if (playerServerMapper.existTable(getConfig().getString("setting.mysql.database")) != 0) {
-            playerServerMapper.dropTable();
+        if (playerServerMapper.existTable(getConfig().getString("mysql.database")) == 0) {
+            playerServerMapper.createTable();
         }
-        playerServerMapper.createTable();
         WcpeLib.getInstance().getServer().getPluginManager().registerEvents(new Listener() {
             @EventHandler(priority = EventPriority.HIGH)
             public void join(PlayerJoinEvent e) {
+                String playerName = e.getPlayer().getName();
                 SqlSession openSession = sqlSessionFactory.openSession();
                 PlayerServerMapper mapper = openSession.getMapper(PlayerServerMapper.class);
-                mapper.delPlayerServer(e.getPlayer().getName());
+                PlayerServer playerServer = mapper.selectPlayerServer(playerName);
+                if (playerServer == null) {
+                    mapper.insertPlayerServer(new PlayerServer(playerName, getServerName(), true));
+                } else {
+                    mapper.updatePlayerServer(new PlayerServer(playerName, getServerName(), true));
+                }
                 openSession.commit();
                 openSession.close();
-                Server.getInstance().getScheduler().scheduleDelayedTask(WcpeLib.getInstance(), () -> {
-                    SqlSession o = sqlSessionFactory.openSession();
-                    PlayerServerMapper m = o.getMapper(PlayerServerMapper.class);
-                    try {
-                        if (m.selectPlayerServer(e.getPlayer().getName()) == null)
-                            m.insertPlayerServer(e.getPlayer().getName(), WcpeLib.getServerName());
-                        m.updatePlayerServer(e.getPlayer().getName(), WcpeLib.getServerName());
-                        o.commit();
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
-                        o.rollback();
-                    } finally {
-                        o.close();
-                    }
-                }, 40);
-
             }
 
             @EventHandler(priority = EventPriority.HIGH)
             public void quit(PlayerQuitEvent e) {
+                String playerName = e.getPlayer().getName();
                 SqlSession openSession = sqlSessionFactory.openSession();
                 PlayerServerMapper mapper = openSession.getMapper(PlayerServerMapper.class);
-                try {
-                    mapper.delPlayerServer(e.getPlayer().getName());
-                    openSession.commit();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                    openSession.rollback();
-                } finally {
-                    openSession.close();
+                PlayerServer playerServer = mapper.selectPlayerServer(playerName);
+                if (playerServer == null) {
+                    mapper.insertPlayerServer(new PlayerServer(playerName, getServerName(), false));
+                } else {
+                    mapper.updatePlayerServer(new PlayerServer(playerName, getServerName(), false));
                 }
+                openSession.commit();
+                openSession.close();
             }
         }, WcpeLib.getInstance());
         session.commit();
