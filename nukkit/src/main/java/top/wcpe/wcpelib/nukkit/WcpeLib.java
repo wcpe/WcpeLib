@@ -17,6 +17,7 @@ import top.wcpe.wcpelib.common.mybatis.Mybatis;
 import top.wcpe.wcpelib.common.readis.Redis;
 import top.wcpe.wcpelib.nukkit.mybatis.entity.PlayerServer;
 import top.wcpe.wcpelib.nukkit.mybatis.mapper.PlayerServerMapper;
+import top.wcpe.wcpelib.nukkit.placeholder.data.PlayerPlaceholder;
 import top.wcpe.wcpelib.nukkit.server.ServerInfo;
 
 import java.io.File;
@@ -77,6 +78,8 @@ public final class WcpeLib extends PluginBase {
         saveDefaultFile(itemFile);
         itemConfig = new Config(itemFile);
 
+        initPlaceholderExtend();
+
         log("开始读取各个服务器信息");
         ConfigSection serverInfoCfg = getConfig().getSection("server.server-info");
         for (String key : serverInfoCfg.getKeys(false)) {
@@ -123,6 +126,10 @@ public final class WcpeLib extends PluginBase {
         getServer().getConsoleSender().sendMessage("§a |__/|__/   \\___/   / .___/ \\___/ /_____//_/   /_.___/ ");
         getServer().getConsoleSender().sendMessage("§a                   /_/                                 ");
 
+    }
+
+    private void initPlaceholderExtend() {
+        new PlayerPlaceholder().register();
     }
 
     private void initDefaultMapper() {

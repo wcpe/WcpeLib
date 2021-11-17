@@ -1,6 +1,7 @@
 package top.wcpe.wcpelib.nukkit.placeholder.data;
 
 import cn.nukkit.Player;
+import top.wcpe.wcpelib.nukkit.WcpeLib;
 import top.wcpe.wcpelib.nukkit.placeholder.PlaceholderExtend;
 
 /**
@@ -23,6 +24,9 @@ public class ServerPlaceholder extends PlaceholderExtend {
 
     @Override
     public String onPlaceholderRequest(Player p, String identifier) {
+        if ("name".equals(identifier)) {
+            return WcpeLib.getServerName();
+        }
         return null;
     }
 }
