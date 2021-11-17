@@ -7,12 +7,10 @@ import top.wcpe.wcpelib.nukkit.WcpeLib;
 import top.wcpe.wcpelib.nukkit.mybatis.entity.PlayerServer;
 import top.wcpe.wcpelib.nukkit.mybatis.mapper.PlayerServerMapper;
 
-public class PlayerServerUtil {
-    public static String getPlayerServer(String playerName) {
-        return getPlayerServerEntity(playerName).getPlayerName();
-    }
+import java.util.List;
 
-    public static PlayerServer getPlayerServerEntity(String playerName) {
+public class PlayerServerUtil {
+    public static PlayerServer getPlayerServer(String playerName, boolean defaultCreate) {
         if (!WcpeLib.isEnableMysql()) {
             Player playerExact = Server.getInstance().getPlayerExact(playerName);
             if (playerExact == null || !playerExact.isOnline()) {
@@ -23,7 +21,26 @@ public class PlayerServerUtil {
         SqlSession sqlSession = WcpeLib.getMybatis().getSqlSessionFactory().openSession();
         try {
             PlayerServerMapper mapper = sqlSession.getMapper(PlayerServerMapper.class);
-            return mapper.selectPlayerServer(playerName);
+            if (!defaultCreate) {
+                return mapper.selectPlayerServer(playerName);
+            }
+            PlayerServer playerServer = mapper.selectPlayerServer(playerName);
+            if (playerServer != null) {
+                return playerServer;
+            }
+            playerServer = new PlayerServer(playerName, WcpeLib.getServerName(), false);
+            mapper.insertPlayerServer(playerServer);
+            return playerServer;
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    public static List<PlayerServer> getPlayerServerToServerName(String serverName) {
+        SqlSession sqlSession = WcpeLib.getMybatis().getSqlSessionFactory().openSession();
+        try {
+            PlayerServerMapper mapper = sqlSession.getMapper(PlayerServerMapper.class);
+            return mapper.selectOnlinePlayerToServer(serverName);
         } finally {
             sqlSession.close();
         }

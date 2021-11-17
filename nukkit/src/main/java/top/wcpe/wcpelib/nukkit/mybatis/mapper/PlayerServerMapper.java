@@ -15,17 +15,22 @@ public interface PlayerServerMapper {
     @Update("drop table `wcpelib_player_server`")
     void dropTable();
 
-    @Select("select * from `wcpelib_player_server`")
+    @Select("select player_name,server_name,online from `wcpelib_player_server`")
     @ResultMap("PlayerServerMap")
     List<PlayerServer> listPlayerServer();
 
-    @Select("select * from `wcpelib_player_server` where `player_name`=#{playerName}")
+    @Select("select player_name,server_name,online from `wcpelib_player_server` where `player_name`=#{playerName}")
     @Results(id = "PlayerServerMap", value = {
             @Result(column = "player_name", property = "playerName", id = true),
             @Result(column = "server_name", property = "serverName"),
             @Result(column = "online", property = "online")
     })
     PlayerServer selectPlayerServer(@Param("playerName") String playerName);
+
+    @Select("select player_name,server_name,online from `wcpelib_player_server` where `server_name`=#{serverName} AND `online`= 1")
+    @ResultMap("PlayerServerMap")
+    List<PlayerServer> selectOnlinePlayerToServer(@Param("serverName") String serverName);
+
 
     @Update("update `wcpelib_player_server` set server_name=#{serverName},online=#{online} where `player_name`=#{playerName}")
     void updatePlayerServer(PlayerServer playerServer);
