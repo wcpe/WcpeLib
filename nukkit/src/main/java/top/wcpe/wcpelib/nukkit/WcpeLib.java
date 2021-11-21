@@ -18,6 +18,7 @@ import top.wcpe.wcpelib.common.readis.Redis;
 import top.wcpe.wcpelib.nukkit.mybatis.entity.PlayerServer;
 import top.wcpe.wcpelib.nukkit.mybatis.mapper.PlayerServerMapper;
 import top.wcpe.wcpelib.nukkit.placeholder.data.PlayerPlaceholder;
+import top.wcpe.wcpelib.nukkit.placeholder.data.ServerPlaceholder;
 import top.wcpe.wcpelib.nukkit.server.ServerInfo;
 
 import java.io.File;
@@ -130,6 +131,7 @@ public final class WcpeLib extends PluginBase {
 
     private void initPlaceholderExtend() {
         new PlayerPlaceholder().register();
+        new ServerPlaceholder().register();
     }
 
     private void initDefaultMapper() {
