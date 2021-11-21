@@ -21,11 +21,11 @@ public class Mybatis {
         PooledDataSource pooledDataSource = new PooledDataSource("com.mysql.jdbc.Driver",
                 "jdbc:mysql://" + url + ":" + port + "/" + database + "?" + parameter, user,
                 password);
-        pooledDataSource.setPoolMaximumActiveConnections(2000);
-        pooledDataSource.setPoolMaximumIdleConnections(2000);
-        pooledDataSource.setPoolTimeToWait(2000);
-        pooledDataSource.setPoolPingQuery("SELECT NOW()");
+        pooledDataSource.setPoolMaximumActiveConnections(65535);
+        pooledDataSource.setPoolMaximumIdleConnections(0);
+        pooledDataSource.setPoolTimeToWait(10000);
         pooledDataSource.setPoolPingEnabled(true);
+        pooledDataSource.setPoolPingQuery("SELECT 1");
         Environment environment = new Environment("development", new JdbcTransactionFactory(), pooledDataSource);
         Configuration configuration = new Configuration(environment);
         this.sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
