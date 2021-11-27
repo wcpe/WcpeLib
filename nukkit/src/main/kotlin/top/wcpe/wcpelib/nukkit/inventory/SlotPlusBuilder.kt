@@ -3,22 +3,19 @@ package top.wcpe.wcpelib.nukkit.inventory
 import cn.nukkit.item.Item
 import cn.nukkit.item.enchantment.Enchantment
 import top.wcpe.wcpelib.nukkit.inventory.action.ClickListener
+import top.wcpe.wcpelib.nukkit.inventory.entity.SaveItem
 
 class SlotPlusBuilder {
 
     var id: Int = 0
-
     var data = 0
-
     var name: String = " "
-
     var lores: MutableList<String> = mutableListOf()
-
     var amount = 1
-
     var enchantments: MutableList<Enchantment> = mutableListOf()
-
     var unbreakable = false
+
+    var item: Item = createItem()
 
     var listener: ClickListener? = null
 
@@ -33,8 +30,21 @@ class SlotPlusBuilder {
         lores = item.lore.toMutableList()
         enchantments = item.enchantments.toMutableList()
         unbreakable = item.isUnbreakable
+        this.item = item
     }
 
+    fun createItem(): Item {
+        var item = Item.get(id, data, amount)
+        item.customName = name
+        item.setLore(*lores.toTypedArray())
+        for (enchantment in enchantments) {
+            item.addEnchantment(enchantment)
+        }
+        if (unbreakable) {
+            item.namedTag.putByte("Unbreakable", 1)
+        }
+        return item
+    }
 
     fun name(name: String): SlotPlusBuilder {
         this.name = name
