@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -32,7 +33,7 @@ public class ZipUtil {
         }
         ZipOutputStream zipOutputStream = null;
         try {
-            compress(sourcePath.toFile(), zipOutputStream = new ZipOutputStream(Files.newOutputStream(outPath)), sourcePath.toFile().getName(), keepDirStructure);
+            compress(sourcePath, zipOutputStream = new ZipOutputStream(Files.newOutputStream(outPath)), sourcePath.toFile().getName(), keepDirStructure);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -49,38 +50,30 @@ public class ZipUtil {
 
     }
 
-    private static void compress(File sourceFile, ZipOutputStream zos, String name, boolean keepDirStructure) throws IOException {
-        byte[] buf = new byte[2048];
-        if (sourceFile.isFile()) {
-            zos.putNextEntry(new ZipEntry(name));
-            FileInputStream in = new FileInputStream(sourceFile);
-            int len;
-            while ((len = in.read(buf)) != -1)
-                zos.write(buf, 0, len);
-            zos.closeEntry();
-            in.close();
-        } else {
-            File[] listFiles = sourceFile.listFiles();
-            if (listFiles == null || listFiles.length == 0) {
+    private static void compress(Path sourcePath, ZipOutputStream zos, String name, boolean keepDirStructure) throws IOException {
+        if (Files.isDirectory(sourcePath)) {
+            List<Path> subFolder = Files.walk(sourcePath, 1).skip(1)
+                    .collect(Collectors.toList());
+            if (subFolder.size() == 0 || subFolder.isEmpty()) {
                 if (keepDirStructure) {
                     zos.putNextEntry(new ZipEntry(name + "/"));
                     zos.closeEntry();
                 }
             } else {
-                byte b;
-                int i;
-                File[] arrayOfFile;
-                for (i = (arrayOfFile = listFiles).length, b = 0; b < i; ) {
-                    File file = arrayOfFile[b];
+                for (Path path : subFolder) {
                     if (keepDirStructure) {
-                        compress(file, zos, name + "/" + file.getName(), true);
+                        compress(path, zos, name + "/" + path.getFileName().toString(), true);
                     } else {
-                        compress(file, zos, file.getName(), false);
+                        compress(path, zos, path.getFileName().toString(), false);
                     }
-                    b++;
                 }
             }
+            return;
         }
+        zos.putNextEntry(new ZipEntry(name));
+        byte[] bytes = Files.readAllBytes(sourcePath);
+        zos.write(bytes, 0, bytes.length);
+        zos.closeEntry();
     }
 
 }
