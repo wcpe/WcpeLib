@@ -28,7 +28,7 @@ public class RandomUtil {
      * @param max
      * @return
      */
-    public double nextRandom(double min, double max) {
+    public static double nextRandom(double min, double max) {
         return min + Math.random() * max;
     }
 
@@ -38,7 +38,7 @@ public class RandomUtil {
      * @param mapList
      * @return int
      */
-    public int randomIndexToListChance(List<Double> mapList) {
+    public static int randomIndexToListChance(List<Double> mapList) {
         List<Double> totalChance = new ArrayList<>(mapList.size());
         for (Double aDouble : mapList) {
             totalChance.add(aDouble < 0d ? 0d : aDouble);
