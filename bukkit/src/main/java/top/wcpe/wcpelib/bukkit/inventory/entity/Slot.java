@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import lombok.Getter;
-import org.bukkit.material.MaterialData;
 import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
 import top.wcpe.wcpelib.bukkit.inventory.listener.inter.SlotEventFunctional;
 import top.wcpe.wcpelib.bukkit.utils.NameBinaryTagUtil;
