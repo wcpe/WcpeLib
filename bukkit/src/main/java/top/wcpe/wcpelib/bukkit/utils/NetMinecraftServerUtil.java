@@ -23,10 +23,37 @@ public class NetMinecraftServerUtil {
     }
 
     public static void sendAction(Player p, String msg) {
-        if (getServerVersionNum() >= 1160)
+        int serverVersionNum = getServerVersionNum();
+        if (serverVersionNum >= 1170) {
+            sendAction_1_17(p, msg);
+        } else if (getServerVersionNum() >= 1160)
             sendAction_1_16(p, msg);
         else
             sendAction_1_15(p, msg);
+    }
+
+    private static void sendAction_1_17(Player p, String msg) {
+        try {
+            Class<?> chatComponentTextClass = Class.forName("net.minecraft.network.chat.ChatComponentText");
+            Class<?> chatMessageTypeClass = Class.forName("net.minecraft.network.chat.ChatMessageType");
+
+            Object chatComponentTextInstance = chatComponentTextClass.getConstructor(new Class[]{String.class})
+                    .newInstance(new Object[]{ChatColor.translateAlternateColorCodes('&', msg)});
+
+            Object gameInfoFieldValue = chatMessageTypeClass.getField("c").get(null);
+
+            Object packetPlayOutChatInstance = Class.forName("net.minecraft.network.protocol.game.PacketPlayOutChat")
+                    .getConstructor(new Class[]{Class.forName("net.minecraft.network.chat.IChatBaseComponent"), chatMessageTypeClass, UUID.class})
+                    .newInstance(new Object[]{chatComponentTextInstance, gameInfoFieldValue, p.getUniqueId()});
+            Object craftPlayer = p.getClass().getMethod("getHandle", new Class[0]).invoke(p, new Object[0]);
+
+            Object craftPlayerConnection = craftPlayer.getClass().getField("b").get(craftPlayer);
+            craftPlayerConnection.getClass().getMethod("sendPacket", new Class[]{Class.forName("net.minecraft.network.protocol.Packet")}).invoke(craftPlayerConnection,
+                    new Object[]{packetPlayOutChatInstance});
+        } catch (IllegalAccessException | InstantiationException | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException | ClassNotFoundException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void sendAction_1_16(Player p, String msg) {
