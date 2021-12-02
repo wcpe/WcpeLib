@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'top.wcpe.wcpelib.bukkit'
-version '1.0.1'
+version '1.0.2'
 archivesBaseName = "wcpelib-bukkit"
 
 apply from: '../../build-upload.gradle'
