@@ -36,8 +36,12 @@ public final class WcpeLib extends PluginBase {
         getServer().getConsoleSender().sendMessage("§a[§e" + this.getName() + "§a]§r" + log);
     }
 
-    @Getter
+
     private static WcpeLib instance;
+
+    public static WcpeLib getInstance() {
+        return instance;
+    }
 
     public static String getServerName() {
         return instance.getConfig().getString("server.server-name");
@@ -110,7 +114,8 @@ public final class WcpeLib extends PluginBase {
             long s = System.currentTimeMillis();
             try {
                 ConfigSection redisSection = getConfig().getSection("redis");
-                this.redis = new Redis(redisSection.getString("url"), redisSection.getInt("port"), redisSection.getInt("max-total"), redisSection.getInt("max-idle"), redisSection.getInt("min-idle"), redisSection.getInt("max-wait-millis"), redisSection.getBoolean("test-on-borrow"), redisSection.getBoolean("test-on-return"));
+                String password = redisSection.getString("password");
+                this.redis = new Redis(redisSection.getString("url"), redisSection.getInt("port"), redisSection.getInt("time-out"), password == null || password.isEmpty() ? null : password, redisSection.getInt("max-total"), redisSection.getInt("max-idle"), redisSection.getInt("min-idle"), redisSection.getBoolean("jmx-enabled"),redisSection.getBoolean("test-on-create"), redisSection.getBoolean("block-when-exhausted"), redisSection.getInt("max-wait-millis"), redisSection.getBoolean("test-on-borrow"), redisSection.getBoolean("test-on-return"));
                 log(" Redis 链接成功! 共耗时:" + (System.currentTimeMillis() - s) + "Ms");
                 log(" host->" + redisSection.getString("url") + ",port->" + redisSection.getInt("port"));
             } catch (Exception e) {
