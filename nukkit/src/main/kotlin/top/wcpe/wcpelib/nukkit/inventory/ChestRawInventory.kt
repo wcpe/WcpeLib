@@ -31,9 +31,9 @@ open class ChestRawInventory(type: InventoryType, holder: InventoryHolder, title
         }
     }
 
-    override fun onOpenBlock(who: Player): MutableList<BlockVector3> {
-        var blockPosition = BlockVector3(who.x.toInt(), (who.y + 2).toInt(), who.z.toInt());
-        placeChest(who, blockPosition)
+    override fun onOpenBlock(paramPlayer: Player): MutableList<BlockVector3> {
+        var blockPosition = BlockVector3(paramPlayer.x.toInt(), (paramPlayer.y + 2).toInt(), paramPlayer.z.toInt());
+        placeChest(paramPlayer, blockPosition)
         return Collections.singletonList(blockPosition);
     }
 

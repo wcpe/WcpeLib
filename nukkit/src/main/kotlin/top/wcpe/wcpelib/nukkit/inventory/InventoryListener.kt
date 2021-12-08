@@ -33,10 +33,10 @@ class InventoryListener : Listener {
                 to = action
             }
         }
-        var target: SlotChangeAction? =
+        var target =
             (if (from?.inventory is RawInventory) from else if (to?.inventory is RawInventory) to else null) ?: return
-        var inventory = target!!.inventory
-        var slot = target!!.slot
+        var inventory = target.inventory
+        var slot = target.slot
         if (inventory.holder !is WcpeLibInventoryHolder) return
         val inventoryPlus: InventoryPlus = (inventory.holder as WcpeLibInventoryHolder).inventoryPlus
         var inventoryClickEventDTO = InventoryClickEventDTO(
@@ -60,7 +60,7 @@ class InventoryListener : Listener {
         var slotPlus = inventoryPlus.slotMap[slot]
 
         slotPlus?.listener?.accept(inventoryClickEventDTO)
-        e.isCancelled =inventoryClickEventDTO.inventoryClickEvent.isCancelled
+        e.isCancelled = inventoryClickEventDTO.inventoryClickEvent.isCancelled
     }
 
 

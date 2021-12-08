@@ -26,9 +26,10 @@ class InventoryPlus {
 
         rawInventory =
             if (doubleInventory) DoubleChestRawInventory(
-                WcpeLibInventoryHolder( this),
+                WcpeLibInventoryHolder(this),
                 title
-            ) else ChestRawInventory( WcpeLibInventoryHolder(this), title
+            ) else ChestRawInventory(
+                WcpeLibInventoryHolder(this), title
             )
 
         slotMap = builder.slotMap
@@ -85,13 +86,9 @@ class InventoryPlus {
     fun getOpenThisInventoryPlayers(): Stream<Player> {
         return Server.getInstance().onlinePlayers.values.stream().filter { p ->
             var topWindow = p.topWindow.orElse(null)
-            if (topWindow != null) {
+            topWindow?.let {
                 if (topWindow.holder is WcpeLibInventoryHolder) {
-                    val inventoryPlus: InventoryPlus =
-                        (topWindow.holder as WcpeLibInventoryHolder).inventoryPlus
-                    if (inventoryPlus != null) {
-                        return@filter true
-                    }
+                    return@filter false
                 }
             }
             false

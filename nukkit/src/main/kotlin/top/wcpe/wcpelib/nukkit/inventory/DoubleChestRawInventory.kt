@@ -9,6 +9,7 @@ import cn.nukkit.nbt.NBTIO
 import cn.nukkit.nbt.tag.CompoundTag
 import cn.nukkit.network.protocol.BlockEntityDataPacket
 import cn.nukkit.network.protocol.DataPacket
+import top.wcpe.wcpelib.nukkit.WcpeLib
 import java.io.IOException
 import java.nio.ByteOrder
 
@@ -35,16 +36,16 @@ class DoubleChestRawInventory(holder: InventoryHolder, title: String) :
         this.viewers.add(who)
         val blocks = onOpenBlock(who)
         blockPositions[who] = blocks
-        Server.getInstance().scheduler.scheduleDelayedTask({ onFakeOpen(who, blocks) }, 3)
+        Server.getInstance().scheduler.scheduleDelayedTask(WcpeLib.getInstance(), { onFakeOpen(who, blocks) }, 3)
     }
 
-    override fun onOpenBlock(who: Player): MutableList<BlockVector3> {
-        val blockPositionA = BlockVector3(who.x.toInt(), who.y.toInt() + 2, who.z.toInt())
+    override fun onOpenBlock(paramPlayer: Player): MutableList<BlockVector3> {
+        val blockPositionA = BlockVector3(paramPlayer.x.toInt(), paramPlayer.y.toInt() + 2, paramPlayer.z.toInt())
         val blockPositionB = blockPositionA.add(1, 0, 0)
-        placeChest(who, blockPositionA)
-        placeChest(who, blockPositionB)
-        pair(who, blockPositionA, blockPositionB)
-        pair(who, blockPositionB, blockPositionA)
+        placeChest(paramPlayer, blockPositionA)
+        placeChest(paramPlayer, blockPositionB)
+        pair(paramPlayer, blockPositionA, blockPositionB)
+        pair(paramPlayer, blockPositionB, blockPositionA)
         return mutableListOf(blockPositionA, blockPositionB)
     }
 
