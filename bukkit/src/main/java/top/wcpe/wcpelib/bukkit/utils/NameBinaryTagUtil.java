@@ -1,4 +1,5 @@
 package top.wcpe.wcpelib.bukkit.utils;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
@@ -128,7 +129,6 @@ public class NameBinaryTagUtil {
 
     public List<NameBinaryTagUtil> getNBTList(String key) {
         List<NameBinaryTagUtil> nbts = new ArrayList<>();
-        @SuppressWarnings("rawtypes")
         Map map = (Map) getField(compound, "map");
         Object list = map.get(key);
         if (list != null) {
@@ -147,7 +147,7 @@ public class NameBinaryTagUtil {
         return (ItemStack) doStaticMethod(CraftItemStackClazz, "asBukkitCopy", new ParamGroup(nmsItem));
     }
 
-    public  NameBinaryTagUtil readByItem(ItemStack item) {
+    public NameBinaryTagUtil readByItem(ItemStack item) {
         nmsItem = doStaticMethod(CraftItemStackClazz, "asNMSCopy", new ParamGroup(item, ItemStack.class));
         compound = ((Boolean) doMethod(nmsItem, "hasTag")) ? doMethod(nmsItem, "getTag") : create(NBTTagCompoundClazz);
         return this;
@@ -316,7 +316,7 @@ public class NameBinaryTagUtil {
     }
 
     public static enum Package {
-        MINECRAFT_SERVER("net.minecraft.server." + getServerVersion()),
+        MINECRAFT_SERVER("net.minecraft." + getNmsPacket()),
         CRAFTBUKKIT("org.bukkit.craftbukkit." + getServerVersion());
 
         private String path;
@@ -331,6 +331,13 @@ public class NameBinaryTagUtil {
             } catch (ClassNotFoundException ex) {
             }
             return null;
+        }
+
+        public static String getNmsPacket() {
+            if (NetMinecraftServerUtil.getServerVersionNum() > 1170)
+                return "nbt";
+            else
+                return "server." + Bukkit.getServer().getClass().getPackage().getName().substring(23);
         }
 
         public static String getServerVersion() {
