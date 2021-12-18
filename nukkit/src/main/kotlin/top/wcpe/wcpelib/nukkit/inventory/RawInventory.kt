@@ -9,6 +9,7 @@ import cn.nukkit.level.GlobalBlockPalette
 import cn.nukkit.math.BlockVector3
 import cn.nukkit.network.protocol.ContainerOpenPacket
 import cn.nukkit.network.protocol.UpdateBlockPacket
+import top.wcpe.wcpelib.nukkit.WcpeLib
 
 
 abstract class RawInventory(inventoryType: InventoryType, inventoryHolder: InventoryHolder) :
@@ -51,8 +52,8 @@ abstract class RawInventory(inventoryType: InventoryType, inventoryHolder: Inven
         var blocks = blockPositions[who]
         if (blocks != null) {
             for ((index, block) in blocks.withIndex()) {
-                Server.getInstance().scheduler.scheduleDelayedTask({
-                    var blockPosition = (blocks[index]).asVector3()
+                Server.getInstance().scheduler.scheduleDelayedTask(WcpeLib.getInstance(), {
+                    var blockPosition = block.asVector3()
                     var updateBlock = UpdateBlockPacket()
                     updateBlock.blockRuntimeId =
                         GlobalBlockPalette.getOrCreateRuntimeId(who.getLevel().getBlock(blockPosition).fullId)

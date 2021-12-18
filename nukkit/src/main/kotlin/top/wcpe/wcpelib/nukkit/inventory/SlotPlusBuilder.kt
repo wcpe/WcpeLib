@@ -20,9 +20,6 @@ class SlotPlusBuilder {
     var listener: ClickListener? = null
 
     constructor(item: Item) {
-        if (item == null) {
-            return
-        }
         id = item.id
         data = item.damage
         name = item.customName
@@ -53,14 +50,12 @@ class SlotPlusBuilder {
 
 
     fun lore(lores: MutableList<String>): SlotPlusBuilder {
-        if (lores == null) return this
         this.lores = lores
         return this
     }
 
 
     fun lore(vararg lore: String): SlotPlusBuilder {
-        if (lore == null) return this
         this.lores = lore.toMutableList()
         return this
     }
