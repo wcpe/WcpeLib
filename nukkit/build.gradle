@@ -2,7 +2,7 @@ plugins {
 }
 
 group 'top.wcpe.wcpelib.nukkit'
-version '1.0.3'
+version '1.0.4-alpha'
 archivesBaseName = "wcpelib-nukkit"
 
 apply from: '../../build-upload.gradle'
