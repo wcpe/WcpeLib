@@ -41,18 +41,17 @@ object ChatAcceptParameterManager {
 
                 e.isCancelled = true
 
-                if (chatAcceptParameterTask.cancelString == e.message) {
-                    e.player.sendMessage(chatAcceptParameterTask.cancelTipString)
+                if (chatAcceptParameterTask.cancelJudgeTask(e.player, e.message)) {
+                    chatAcceptParameterTask.cancelSuccessTask(e.player, e.message)
                     playerTask.remove(e.player.name)
                     return
                 }
-                if (chatAcceptParameterTask.judge(e.message)) {
-                    chatAcceptParameterTask.judgeSuccessTask(e.player, e.message)
+                if (chatAcceptParameterTask.judge(e.player, e.message)) {
+                    chatAcceptParameterTask.judgeTrueTask(e.player, e.message)
                     playerTask.remove(e.player.name)
                     return
                 }
-                chatAcceptParameterTask.judgeFailTask(e.player, e.message)
-                e.player.sendMessage(chatAcceptParameterTask.tipString)
+                chatAcceptParameterTask.judgeFalseTask(e.player, e.message)
             }
 
         }, WcpeLib.getInstance())
@@ -62,16 +61,12 @@ object ChatAcceptParameterManager {
     fun putChatAcceptParameterTask(
         player: Player,
         inputTime: Long,
-        tipString: String?,
-        cancelString: String,
-        cancelTipString: String,
-        judge: (message: String) -> Boolean,
-        judgeSuccessTask: (player: Player, message: String) -> Unit,
-        judgeFailTask: (player: Player, message: String) -> Unit
+        cancelJudgeTask: (player: Player, message: String) -> Boolean,
+        cancelSuccessTask: (player: Player, message: String) -> Unit,
+        judge: (player: Player, message: String) -> Boolean,
+        judgeTrueTask: (player: Player, message: String) -> Unit,
+        judgeFalseTask: (player: Player, message: String) -> Unit
     ): Boolean {
-        tipString?.let {
-            player.sendMessage(it)
-        }
         var task = playerTask[player.name]
         if (task != null) {
             if (task.timeStamp < System.currentTimeMillis()) {
@@ -79,15 +74,13 @@ object ChatAcceptParameterManager {
                 return false
             }
         }
-
         playerTask[player.name] = ChatAcceptParameterTask(
             System.currentTimeMillis() + inputTime * 1000,
-            tipString,
-            cancelString,
-            cancelTipString,
+            cancelJudgeTask,
+            cancelSuccessTask,
             judge,
-            judgeSuccessTask,
-            judgeFailTask
+            judgeTrueTask,
+            judgeFalseTask
         )
         return true
     }

@@ -15,10 +15,9 @@ import cn.nukkit.Player
  */
 data class ChatAcceptParameterTask(
     val timeStamp: Long,
-    val tipString: String?,
-    val cancelString: String,
-    val cancelTipString: String,
-    val judge: (message: String) -> Boolean,
-    val judgeSuccessTask: (player: Player, message: String) -> Unit,
-    val judgeFailTask: (player: Player, message: String) -> Unit
+    val cancelJudgeTask: (player: Player, message: String) -> Boolean,
+    val cancelSuccessTask: (player: Player, message: String) -> Unit,
+    val judge: (player: Player, message: String) -> Boolean,
+    val judgeTrueTask: (player: Player, message: String) -> Unit,
+    val judgeFalseTask: (player: Player, message: String) -> Unit
 )
