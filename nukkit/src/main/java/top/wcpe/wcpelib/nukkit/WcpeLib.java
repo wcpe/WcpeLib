@@ -1,7 +1,6 @@
 package top.wcpe.wcpelib.nukkit;
 
 
-import cn.nukkit.Server;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
@@ -14,7 +13,7 @@ import lombok.Getter;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import top.wcpe.wcpelib.common.mybatis.Mybatis;
-import top.wcpe.wcpelib.common.readis.Redis;
+import top.wcpe.wcpelib.common.redis.Redis;
 import top.wcpe.wcpelib.nukkit.mybatis.entity.PlayerServer;
 import top.wcpe.wcpelib.nukkit.mybatis.mapper.PlayerServerMapper;
 import top.wcpe.wcpelib.nukkit.placeholder.data.PlayerPlaceholder;
