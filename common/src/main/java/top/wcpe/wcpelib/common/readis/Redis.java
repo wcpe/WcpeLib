@@ -10,6 +10,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * @author: WCPE 1837019522@qq.com
  * @create: 2021-05-11 10:05
  */
+@Deprecated
 public class Redis {
 
     private JedisPool jedisPool;
