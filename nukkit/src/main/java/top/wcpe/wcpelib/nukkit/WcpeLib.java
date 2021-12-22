@@ -57,6 +57,7 @@ public final class WcpeLib extends PluginBase {
     @Getter
     private static Redis redis;
 
+    @Getter
     private static final HashMap<String, ServerInfo> serverInfoMap = new HashMap<>();
 
     public static ServerInfo getServerInfo(String serverName) {
@@ -115,7 +116,7 @@ public final class WcpeLib extends PluginBase {
             try {
                 ConfigSection redisSection = getConfig().getSection("redis");
                 String password = redisSection.getString("password");
-                this.redis = new Redis(redisSection.getString("url"), redisSection.getInt("port"), redisSection.getInt("time-out"), password == null || password.isEmpty() ? null : password, redisSection.getInt("max-total"), redisSection.getInt("max-idle"), redisSection.getInt("min-idle"), redisSection.getBoolean("jmx-enabled"),redisSection.getBoolean("test-on-create"), redisSection.getBoolean("block-when-exhausted"), redisSection.getInt("max-wait-millis"), redisSection.getBoolean("test-on-borrow"), redisSection.getBoolean("test-on-return"));
+                this.redis = new Redis(redisSection.getString("url"), redisSection.getInt("port"), redisSection.getInt("time-out"), password == null || password.isEmpty() ? null : password, redisSection.getInt("max-total"), redisSection.getInt("max-idle"), redisSection.getInt("min-idle"), redisSection.getBoolean("jmx-enabled"), redisSection.getBoolean("test-on-create"), redisSection.getBoolean("block-when-exhausted"), redisSection.getInt("max-wait-millis"), redisSection.getBoolean("test-on-borrow"), redisSection.getBoolean("test-on-return"));
                 log(" Redis 链接成功! 共耗时:" + (System.currentTimeMillis() - s) + "Ms");
                 log(" host->" + redisSection.getString("url") + ",port->" + redisSection.getInt("port"));
             } catch (Exception e) {
