@@ -3,6 +3,7 @@ package top.wcpe.wcpelib.common.redis
 import redis.clients.jedis.Jedis
 import redis.clients.jedis.JedisPool
 import redis.clients.jedis.JedisPoolConfig
+import java.util.function.Consumer
 
 /**
  * 由 WCPE 在 2021/12/22 18:08 创建
@@ -83,9 +84,20 @@ class Redis {
         return jedisPool.resource
     }
 
-    fun useRedisResource(callBack: (Jedis) -> Unit) {
-        jedisPool?.run {
-            resource?.use(callBack)
+    fun useRedisResource(callBack: Consumer<Jedis>) {
+        jedisPool.run {
+            resource?.use {
+                callBack.accept(it)
+            }
+        }
+    }
+
+    fun useRedisResource(callBack: Consumer<Jedis>, select: Int) {
+        jedisPool.run {
+            resource?.use {
+                it.select(select)
+                callBack.accept(it)
+            }
         }
     }
 

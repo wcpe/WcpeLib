@@ -16,7 +16,7 @@ import top.wcpe.wcpelib.bukkit.bc.PluginMessageBase;
 import top.wcpe.wcpelib.bukkit.bc.utils.ServerUtil;
 import top.wcpe.wcpelib.bukkit.mybatis.mapper.PlayerServerMapper;
 import top.wcpe.wcpelib.common.mybatis.Mybatis;
-import top.wcpe.wcpelib.common.readis.Redis;
+import top.wcpe.wcpelib.common.redis.Redis;
 
 /**
  * 功能描述：WcpeLib 一个自己用的破烂Bukkit插件前置
