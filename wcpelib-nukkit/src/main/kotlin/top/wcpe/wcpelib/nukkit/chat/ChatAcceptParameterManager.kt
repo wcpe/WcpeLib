@@ -63,11 +63,11 @@ object ChatAcceptParameterManager {
         judge: (player: Player, message: String) -> Boolean,
         judgeTrueTask: (player: Player, message: String) -> Unit,
         judgeFalseTask: (player: Player, message: String) -> Unit
-    ): Boolean {
+    ): Long {
         playerTask[player.name]?.let {
-            if (it.timeStamp < System.currentTimeMillis()) {
-                playerTask.remove(player.name)
-                return false
+            val currentTimeMillis = System.currentTimeMillis()
+            if (it.timeStamp > currentTimeMillis) {
+                return it.timeStamp - currentTimeMillis
             }
         }
         playerTask[player.name] = ChatAcceptParameterTask(
@@ -78,7 +78,7 @@ object ChatAcceptParameterManager {
             judgeTrueTask,
             judgeFalseTask
         )
-        return true
+        return -1
     }
 
 

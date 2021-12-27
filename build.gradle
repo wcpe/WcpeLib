@@ -17,8 +17,6 @@ allprojects {
         mavenCentral()
         gradlePluginPortal()
     }
-    dependencies {
-    }
 }
 subprojects {
     apply plugin: 'java'
