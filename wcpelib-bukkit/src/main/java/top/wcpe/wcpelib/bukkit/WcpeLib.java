@@ -30,8 +30,11 @@ public final class WcpeLib extends JavaPlugin {
     }
 
 
-    @Getter
     private static WcpeLib instance;
+
+    public static WcpeLib getInstance() {
+        return instance;
+    }
 
     @Getter
     private static ServerUtil serverUtil;
