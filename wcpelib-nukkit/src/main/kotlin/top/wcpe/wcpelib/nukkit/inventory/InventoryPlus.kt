@@ -2,7 +2,6 @@ package top.wcpe.wcpelib.nukkit.inventory
 
 import cn.nukkit.Player
 import cn.nukkit.Server
-import cn.nukkit.inventory.InventoryType
 import top.wcpe.wcpelib.nukkit.inventory.action.ClickListener
 import top.wcpe.wcpelib.nukkit.inventory.action.CloseListener
 import top.wcpe.wcpelib.nukkit.inventory.action.OpenListener

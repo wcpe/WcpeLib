@@ -18,6 +18,11 @@ import top.wcpe.wcpelib.bukkit.utils.ReflectionUtil.PackageType;
  * @author Jed
  */
 public class BookUtil {
+
+    private BookUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
     private static boolean initialised = false;
     private static Method getHandle;
     private static Method openBook;

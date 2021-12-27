@@ -6,7 +6,6 @@ import cn.nukkit.event.EventHandler
 import cn.nukkit.event.EventPriority
 import cn.nukkit.event.Listener
 import cn.nukkit.event.player.PlayerChatEvent
-import lombok.Data
 import top.wcpe.wcpelib.nukkit.WcpeLib
 import top.wcpe.wcpelib.nukkit.chat.entity.ChatAcceptParameterTask
 
