@@ -1,5 +1,3 @@
-group 'top.wcpe.wcpelib.bukkit'
-
 repositories {
     maven { url 'https://jitpack.io' }
     maven {
