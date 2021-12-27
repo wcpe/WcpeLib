@@ -6,20 +6,25 @@ buildscript {
     }
     dependencies {
         classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.1"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
     }
 }
 allprojects {
-    apply plugin: 'java'
-    apply plugin: 'idea'
     apply plugin: "com.github.johnrengelman.shadow"
     apply plugin: "org.jetbrains.kotlin.jvm"
-
     repositories {
         mavenLocal()
         mavenCentral()
         gradlePluginPortal()
     }
+    dependencies {
+    }
+}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply from: '../../build-upload.gradle'
+    version = '1.0.5-alpha-dev-1'
     processResources {
         def props = [version: version]
         inputs.properties props
@@ -34,16 +39,10 @@ allprojects {
             include '**/*.xml'
         }
     }
-}
-subprojects {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
-    }
-
-    ext {
-        junitVersion = '4.12'
     }
     dependencies {
         implementation "redis.clients:jedis:3.6.0"
@@ -52,6 +51,8 @@ subprojects {
         implementation "mysql:mysql-connector-java:5.1.35"
         implementation "org.mybatis:mybatis:3.5.6"
         implementation "org.quartz-scheduler:quartz:2.3.0"
+        implementation "com.google.code.gson:gson:2.8.9"
+        implementation "com.squareup.okhttp3:okhttp:4.9.3"
 
         compileOnly 'org.projectlombok:lombok:1.18.22'
         annotationProcessor 'org.projectlombok:lombok:1.18.22'
@@ -59,8 +60,11 @@ subprojects {
         testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
 
         implementation "org.jetbrains.kotlin:kotlin-stdlib"
+        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     }
-
+    test {
+        useJUnitPlatform()
+    }
 }

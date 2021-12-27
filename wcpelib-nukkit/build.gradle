@@ -1,0 +1,8 @@
+group 'top.wcpe.wcpelib.nukkit'
+
+dependencies {
+    implementation project(':wcpelib-common')
+    compileOnly "cn.nukkit:nukkit:1.0-SNAPSHOT"
+    compileOnly "me.onebone:economyapi:2.0.0"
+}
+
