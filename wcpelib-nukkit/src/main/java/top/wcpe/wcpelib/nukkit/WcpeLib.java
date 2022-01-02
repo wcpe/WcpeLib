@@ -63,26 +63,34 @@ public final class WcpeLib extends PluginBase {
         return serverInfoMap.get(serverName);
     }
 
-    public void saveDefaultFile(File itemFile) {
-        if (!itemFile.exists()) {
-            this.saveResource(itemFile.getName(), false);
-        }
-    }
 
-    @Getter
     private static Config itemConfig;
 
+    public static Config getItemConfig() {
+        return itemConfig;
+    }
+
+    @Override
+    public void saveDefaultConfig() {
+        super.saveDefaultConfig();
+        File itemFile = new File(this.getDataFolder(), "item.yml");
+        if (!itemFile.exists()) {
+            this.saveResource("item.yml", false);
+        }
+        itemConfig = new Config(itemFile);
+    }
+
+    @Override
+    public void reloadConfig() {
+        super.reloadConfig();
+        itemConfig.reload();
+    }
 
     @Override
     public void onEnable() {
         long start = System.currentTimeMillis();
         instance = this;
         saveDefaultConfig();
-
-        File itemFile = new File(this.getDataFolder(), "item.yml");
-        saveDefaultFile(itemFile);
-        itemConfig = new Config(itemFile);
-
         initPlaceholderExtend();
 
         log("开始读取各个服务器信息");
