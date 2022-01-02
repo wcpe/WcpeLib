@@ -132,6 +132,7 @@ public final class WcpeLib extends PluginBase {
                 this.enableRedis = false;
             }
         }
+        new WcpeLibCommands();
         log("§aload time: §e" + (System.currentTimeMillis() - start) + " §ams");
         getServer().getConsoleSender().sendMessage("§a  _       __                          __     _     __  ");
         getServer().getConsoleSender().sendMessage("§a | |     / /  _____    ____   ___    / /    (_)   / /_ ");
