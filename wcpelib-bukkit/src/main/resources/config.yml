@@ -1,24 +1,2 @@
 server-name: "xxx"
-mysql:
-  enable: false
-  url: "localhost"
-  user: "root"
-  port: 3306
-  password: "root"
-  database: "test"
-redis:
-  enable: false
-  url: "localhost"
-  port: 6379
-  time-out: 2000
-  password: ""
-  max-total: 100
-  max-idle: 100
-  min-idle: 0
-  jmx-enabled: true
-  test-on-create: true
-  block-when-exhausted: true
-  max-wait-millis: 1000
-  test-on-borrow: false
-  test-on-return: false
 skull-save-time: 10

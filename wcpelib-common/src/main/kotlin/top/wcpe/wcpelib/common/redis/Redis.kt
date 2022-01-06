@@ -85,19 +85,15 @@ class Redis {
     }
 
     fun useRedisResource(callBack: Consumer<Jedis>) {
-        jedisPool.run {
-            resource?.use {
-                callBack.accept(it)
-            }
+        jedisPool.resource.use {
+            callBack.accept(it)
         }
     }
 
     fun useRedisResource(callBack: Consumer<Jedis>, select: Int) {
-        jedisPool.run {
-            resource?.use {
-                it.select(select)
-                callBack.accept(it)
-            }
+        jedisPool.resource.use {
+            it.select(select)
+            callBack.accept(it)
         }
     }
 

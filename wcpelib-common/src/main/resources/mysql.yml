@@ -1,0 +1,22 @@
+mysql:
+  enable: false
+  url: "localhost"
+  user: "root"
+  port: 3306
+  password: "root"
+  database: "test"
+  parameter: "useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC"
+  filters: "stat"
+  maxActive: 128
+  initialSize: 8
+  maxWait: 6000
+  minIdle: 8
+  timeBetweenEvictionRunsMillis: 60000
+  minEvictableIdleTimeMillis: 300000
+  validationQuery: "select 1"
+  testWhileIdle: true
+  testOnBorrow: false
+  testOnReturn: false
+  poolPreparedStatements: false
+  maxOpenPreparedStatements: -1
+  asyncInit: true
