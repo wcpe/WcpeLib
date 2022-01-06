@@ -47,6 +47,9 @@ class WcpeLibCommon(
                     testOnReturn = getBoolean("mysql.testOnReturn"),
                     poolPreparedStatements = getBoolean("mysql.poolPreparedStatements"),
                     maxOpenPreparedStatements = getInt("mysql.maxOpenPreparedStatements"),
+                    removeAbandoned  = getBoolean("mysql.removeAbandoned"),
+                    removeAbandonedTimeout = getInt("mysql.removeAbandonedTimeout"),
+                    logAbandoned = getBoolean("mysql.logAbandoned"),
                     asyncInit = getBoolean("mysql.asyncInit")
                 ).let {
                     loggerAdapter.info("Mybatis 链接成功! 共耗时:${(System.currentTimeMillis() - start)}Ms")

@@ -6,7 +6,7 @@ mysql:
   password: "root"
   database: "test"
   parameter: "useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC"
-  filters: "stat"
+  filters: "stat,wall,slf4j"
   maxActive: 128
   initialSize: 8
   maxWait: 6000
@@ -19,4 +19,7 @@ mysql:
   testOnReturn: false
   poolPreparedStatements: false
   maxOpenPreparedStatements: -1
+  removeAbandoned: false
+  removeAbandonedTimeout: 1800
+  logAbandoned: true
   asyncInit: true

@@ -42,6 +42,9 @@ class Mybatis(
     testOnReturn: Boolean,
     poolPreparedStatements: Boolean,
     maxOpenPreparedStatements: Int,
+    removeAbandoned: Boolean,
+    removeAbandonedTimeout: Int,
+    logAbandoned: Boolean,
     asyncInit: Boolean
 ) {
     var databaseName: String
@@ -71,6 +74,9 @@ class Mybatis(
         druidDataSource.isTestOnReturn = testOnReturn
         druidDataSource.isPoolPreparedStatements = poolPreparedStatements
         druidDataSource.maxOpenPreparedStatements = maxOpenPreparedStatements
+        druidDataSource.isRemoveAbandoned = removeAbandoned
+        druidDataSource.removeAbandonedTimeout = removeAbandonedTimeout
+        druidDataSource.isLogAbandoned = logAbandoned
         druidDataSource.isAsyncInit = asyncInit
 
         sqlSessionFactory = SqlSessionFactoryBuilder().build(
