@@ -21,7 +21,7 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
-    version = '1.0.7-alpha-dev-2'
+    version = '1.0.7-alpha-dev-3'
     group 'top.wcpe.wcpelib'
     apply from: '../../build-upload.gradle'
     processResources {

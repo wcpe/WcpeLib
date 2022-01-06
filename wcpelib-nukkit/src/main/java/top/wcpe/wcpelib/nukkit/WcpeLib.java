@@ -1,24 +1,15 @@
 package top.wcpe.wcpelib.nukkit;
 
 
-import cn.nukkit.event.EventHandler;
-import cn.nukkit.event.EventPriority;
-import cn.nukkit.event.Listener;
-import cn.nukkit.event.player.PlayerJoinEvent;
-import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.ConfigSection;
 import lombok.Getter;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import top.wcpe.wcpelib.common.WcpeLibCommon;
 import top.wcpe.wcpelib.common.mybatis.Mybatis;
 import top.wcpe.wcpelib.common.redis.Redis;
 import top.wcpe.wcpelib.nukkit.adapter.ConfigAdapterNukkitImpl;
 import top.wcpe.wcpelib.nukkit.adapter.LoggerAdapterNukkitImpl;
-import top.wcpe.wcpelib.nukkit.mybatis.entity.PlayerServer;
-import top.wcpe.wcpelib.nukkit.mybatis.mapper.PlayerServerMapper;
 import top.wcpe.wcpelib.nukkit.placeholder.data.PlayerPlaceholder;
 import top.wcpe.wcpelib.nukkit.placeholder.data.ServerPlaceholder;
 import top.wcpe.wcpelib.nukkit.server.ServerInfo;
@@ -28,10 +19,15 @@ import java.util.HashMap;
 
 
 /**
- * 功能描述：WcpeLib 一个自己用的破烂Nukkit插件前置
+ * 由 WCPE 在 2021/4/13 12:46 创建
+ * <p>
+ * Created by WCPE on 2022/1/2 17:07
+ * <p>
+ * Github: https://github.com/wcpe
+ * <p>
+ * QQ: 1837019522
  *
- * @Author: WCPE
- * @Date: 2021/4/13 12:46
+ * @author WCPE
  */
 public final class WcpeLib extends PluginBase {
 
@@ -126,46 +122,6 @@ public final class WcpeLib extends PluginBase {
     private void initDefaultMapper() {
         final Long start = System.currentTimeMillis();
         getLogger().info("开始初始化默认 Mapper");
-        this.mybatis.addMapper(PlayerServerMapper.class);
-        SqlSessionFactory sqlSessionFactory = this.mybatis.getSqlSessionFactory();
-        SqlSession session = sqlSessionFactory.openSession();
-
-        PlayerServerMapper playerServerMapper = session.getMapper(PlayerServerMapper.class);
-        if (playerServerMapper.existTable(this.mybatis.getDatabaseName()) == 0) {
-            playerServerMapper.createTable();
-        }
-        WcpeLib.getInstance().getServer().getPluginManager().registerEvents(new Listener() {
-            @EventHandler(priority = EventPriority.HIGH)
-            public void join(PlayerJoinEvent e) {
-                String playerName = e.getPlayer().getName();
-                SqlSession openSession = sqlSessionFactory.openSession();
-                PlayerServerMapper mapper = openSession.getMapper(PlayerServerMapper.class);
-                PlayerServer playerServer = mapper.selectPlayerServer(playerName);
-                if (playerServer == null) {
-                    mapper.insertPlayerServer(new PlayerServer(playerName, getServerName(), true));
-                } else {
-                    mapper.updatePlayerServer(new PlayerServer(playerName, getServerName(), true));
-                }
-                openSession.commit();
-                openSession.close();
-            }
-
-            @EventHandler(priority = EventPriority.HIGH)
-            public void quit(PlayerQuitEvent e) {
-                String playerName = e.getPlayer().getName();
-                SqlSession openSession = sqlSessionFactory.openSession();
-                PlayerServerMapper mapper = openSession.getMapper(PlayerServerMapper.class);
-                PlayerServer playerServer = mapper.selectPlayerServer(playerName);
-                if (playerServer == null) {
-                    mapper.insertPlayerServer(new PlayerServer(playerName, getServerName(), false));
-                } else {
-                    mapper.updatePlayerServer(new PlayerServer(playerName, getServerName(), false));
-                }
-                openSession.commit();
-                openSession.close();
-            }
-        }, WcpeLib.getInstance());
-        session.commit();
         getLogger().info("始化默认 Mapper 完成 耗时:" + (System.currentTimeMillis() - start) + " Ms");
     }
 
