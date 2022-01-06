@@ -86,8 +86,14 @@ class Mybatis(
     }
 
     fun useSession(callBack: Consumer<SqlSession>) {
-        sqlSessionFactory.openSession(true).use {
-            callBack.accept(it)
+        sqlSessionFactory.openSession().use {
+            try {
+                callBack.accept(it)
+                it.commit()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                it.rollback()
+            }
         }
     }
 
