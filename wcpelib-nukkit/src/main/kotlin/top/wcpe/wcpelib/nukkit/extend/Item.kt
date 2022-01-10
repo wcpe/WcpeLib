@@ -15,10 +15,12 @@ import top.wcpe.wcpelib.nukkit.WcpeLib
  * @author WCPE
  */
 fun Item.getWcpeLibCustomName(): String {
-    WcpeLib.getItemConfig().getSection("item-custom-name").let{
-        return if (it.exists("${this.id}:${this.damage}"))
-            it.getString("${this.id}:${this.damage}")
-        else
-            name
-    }
+    return if (hasCustomName()) name
+    else
+        WcpeLib.getItemConfig().getSection("item-custom-name").let {
+            return if (it.exists("${this.id}:${this.damage}"))
+                it.getString("${this.id}:${this.damage}")
+            else
+                name
+        }
 }
