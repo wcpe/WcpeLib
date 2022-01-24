@@ -4,6 +4,7 @@ import cn.nukkit.utils.Config
 import top.wcpe.wcpelib.common.adapter.ConfigAdapter
 import top.wcpe.wcpelib.nukkit.WcpeLib
 import java.io.File
+import java.nio.file.Path
 
 /**
  * 由 WCPE 在 2022/1/3 23:14 创建
@@ -51,5 +52,9 @@ class ConfigAdapterNukkitImpl(private val file: File) : ConfigAdapter {
 
     override fun getDouble(key: String): Double {
         return config.getDouble(key)
+    }
+
+    override fun getPath(): Path {
+        return file.toPath()
     }
 }

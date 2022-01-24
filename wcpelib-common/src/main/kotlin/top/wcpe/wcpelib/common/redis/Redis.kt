@@ -10,11 +10,10 @@ import java.util.function.Consumer
  *
  * Created by WCPE on 2021/12/22 18:08
  *
- * Github: https://github.com/wcpe
- *
- * QQ: 1837019522
- *
- * @author WCPE
+ * GitHub  : https://github.com/wcpe
+ * QQ      : 1837019522
+ * @author : WCPE
+ * @since  : v1.0.7-alpha-dev-1
  */
 class Redis {
     private val jedisPool: JedisPool

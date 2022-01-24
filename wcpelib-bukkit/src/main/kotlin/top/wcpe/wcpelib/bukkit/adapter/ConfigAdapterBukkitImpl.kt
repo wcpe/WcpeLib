@@ -6,6 +6,7 @@ import top.wcpe.wcpelib.bukkit.WcpeLib
 import top.wcpe.wcpelib.common.adapter.ConfigAdapter
 import java.io.File
 import java.io.InputStreamReader
+import java.nio.file.Path
 
 /**
  * 由 WCPE 在 2022/1/3 22:57 创建
@@ -59,5 +60,9 @@ class ConfigAdapterBukkitImpl(private val file: File) : ConfigAdapter {
 
     override fun getDouble(key: String): Double {
         return config.getDouble(key)
+    }
+
+    override fun getPath(): Path {
+        return file.toPath()
     }
 }

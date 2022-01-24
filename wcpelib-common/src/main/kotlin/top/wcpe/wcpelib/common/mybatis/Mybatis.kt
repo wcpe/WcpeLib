@@ -16,11 +16,10 @@ import java.util.function.Consumer
  *
  * Created by WCPE on 2022/1/3 21:47
  *
- * Github: https://github.com/wcpe
- *
- * QQ: 1837019522
- *
- * @author WCPE
+ * GitHub  : https://github.com/wcpe
+ * QQ      : 1837019522
+ * @author : WCPE
+ * @since  : v1.0.7-alpha-dev-1
  */
 class Mybatis(
     url: String,

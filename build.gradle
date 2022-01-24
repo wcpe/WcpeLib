@@ -21,7 +21,7 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
-    version = '1.0.8'
+    version = '1.0.9-alpha-dev-1'
     group 'top.wcpe.wcpelib'
     apply from: '../../build-upload.gradle'
     processResources {
@@ -44,15 +44,17 @@ subprojects {
         options.encoding = 'UTF-8'
     }
     dependencies {
+        implementation "org.msgpack:msgpack-core:0.9.0"
         implementation "redis.clients:jedis:3.6.0"
-        implementation "log4j:log4j:1.2.17"
-        implementation "org.slf4j:slf4j-nop:1.7.25"
+        implementation "org.slf4j:slf4j-api:1.7.33"
+        implementation "ch.qos.logback:logback-core:1.2.10"
+        implementation "ch.qos.logback:logback-classic:1.2.10"
+        implementation "ch.qos.logback:logback-access:1.2.10"
         implementation "mysql:mysql-connector-java:5.1.35"
         implementation "org.mybatis:mybatis:3.5.6"
         implementation 'com.alibaba:druid:1.2.8'
         implementation "org.quartz-scheduler:quartz:2.3.0"
         implementation "com.google.code.gson:gson:2.8.9"
-        implementation "com.squareup.okhttp3:okhttp:4.9.3"
         implementation "com.squareup.moshi:moshi:1.13.0"
         implementation "com.squareup.moshi:moshi-kotlin:1.13.0"
 

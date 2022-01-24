@@ -5,11 +5,10 @@ package top.wcpe.wcpelib.common.adapter
  *
  * Created by WCPE on 2022/1/3 22:29
  *
- * Github: https://github.com/wcpe
- *
- * QQ: 1837019522
- *
- * @author WCPE
+ * GitHub  : https://github.com/wcpe
+ * QQ      : 1837019522
+ * @author : WCPE
+ * @since  : v1.0.7-alpha-dev-1
  */
 interface LoggerAdapter {
 

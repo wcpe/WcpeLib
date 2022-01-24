@@ -13,11 +13,11 @@ import java.io.File;
 
 /**
  * 由 WCPE 在 2021/2/17 3:45 创建
- *
+ * <p>
  * Created by WCPE on 2022/1/2 17:07
- *
+ * <p>
  * Github: https://github.com/wcpe
- *
+ * <p>
  * QQ: 1837019522
  *
  * @author WCPE
@@ -49,7 +49,10 @@ public final class WcpeLib extends JavaPlugin {
         long start = System.currentTimeMillis();
         instance = this;
         saveDefaultConfig();
-        final WcpeLibCommon wcpeLibCommon = new WcpeLibCommon(new LoggerAdapterBukkitImpl(), new ConfigAdapterBukkitImpl(new File(getDataFolder(), "mysql.yml")), new ConfigAdapterBukkitImpl(new File(getDataFolder(), "redis.yml")));
+        final WcpeLibCommon wcpeLibCommon = new WcpeLibCommon(
+                new LoggerAdapterBukkitImpl(),
+                new ConfigAdapterBukkitImpl(new File(getDataFolder(), "mysql.yml")),
+                new ConfigAdapterBukkitImpl(new File(getDataFolder(), "redis.yml")));
         mybatis = wcpeLibCommon.getMybatis();
         if (enableMysql = mybatis != null) {
             initDefaultMapper();
@@ -58,7 +61,6 @@ public final class WcpeLib extends JavaPlugin {
         enableRedis = redis != null;
 //        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 //        getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessageBase());
-
 
 
         getLogger().info("load time: " + (System.currentTimeMillis() - start) + " ms");

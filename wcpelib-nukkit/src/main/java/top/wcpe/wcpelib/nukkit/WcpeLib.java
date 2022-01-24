@@ -95,7 +95,10 @@ public final class WcpeLib extends PluginBase {
             serverInfoMap.put(key, new ServerInfo(key, serverInfoCfgSection.getString("host"), serverInfoCfgSection.getInt("port")));
             getLogger().info(key + " -> " + serverInfoCfgSection.getString("host") + ":" + serverInfoCfgSection.getInt("port"));
         }
-        final WcpeLibCommon wcpeLibCommon = new WcpeLibCommon(new LoggerAdapterNukkitImpl(), new ConfigAdapterNukkitImpl(new File(getDataFolder(), "mysql.yml")), new ConfigAdapterNukkitImpl(new File(getDataFolder(), "redis.yml")));
+        final WcpeLibCommon wcpeLibCommon = new WcpeLibCommon(
+                new LoggerAdapterNukkitImpl(),
+                new ConfigAdapterNukkitImpl(new File(getDataFolder(), "mysql.yml")),
+                new ConfigAdapterNukkitImpl(new File(getDataFolder(), "redis.yml")));
         mybatis = wcpeLibCommon.getMybatis();
         if (enableMysql = mybatis != null) {
             initDefaultMapper();

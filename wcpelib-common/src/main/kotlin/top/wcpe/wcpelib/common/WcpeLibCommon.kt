@@ -47,7 +47,7 @@ class WcpeLibCommon(
                     testOnReturn = getBoolean("mysql.testOnReturn"),
                     poolPreparedStatements = getBoolean("mysql.poolPreparedStatements"),
                     maxOpenPreparedStatements = getInt("mysql.maxOpenPreparedStatements"),
-                    removeAbandoned  = getBoolean("mysql.removeAbandoned"),
+                    removeAbandoned = getBoolean("mysql.removeAbandoned"),
                     removeAbandonedTimeout = getInt("mysql.removeAbandonedTimeout"),
                     logAbandoned = getBoolean("mysql.logAbandoned"),
                     asyncInit = getBoolean("mysql.asyncInit")
