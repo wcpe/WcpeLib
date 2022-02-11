@@ -14,6 +14,13 @@ allprojects {
     apply plugin: "org.jetbrains.kotlin.jvm"
     repositories {
         mavenLocal()
+        maven {
+            allowInsecureProtocol = true
+            url "http://maven.wcpe.top/repository/maven-public/"
+            credentials {
+                allowInsecureProtocol = true
+            }
+        }
         mavenCentral()
         gradlePluginPortal()
     }
@@ -21,7 +28,7 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
-    version = '1.0.9-alpha-dev-1'
+    version = '1.0.9-alpha-dev-2'
     group 'top.wcpe.wcpelib'
     apply from: '../../build-upload.gradle'
     processResources {
