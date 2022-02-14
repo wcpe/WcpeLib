@@ -8,10 +8,12 @@ buildscript {
         classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
     }
+
 }
 allprojects {
     apply plugin: "com.github.johnrengelman.shadow"
     apply plugin: "org.jetbrains.kotlin.jvm"
+    apply plugin: 'maven-publish'
     repositories {
         mavenLocal()
         maven {
@@ -28,9 +30,9 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
-    version = '1.0.9-alpha-dev-3'
+
+    version = '1.0.9-alpha-dev-4'
     group 'top.wcpe.wcpelib'
-    apply from: '../../build-upload.gradle'
     processResources {
         def props = [version: version]
         inputs.properties props
@@ -77,5 +79,36 @@ subprojects {
     }
     test {
         useJUnitPlatform()
+    }
+
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allJava
+        archiveClassifier = 'sources'
+    }
+
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+
+                groupId project.group
+                artifactId project.name
+                version project.version
+                from components.java
+                artifact sourcesJar
+            }
+        }
+        repositories {
+            maven {
+                credentials {
+                    allowInsecureProtocol = true
+                    username = project.findProperty("username").toString()
+                    password = project.findProperty("password").toString()
+                }
+                def releasesRepoUrl = "http://maven.wcpe.top/repository/maven-releases/"
+                def snapshotsRepoUrl = "http://maven.wcpe.top/repository/maven-snapshots/"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            }
+        }
     }
 }
