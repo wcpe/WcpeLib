@@ -10,7 +10,7 @@ import top.wcpe.wcpelib.common.mybatis.Mybatis;
 import top.wcpe.wcpelib.common.redis.Redis;
 import top.wcpe.wcpelib.nukkit.adapter.ConfigAdapterNukkitImpl;
 import top.wcpe.wcpelib.nukkit.adapter.LoggerAdapterNukkitImpl;
-import top.wcpe.wcpelib.nukkit.placeholder.data.PlayerPlaceholder;
+import top.wcpe.wcpelib.nukkit.placeholder.data.PlayerPlaceholderExtend;
 import top.wcpe.wcpelib.nukkit.placeholder.data.ServerPlaceholder;
 import top.wcpe.wcpelib.nukkit.server.ServerInfo;
 
@@ -118,7 +118,7 @@ public final class WcpeLib extends PluginBase {
     }
 
     private void initPlaceholderExtend() {
-        new PlayerPlaceholder().register();
+        new PlayerPlaceholderExtend().register();
         new ServerPlaceholder().register();
     }
 

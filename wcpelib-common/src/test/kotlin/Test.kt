@@ -1,8 +1,3 @@
-import com.google.gson.JsonParser
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import org.junit.jupiter.api.Test
-import java.util.*
 
 /**
  * 由 WCPE 在 2021/12/27 21:52 创建
@@ -16,7 +11,7 @@ import java.util.*
  * @author WCPE
  */
 class Test {
-
+    /*
     fun testMojangApi() {
         println(sendGetMojangApi("paotangya"))
     }
@@ -50,5 +45,5 @@ class Test {
         val skinByte = "{\"textures\":{\"SKIN\":{\"url\":\"$skinURL\"}}}".toByteArray()
         return String(Base64.getEncoder().encode(skinByte))
     }
-
+    */
 }
