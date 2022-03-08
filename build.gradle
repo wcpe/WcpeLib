@@ -19,9 +19,6 @@ allprojects {
         maven {
             allowInsecureProtocol = true
             url "http://maven.wcpe.top/repository/maven-public/"
-            credentials {
-                allowInsecureProtocol = true
-            }
         }
         mavenCentral()
         gradlePluginPortal()
@@ -31,7 +28,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
 
-    version = '1.0.9'
+    version = '1.0.10-alpha-dev-1'
     group 'top.wcpe.wcpelib'
     processResources {
         def props = [version: version]
@@ -66,6 +63,7 @@ subprojects {
         implementation "com.google.code.gson:gson:2.8.9"
         implementation "com.squareup.moshi:moshi:1.13.0"
         implementation "com.squareup.moshi:moshi-kotlin:1.13.0"
+        implementation "dev.zacsweers.moshix:moshi-metadata-reflect:0.17.0"
 
         compileOnly 'org.projectlombok:lombok:1.18.22'
         annotationProcessor 'org.projectlombok:lombok:1.18.22'

@@ -26,10 +26,11 @@ public class NetMinecraftServerUtil {
         int serverVersionNum = getServerVersionNum();
         if (serverVersionNum >= 1170) {
             sendAction_1_17(p, msg);
-        } else if (getServerVersionNum() >= 1160)
+        } else if (getServerVersionNum() >= 1160) {
             sendAction_1_16(p, msg);
-        else
+        } else {
             sendAction_1_15(p, msg);
+        }
     }
 
     private static void sendAction_1_17(Player p, String msg) {

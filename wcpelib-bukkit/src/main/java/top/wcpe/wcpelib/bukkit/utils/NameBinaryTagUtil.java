@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
@@ -124,6 +125,9 @@ public class NameBinaryTagUtil {
     }
 
     public Map getNBTList() {
+        if (NetMinecraftServerUtil.getServerVersionNum() > 1170) {
+            return (Map) getField(compound, "x");
+        }
         return (Map) getField(compound, "map");
     }
 
@@ -315,7 +319,7 @@ public class NameBinaryTagUtil {
         return null;
     }
 
-    public static enum Package {
+    public enum Package {
         MINECRAFT_SERVER("net.minecraft." + getNmsPacket()),
         CRAFTBUKKIT("org.bukkit.craftbukkit." + getServerVersion());
 
@@ -334,10 +338,11 @@ public class NameBinaryTagUtil {
         }
 
         public static String getNmsPacket() {
-            if (NetMinecraftServerUtil.getServerVersionNum() > 1170)
+            if (NetMinecraftServerUtil.getServerVersionNum() > 1170) {
                 return "nbt";
-            else
+            } else {
                 return "server." + Bukkit.getServer().getClass().getPackage().getName().substring(23);
+            }
         }
 
         public static String getServerVersion() {
