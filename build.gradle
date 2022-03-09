@@ -28,7 +28,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
 
-    version = '1.0.10-alpha-dev-2'
+    version = '1.0.10-alpha-dev-3'
     group 'top.wcpe.wcpelib'
     processResources {
         def props = [version: version]

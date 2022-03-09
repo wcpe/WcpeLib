@@ -6,6 +6,7 @@ import cn.nukkit.utils.Config;
 import cn.nukkit.utils.ConfigSection;
 import lombok.Getter;
 import top.wcpe.wcpelib.common.WcpeLibCommon;
+import top.wcpe.wcpelib.common.adapter.ConfigAdapter;
 import top.wcpe.wcpelib.common.mybatis.Mybatis;
 import top.wcpe.wcpelib.common.redis.Redis;
 import top.wcpe.wcpelib.nukkit.adapter.ConfigAdapterNukkitImpl;
@@ -59,32 +60,26 @@ public final class WcpeLib extends PluginBase {
     }
 
 
-    private static Config itemConfig;
-
-    public static Config getItemConfig() {
-        return itemConfig;
-    }
+    @Getter
+    private static ConfigAdapter itemConfig;
 
     @Override
     public void saveDefaultConfig() {
         super.saveDefaultConfig();
-        File itemFile = new File(this.getDataFolder(), "item.yml");
-        if (!itemFile.exists()) {
-            this.saveResource("item.yml", false);
-        }
-        itemConfig = new Config(itemFile);
+        itemConfig.saveDefaultConfig();
     }
 
     @Override
     public void reloadConfig() {
         super.reloadConfig();
-        itemConfig.reload();
+        itemConfig.reloadConfig();
     }
 
     @Override
     public void onEnable() {
         long start = System.currentTimeMillis();
         instance = this;
+        itemConfig = new ConfigAdapterNukkitImpl(new File(this.getDataFolder(), "item.yml"));
         saveDefaultConfig();
         initPlaceholderExtend();
 

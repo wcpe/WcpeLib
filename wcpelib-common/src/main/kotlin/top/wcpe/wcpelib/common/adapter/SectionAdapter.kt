@@ -1,24 +1,16 @@
 package top.wcpe.wcpelib.common.adapter
 
-import java.nio.file.Path
-
-
 /**
- * 由 WCPE 在 2022/1/3 22:19 创建
+ * 由 WCPE 在 2022/3/9 20:18 创建
  *
- * Created by WCPE on 2022/1/3 22:19
+ * Created by WCPE on 2022/3/9 20:18
  *
  * GitHub  : https://github.com/wcpe
  * QQ      : 1837019522
  * @author : WCPE
- * @since  : v1.0.7-alpha-dev-1
+ * @since  : v1.0.10-alpha-dev-3
  */
-interface ConfigAdapter {
-
-    fun saveDefaultConfig()
-
-    fun reloadConfig()
-
+interface SectionAdapter {
     fun getString(key: String): String
 
     fun getBoolean(key: String): Boolean
@@ -29,11 +21,9 @@ interface ConfigAdapter {
 
     fun getDouble(key: String): Double
 
-    fun exists(key: String): Boolean
-
     fun getKeys(): Set<String>
 
-    fun getSection(key: String): SectionAdapter?
+    fun exists(key: String): Boolean
 
-    fun getPath(): Path
+    fun getSection(key: String): SectionAdapter?
 }

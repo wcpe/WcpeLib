@@ -2,6 +2,7 @@ package top.wcpe.wcpelib.nukkit.adapter
 
 import cn.nukkit.utils.Config
 import top.wcpe.wcpelib.common.adapter.ConfigAdapter
+import top.wcpe.wcpelib.common.adapter.SectionAdapter
 import top.wcpe.wcpelib.nukkit.WcpeLib
 import java.io.File
 import java.nio.file.Path
@@ -52,6 +53,18 @@ class ConfigAdapterNukkitImpl(private val file: File) : ConfigAdapter {
 
     override fun getDouble(key: String): Double {
         return config.getDouble(key)
+    }
+
+    override fun exists(key: String): Boolean {
+        return config.exists(key)
+    }
+
+    override fun getKeys(): Set<String> {
+        return config.getKeys(false)
+    }
+
+    override fun getSection(key: String): SectionAdapter? {
+        return SectionAdapterNukkitImpl(config.getSection(key))
     }
 
     override fun getPath(): Path {

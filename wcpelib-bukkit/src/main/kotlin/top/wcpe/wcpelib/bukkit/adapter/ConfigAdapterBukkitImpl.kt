@@ -4,6 +4,7 @@ import com.google.common.base.Charsets
 import org.bukkit.configuration.file.YamlConfiguration
 import top.wcpe.wcpelib.bukkit.WcpeLib
 import top.wcpe.wcpelib.common.adapter.ConfigAdapter
+import top.wcpe.wcpelib.common.adapter.SectionAdapter
 import java.io.File
 import java.io.InputStreamReader
 import java.nio.file.Path
@@ -43,7 +44,7 @@ class ConfigAdapterBukkitImpl(private val file: File) : ConfigAdapter {
     }
 
     override fun getString(key: String): String {
-        return config.getString(key)
+        return config.getString(key) ?: ""
     }
 
     override fun getBoolean(key: String): Boolean {
@@ -60,6 +61,18 @@ class ConfigAdapterBukkitImpl(private val file: File) : ConfigAdapter {
 
     override fun getDouble(key: String): Double {
         return config.getDouble(key)
+    }
+
+    override fun exists(key: String): Boolean {
+        return config.contains(key)
+    }
+
+    override fun getKeys(): Set<String> {
+        return config.getKeys(false)
+    }
+
+    override fun getSection(key: String): SectionAdapter? {
+        return SectionAdapterBukkitImpl(config.getConfigurationSection(key) ?: return null)
     }
 
     override fun getPath(): Path {
