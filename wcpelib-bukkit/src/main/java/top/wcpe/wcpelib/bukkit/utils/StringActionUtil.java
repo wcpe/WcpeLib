@@ -29,12 +29,10 @@ public class StringActionUtil {
 
     private static String setPlaceholders(Player p, String text) {
         try {
-            Class<?> forName = Class.forName("PlaceholderAPI");
-            Object newInstance = forName.newInstance();
-            text = (String) forName.getMethod("setPlaceholders", Player.class, String.class).invoke(newInstance, p,
+            Class<?> forName = Class.forName("me.clip.placeholderapi.PlaceholderAPI");
+            text = (String) forName.getMethod("setPlaceholders", Player.class, String.class).invoke(null, p,
                     text);
-        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
-                | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return text;
