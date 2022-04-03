@@ -43,6 +43,6 @@ class SectionAdapterBukkitImpl(private val configurationSection: ConfigurationSe
     }
 
     override fun getSection(key: String): SectionAdapter? {
-        return SectionAdapterBukkitImpl(configurationSection.getConfigurationSection(key) ?: return null)
+        return SectionAdapterBukkitImpl((configurationSection.getConfigurationSection(key) ?: return null))
     }
 }

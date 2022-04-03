@@ -17,7 +17,7 @@ import top.wcpe.wcpelib.nukkit.WcpeLib
 fun Item.getWcpeLibCustomName(): String {
     return if (hasCustomName()) name
     else
-        WcpeLib.getItemConfig().getSection("item-custom-name").let {
+        (WcpeLib.getItemConfig().getSection("item-custom-name") ?: return name).let {
             return if (it.exists("${this.id}:${this.damage}"))
                 it.getString("${this.id}:${this.damage}")
             else
