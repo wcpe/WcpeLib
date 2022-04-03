@@ -42,7 +42,7 @@ class SectionAdapterNukkitImpl(private val configSection: ConfigSection) : Secti
         return configSection.exists(key)
     }
 
-    override fun getSection(key: String): SectionAdapter {
-        return SectionAdapterNukkitImpl(configSection.getSection(key))
+    override fun getSection(key: String): SectionAdapter? {
+        return SectionAdapterNukkitImpl((configSection.getSection(key) ?: return null))
     }
 }

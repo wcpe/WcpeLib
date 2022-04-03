@@ -44,26 +44,26 @@ public final class WcpeLib extends JavaPlugin {
     @Getter
     private static Redis redis;
 
-    @Getter
-    private static ConfigAdapterBukkitImpl itemConfig;
+//    @Getter
+//    private static ConfigAdapterBukkitImpl itemConfig;
 
     @Override
     public void saveDefaultConfig() {
         super.saveDefaultConfig();
-        itemConfig.saveDefaultConfig();
+//        itemConfig.saveDefaultConfig();
     }
 
     @Override
     public void reloadConfig() {
         super.reloadConfig();
-        itemConfig.reloadConfig();
+//        itemConfig.reloadConfig();
     }
 
     @Override
     public void onEnable() {
         long start = System.currentTimeMillis();
         instance = this;
-        itemConfig = new ConfigAdapterBukkitImpl(new File(getDataFolder(), "item.yml"));
+//        itemConfig = new ConfigAdapterBukkitImpl(new File(getDataFolder(), "item.yml"));
         saveDefaultConfig();
         final WcpeLibCommon wcpeLibCommon = new WcpeLibCommon(
                 new LoggerAdapterBukkitImpl(),

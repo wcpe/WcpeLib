@@ -52,7 +52,6 @@ public final class WcpeLib extends PluginBase {
     @Getter
     private static Redis redis;
 
-    @Getter
     private static final HashMap<String, ServerInfo> serverInfoMap = new HashMap<>();
 
     public static ServerInfo getServerInfo(String serverName) {
@@ -60,8 +59,11 @@ public final class WcpeLib extends PluginBase {
     }
 
 
-    @Getter
     private static ConfigAdapter itemConfig;
+
+    public static ConfigAdapter getItemConfig() {
+        return itemConfig;
+    }
 
     @Override
     public void saveDefaultConfig() {
