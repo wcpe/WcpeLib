@@ -1,9 +1,7 @@
 package top.wcpe.wcpelib.bukkit.itemstack;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
@@ -12,14 +10,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import top.wcpe.wcpelib.bukkit.WcpeLib;
-import top.wcpe.wcpelib.bukkit.utils.NetMinecraftServerUtil;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import top.wcpe.wcpelib.bukkit.version.VersionInfo;
+import top.wcpe.wcpelib.bukkit.version.VersionManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -43,8 +41,9 @@ public class SkullManager {
         Bukkit.getScheduler().runTaskTimerAsynchronously(WcpeLib.getInstance(), () -> limitTime.set(0), 12000L, 12000L);
         Bukkit.getScheduler().runTaskTimerAsynchronously(WcpeLib.getInstance(), () -> {
             try {
-                for (Player p : Bukkit.getOnlinePlayers())
+                for (Player p : Bukkit.getOnlinePlayers()) {
                     savePlayerSkullSkin(p);
+                }
             } catch (Exception exception) {
             }
         }, (20 * WcpeLib.getInstance().getConfig().getInt("skull-save-time")), (20 * WcpeLib.getInstance().getConfig().getInt("Setting.skullSaveTime")));
@@ -101,12 +100,14 @@ public class SkullManager {
             URL url = new URL(urlStr);
             in = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8));
             String str;
-            while ((str = in.readLine()) != null)
+            while ((str = in.readLine()) != null) {
                 sb.append(str);
+            }
         } catch (Exception exception) {
             try {
-                if (in != null)
+                if (in != null) {
                     in.close();
+                }
             } catch (IOException iOException) {
             }
         } finally {
@@ -122,7 +123,7 @@ public class SkullManager {
 
     public static ItemStack getSkullItemStack() {
         ItemStack skull;
-        if (NetMinecraftServerUtil.getServerVersionNum() > 1122) {
+        if (VersionManager.getVersionInfo().getVersionNumber() > VersionInfo.V1_12_2.getVersionNumber()) {
             skull = new ItemStack(Material.valueOf("PLAYER_HEAD"));
         } else {
             skull = new ItemStack(Material.getMaterial("SKULL_ITEM"), 1, (short) SkullType.PLAYER.ordinal());
@@ -148,7 +149,7 @@ public class SkullManager {
         } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
             e1.printStackTrace();
         }
-        is.setItemMeta((ItemMeta) sm);
+        is.setItemMeta(sm);
         return is;
 
     }

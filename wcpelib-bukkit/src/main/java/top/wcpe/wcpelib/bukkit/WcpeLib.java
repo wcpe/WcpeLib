@@ -1,10 +1,12 @@
 package top.wcpe.wcpelib.bukkit;
 
 import lombok.Getter;
+import lombok.val;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import top.wcpe.wcpelib.bukkit.adapter.ConfigAdapterBukkitImpl;
 import top.wcpe.wcpelib.bukkit.adapter.LoggerAdapterBukkitImpl;
+import top.wcpe.wcpelib.bukkit.version.VersionManager;
 import top.wcpe.wcpelib.common.WcpeLibCommon;
 import top.wcpe.wcpelib.common.mybatis.Mybatis;
 import top.wcpe.wcpelib.common.redis.Redis;
@@ -86,7 +88,10 @@ public final class WcpeLib extends JavaPlugin {
         getServer().getConsoleSender().sendMessage("§a | |/ |/ /  / /__    / /_/ //  __/ / /___ / /   / /_/ /");
         getServer().getConsoleSender().sendMessage("§a |__/|__/   \\___/   / .___/ \\___/ /_____//_/   /_.___/ ");
         getServer().getConsoleSender().sendMessage("§a                   /_/                                 ");
-
+        final val versionInfo = VersionManager.getVersionInfo();
+        getLogger().info("load version: " + getServer().getVersion());
+        getLogger().info("nms version: " + versionInfo.getNmsClassPath());
+        getLogger().info("obc version: " + versionInfo.getObcClassPath());
     }
 
     private void initDefaultMapper() {

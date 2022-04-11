@@ -2,6 +2,7 @@ package top.wcpe.wcpelib.bukkit.inventory.entity;
 
 import java.util.*;
 
+import lombok.Data;
 import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -12,7 +13,9 @@ import lombok.Getter;
 import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
 import top.wcpe.wcpelib.bukkit.inventory.listener.inter.SlotEventFunctional;
 import top.wcpe.wcpelib.bukkit.utils.NameBinaryTagUtil;
-import top.wcpe.wcpelib.bukkit.utils.NetMinecraftServerUtil;
+import top.wcpe.wcpelib.bukkit.version.VersionInfo;
+import top.wcpe.wcpelib.bukkit.version.VersionManager;
+import top.wcpe.wcpelib.bukkit.version.adapter.itemstack.ItemStackManager;
 
 /**
  * {@link InventoryPlus}中的格子
@@ -20,29 +23,37 @@ import top.wcpe.wcpelib.bukkit.utils.NetMinecraftServerUtil;
  * @author WCPE
  * @date 2021年4月8日 下午5:20:07
  */
+@Data
 public class Slot<E extends SlotExtend> {
 
 
+    @Override
     public Slot clone() {
         return new Slot.Builder<>(getItemStack()).onClick(onClick).slotExtend(getSlotExtend()).build();
     }
 
-    private NameBinaryTagUtil nameBinaryTagUtil = new NameBinaryTagUtil();
+    private NameBinaryTagUtil nameBinaryTagUtil;
 
     public ItemStack getItemStack() {
         ItemStack itemStack;
-        if (NetMinecraftServerUtil.getServerVersionNum() >= 1130) {
+
+        if (VersionManager.getVersionInfo().getVersionNumber() >= VersionInfo.V1_13_2.getVersionNumber()) {
             itemStack = new ItemStack(this.type);
             itemStack.setAmount(this.amount);
             itemStack.setDurability((short) this.durability);
         } else {
-            itemStack = new ItemStack(this.type.getId(), this.amount, (short) this.durability, (byte) this.data);
+            itemStack = new ItemStack(this.type, this.amount, (short) this.durability, (byte) this.data);
         }
-        itemStack = nameBinaryTagUtil.writeToItemStack(itemStack);
+        if (nameBinaryTagUtil != null) {
+            itemStack = nameBinaryTagUtil.writeToItemStack(itemStack);
+            if (itemStack == null) {
+                return null;
+            }
+        }
         itemStack.addUnsafeEnchantments(this.enchantments);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta != null) {
-            itemMeta.setUnbreakable(this.unbreakable);
+            ItemStackManager.getItemMetaAdapter().setUnbreakable(itemMeta, this.unbreakable);
             itemMeta.setDisplayName(this.name);
             itemMeta.setLore(this.lores);
             itemStack.setItemMeta(itemMeta);
@@ -64,7 +75,7 @@ public class Slot<E extends SlotExtend> {
             this.name = itemMeta.getDisplayName();
             this.lores = itemMeta.getLore();
             this.enchantments = itemMeta.getEnchants();
-            this.unbreakable = itemMeta.isUnbreakable();
+            this.unbreakable = ItemStackManager.getItemMetaAdapter().isUnbreakable(itemMeta);
         }
     }
 
@@ -73,7 +84,7 @@ public class Slot<E extends SlotExtend> {
     private Material type;
     @Getter
     @Setter
-    private int data = 0;
+    private int data;
     @Getter
     @Setter
     private String name;
@@ -149,7 +160,7 @@ public class Slot<E extends SlotExtend> {
                 this.name = itemMeta.getDisplayName();
                 this.lores = itemMeta.getLore();
                 this.enchantments = itemMeta.getEnchants();
-                this.unbreakable = itemMeta.isUnbreakable();
+                this.unbreakable = ItemStackManager.getItemMetaAdapter().isUnbreakable(itemMeta);
             }
         }
 
@@ -160,13 +171,17 @@ public class Slot<E extends SlotExtend> {
 
 
         public Builder<E> lore(List<String> lores) {
-            if (lores == null) return this;
+            if (lores == null) {
+                return this;
+            }
             this.lores = lores;
             return this;
         }
 
         public Builder<E> lore(String... lore) {
-            if (lore == null) return this;
+            if (lore == null) {
+                return this;
+            }
             this.lores = Arrays.asList(lore);
             return this;
         }

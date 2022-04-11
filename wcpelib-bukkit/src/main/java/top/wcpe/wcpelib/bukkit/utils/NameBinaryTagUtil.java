@@ -158,7 +158,13 @@ public class NameBinaryTagUtil {
     }
 
     public ItemStack writeToItemStack(ItemStack item) {
+        if (item == null) {
+            return null;
+        }
         nmsItem = doStaticMethod(CraftItemStackClazz, "asNMSCopy", new ParamGroup(item, ItemStack.class));
+        if (nmsItem == null) {
+            return null;
+        }
         doMethod(nmsItem, "setTag", new ParamGroup(compound, NBTTagCompoundClazz));
         return (ItemStack) doStaticMethod(CraftItemStackClazz, "asBukkitCopy", new ParamGroup(nmsItem));
     }
