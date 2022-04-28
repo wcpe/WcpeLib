@@ -8,6 +8,7 @@ import top.wcpe.wcpelib.bukkit.adapter.ConfigAdapterBukkitImpl;
 import top.wcpe.wcpelib.bukkit.adapter.LoggerAdapterBukkitImpl;
 import top.wcpe.wcpelib.bukkit.version.VersionManager;
 import top.wcpe.wcpelib.common.WcpeLibCommon;
+import top.wcpe.wcpelib.common.ktor.Ktor;
 import top.wcpe.wcpelib.common.mybatis.Mybatis;
 import top.wcpe.wcpelib.common.redis.Redis;
 
@@ -46,6 +47,11 @@ public final class WcpeLib extends JavaPlugin {
     @Getter
     private static Redis redis;
 
+    @Getter
+    private static boolean enableKtor;
+    @Getter
+    private static Ktor ktor;
+
 //    @Getter
 //    private static ConfigAdapterBukkitImpl itemConfig;
 
@@ -70,7 +76,8 @@ public final class WcpeLib extends JavaPlugin {
         final WcpeLibCommon wcpeLibCommon = new WcpeLibCommon(
                 new LoggerAdapterBukkitImpl(),
                 new ConfigAdapterBukkitImpl(new File(getDataFolder(), "mysql.yml")),
-                new ConfigAdapterBukkitImpl(new File(getDataFolder(), "redis.yml")));
+                new ConfigAdapterBukkitImpl(new File(getDataFolder(), "redis.yml")),
+                new ConfigAdapterBukkitImpl(new File(getDataFolder(), "ktor.yml")));
         mybatis = wcpeLibCommon.getMybatis();
         if (enableMysql = mybatis != null) {
             initDefaultMapper();
@@ -80,6 +87,8 @@ public final class WcpeLib extends JavaPlugin {
 //        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 //        getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessageBase());
 
+        ktor = wcpeLibCommon.getKtor();
+        enableKtor = ktor != null;
 
         getLogger().info("load time: " + (System.currentTimeMillis() - start) + " ms");
         getServer().getConsoleSender().sendMessage("§a  _       __                          __     _     __  ");

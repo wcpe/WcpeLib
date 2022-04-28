@@ -5,8 +5,10 @@ import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.ConfigSection;
 import lombok.Getter;
+import lombok.val;
 import top.wcpe.wcpelib.common.WcpeLibCommon;
 import top.wcpe.wcpelib.common.adapter.ConfigAdapter;
+import top.wcpe.wcpelib.common.ktor.Ktor;
 import top.wcpe.wcpelib.common.mybatis.Mybatis;
 import top.wcpe.wcpelib.common.redis.Redis;
 import top.wcpe.wcpelib.nukkit.adapter.ConfigAdapterNukkitImpl;
@@ -52,6 +54,12 @@ public final class WcpeLib extends PluginBase {
     @Getter
     private static Redis redis;
 
+    @Getter
+    public static boolean enableKtor;
+    @Getter
+    private static Ktor ktor;
+
+    @Getter
     private static final HashMap<String, ServerInfo> serverInfoMap = new HashMap<>();
 
     public static ServerInfo getServerInfo(String serverName) {
@@ -95,7 +103,8 @@ public final class WcpeLib extends PluginBase {
         final WcpeLibCommon wcpeLibCommon = new WcpeLibCommon(
                 new LoggerAdapterNukkitImpl(),
                 new ConfigAdapterNukkitImpl(new File(getDataFolder(), "mysql.yml")),
-                new ConfigAdapterNukkitImpl(new File(getDataFolder(), "redis.yml")));
+                new ConfigAdapterNukkitImpl(new File(getDataFolder(), "redis.yml")),
+                new ConfigAdapterNukkitImpl(new File(getDataFolder(), "ktor.yml")));
         mybatis = wcpeLibCommon.getMybatis();
         if (enableMysql = mybatis != null) {
             initDefaultMapper();
@@ -103,6 +112,8 @@ public final class WcpeLib extends PluginBase {
         redis = wcpeLibCommon.getRedis();
         enableRedis = redis != null;
 
+        ktor = wcpeLibCommon.getKtor();
+        enableKtor = ktor != null;
         new WcpeLibCommands();
         getLogger().info("load time: §e" + (System.currentTimeMillis() - start) + " ms");
         getServer().getConsoleSender().sendMessage("§a  _       __                          __     _     __  ");

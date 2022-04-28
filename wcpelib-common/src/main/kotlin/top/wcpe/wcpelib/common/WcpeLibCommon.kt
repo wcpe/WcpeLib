@@ -2,6 +2,7 @@ package top.wcpe.wcpelib.common
 
 import top.wcpe.wcpelib.common.adapter.ConfigAdapter
 import top.wcpe.wcpelib.common.adapter.LoggerAdapter
+import top.wcpe.wcpelib.common.ktor.Ktor
 import top.wcpe.wcpelib.common.mybatis.Mybatis
 import top.wcpe.wcpelib.common.redis.Redis
 
@@ -19,7 +20,8 @@ import top.wcpe.wcpelib.common.redis.Redis
 class WcpeLibCommon(
     private val loggerAdapter: LoggerAdapter,
     mySQLConfigAdapter: ConfigAdapter,
-    redisConfigAdapter: ConfigAdapter
+    redisConfigAdapter: ConfigAdapter,
+    ktorConfigAdapter: ConfigAdapter
 ) {
 
     val mybatis: Mybatis? = mySQLConfigAdapter.run {
@@ -95,6 +97,11 @@ class WcpeLibCommon(
             }
         }
         null
+    }
+        get
+
+    val ktor: Ktor? = ktorConfigAdapter.run {
+        Ktor(getInt("ktor.port"))
     }
         get
 

@@ -28,7 +28,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
 
-    version = '1.0.11-alpha-dev-1'
+    version = '1.0.11-alpha-dev-2'
     group 'top.wcpe.wcpelib'
     processResources {
         def props = [version: version]
@@ -64,6 +64,15 @@ subprojects {
         implementation "com.squareup.moshi:moshi:1.13.0"
         implementation "com.squareup.moshi:moshi-kotlin:1.13.0"
         implementation "dev.zacsweers.moshix:moshi-metadata-reflect:0.17.0"
+
+        implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
+        implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.1"
+        implementation "io.ktor:ktor-server-core:1.4.0"
+        implementation "io.ktor:ktor-server-netty:1.4.0"
+        implementation "io.ktor:ktor-client-core:1.4.0"
+        implementation "io.ktor:ktor-client-okhttp:1.4.0"
+        implementation "io.ktor:ktor-client-gson:1.4.0"
+        implementation "io.ktor:ktor-gson:1.4.0"
 
         compileOnly 'org.projectlombok:lombok:1.18.22'
         annotationProcessor 'org.projectlombok:lombok:1.18.22'
