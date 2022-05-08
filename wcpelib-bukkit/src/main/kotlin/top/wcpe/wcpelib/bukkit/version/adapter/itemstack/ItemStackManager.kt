@@ -23,7 +23,7 @@ object ItemStackManager {
                 in VersionInfo.V1_8_8.versionNumber until VersionInfo.V1_12_1.versionNumber -> {
                     ItemStackMetaAdapter188Impl(this)
                 }
-                in VersionInfo.V1_12_1.versionNumber ..VersionInfo.V1_17_1.versionNumber -> {
+                in VersionInfo.V1_12_1.versionNumber ..VersionInfo.V1_18_2.versionNumber -> {
                     ItemStackMetaAdapter1121mpl(this)
                 }
                 else -> {

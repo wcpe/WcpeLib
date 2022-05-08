@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import lombok.val;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
@@ -153,7 +154,8 @@ public class NameBinaryTagUtil {
 
     public NameBinaryTagUtil readByItem(ItemStack item) {
         nmsItem = doStaticMethod(CraftItemStackClazz, "asNMSCopy", new ParamGroup(item, ItemStack.class));
-        compound = ((Boolean) doMethod(nmsItem, "hasTag")) ? doMethod(nmsItem, "getTag") : create(NBTTagCompoundClazz);
+        Object hasTag = doMethod(nmsItem, "hasTag");
+        compound = hasTag != null && ((Boolean) hasTag) ? doMethod(nmsItem, "getTag") : create(NBTTagCompoundClazz);
         return this;
     }
 
