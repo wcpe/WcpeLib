@@ -1,0 +1,31 @@
+image: java:8-jdk
+
+stages:
+  - build
+  - publish
+
+cache:
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+
+build:
+  stage: build
+  script:
+    - ./gradlew build
+  artifacts:
+    paths:
+      - build/libs/*.jar
+    expire_in: 1 week
+  only:
+    - master
+
+publish:
+  stage: publish
+  script:
+    - ./gradlew publish
+  artifacts:
+    paths:
+      - build/libs/*.*
+  only:
+    - master
