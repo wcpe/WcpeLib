@@ -2,7 +2,6 @@ image: java:8-jdk
 
 stages:
   - build
-  - publish
 
 cache:
   paths:
@@ -19,13 +18,5 @@ build:
     expire_in: 1 week
   only:
     - master
-
-publish:
-  stage: publish
-  script:
-    - ./gradlew publish
-  artifacts:
-    paths:
-      - build/libs/*.*
-  only:
-    - master
+  tags:
+    - build
