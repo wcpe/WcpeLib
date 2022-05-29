@@ -35,9 +35,7 @@ publish:
     - chmod +x ./gradlew
     - ./gradlew publish
   only:
-    - master
     - tags
-    - /^Release .*$/
   tags:
     - common
 after_script:
