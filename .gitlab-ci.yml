@@ -20,12 +20,13 @@ shadowJar:
     - chmod +x ./gradlew
     - ./gradlew shadowJar
   artifacts:
+    when: on_success
     paths:
-      - wcpelib-bukkit/build/libs/*.jar
-      - wcpelib-nukkit/build/libs/*.jar
+      - wcpelib-bukkit/build/libs/*.*
+      - wcpelib-nukkit/build/libs/*.*
     expire_in: 1 week
   only:
-    - master
+    - dev
   tags:
     - common
 publish:
@@ -35,7 +36,6 @@ publish:
     - ./gradlew publish
   only:
     - master
-    - tags
   tags:
     - common
 after_script:
