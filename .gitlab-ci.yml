@@ -36,6 +36,8 @@ publish:
     - ./gradlew publish
   only:
     - master
+    - tags
+    - /^Release .*$/
   tags:
     - common
 after_script:
