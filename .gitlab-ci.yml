@@ -16,6 +16,7 @@ cache:
 build:
   stage: build
   script:
+    - chmod +x ./gradlew
     - ./gradlew assemble
   artifacts:
     paths:
