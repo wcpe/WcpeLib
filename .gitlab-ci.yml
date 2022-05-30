@@ -6,20 +6,22 @@ stages:
   - publish
 
 before_script:
+  - echo "Start CI"
   - echo `pwd`
   - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE"
-  - echo "$NEXUS_USERNAME $NEXUS_PASSWORD"
   - export GRADLE_USER_HOME=`pwd`/.gradle
-
+  - export ORG_GRADLE_PROJECT_username="$NEXUS_USERNAME"
+  - export ORG_GRADLE_PROJECT_password="$NEXUS_PASSWORD"
 cache:
   paths:
     - .gradle/wrapper
     - .gradle/caches
-
 testCI:
   stage: testCI
   script:
-    - echo "$NEXUS_USERNAME $NEXUS_PASSWORD"
+    - echo "Test CI"
+    - chmod +x ./gradlew
+    - ./gradlew publish
   tags:
     - common
 shadowJar:
