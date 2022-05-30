@@ -1,6 +1,7 @@
 image: java:8-jdk
 
 stages:
+  - testCI
   - shadowJar
   - publish
 
@@ -15,6 +16,12 @@ cache:
     - .gradle/wrapper
     - .gradle/caches
 
+testCI:
+  stage: testCI
+  script:
+    - echo "$NEXUS_USERNAME $NEXUS_PASSWORD"
+  tags:
+    - common
 shadowJar:
   stage: shadowJar
   script:
