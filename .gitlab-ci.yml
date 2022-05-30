@@ -7,6 +7,7 @@ stages:
 before_script:
   - echo `pwd`
   - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE"
+  - echo "$NEXUS_USERNAME $NEXUS_PASSWORD"
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
 cache:
