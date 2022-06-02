@@ -14,7 +14,7 @@ import cn.nukkit.scheduler.TaskHandler
  * @author : WCPE
  * @since  : v1.0.12-alpha-dev-1
  */
-fun PluginBase.runTask(runnable: Runnable, isAsynchronously: Boolean = false): TaskHandler {
+fun PluginBase.runTask(isAsynchronously: Boolean = false, runnable: Runnable): TaskHandler {
     return Server.getInstance().scheduler.scheduleTask(this, runnable, isAsynchronously)
 }
 

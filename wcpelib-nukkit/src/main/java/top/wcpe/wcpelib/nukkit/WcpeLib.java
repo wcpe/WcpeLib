@@ -2,10 +2,8 @@ package top.wcpe.wcpelib.nukkit;
 
 
 import cn.nukkit.plugin.PluginBase;
-import cn.nukkit.utils.Config;
 import cn.nukkit.utils.ConfigSection;
 import lombok.Getter;
-import lombok.val;
 import top.wcpe.wcpelib.common.WcpeLibCommon;
 import top.wcpe.wcpelib.common.adapter.ConfigAdapter;
 import top.wcpe.wcpelib.common.ktor.Ktor;
