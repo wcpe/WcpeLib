@@ -34,8 +34,8 @@ class SectionAdapterNukkitImpl(private val configSection: ConfigSection) : Secti
         return configSection.getDouble(key)
     }
 
-    override fun getKeys(): Set<String> {
-        return configSection.getKeys()
+    override fun getKeys(child: Boolean): Set<String> {
+        return configSection.getKeys(child)
     }
 
     override fun exists(key: String): Boolean {

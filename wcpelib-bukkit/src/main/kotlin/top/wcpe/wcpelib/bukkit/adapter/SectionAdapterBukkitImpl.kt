@@ -34,8 +34,8 @@ class SectionAdapterBukkitImpl(private val configurationSection: ConfigurationSe
         return configurationSection.getDouble(key)
     }
 
-    override fun getKeys(): Set<String> {
-        return configurationSection.getKeys(false)
+    override fun getKeys(child: Boolean): Set<String> {
+        return configurationSection.getKeys(child)
     }
 
     override fun exists(key: String): Boolean {

@@ -20,7 +20,7 @@ import java.nio.ByteOrder
  */
 class WcpeLibListener : Listener {
     @EventHandler
-    fun listenerStartGamePacket(e: DataPacketSendEvent) {
+    fun listenerDataPacketSendEvent(e: DataPacketSendEvent) {
         val packet = e.packet
         if (packet is AvailableEntityIdentifiersPacket) {
             val tags = NBTIO.read(packet.tag, ByteOrder.LITTLE_ENDIAN, true)
@@ -38,6 +38,7 @@ class WcpeLibListener : Listener {
                     )
                 }
             }
+            tags.put("idlist", idList)
             packet.tag = NBTIO.write(tags, ByteOrder.LITTLE_ENDIAN, true)
         }
     }

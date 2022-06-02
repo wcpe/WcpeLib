@@ -21,7 +21,11 @@ interface SectionAdapter {
 
     fun getDouble(key: String): Double
 
-    fun getKeys(): Set<String>
+    fun getKeys(): Set<String> {
+        return getKeys(false)
+    }
+
+    fun getKeys(child: Boolean = false): Set<String>
 
     fun exists(key: String): Boolean
 
