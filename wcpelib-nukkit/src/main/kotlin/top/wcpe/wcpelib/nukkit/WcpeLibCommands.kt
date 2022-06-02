@@ -24,7 +24,10 @@ class WcpeLibCommands {
         cp.registerSubCommand(
             Command.Builder("reload", "重载配置文件").executeComponent { sender, _ ->
                 sender.sendMessage("开始重载所有配置文件!")
-                WcpeLib.getInstance().reloadConfig()
+                WcpeLib.getInstance().run {
+                    reloadConfig()
+                    reloadOtherConfig()
+                }
                 sender.sendMessage("重载完成")
                 logger.info("${sender.name}重载了配置文件")
             }.build()

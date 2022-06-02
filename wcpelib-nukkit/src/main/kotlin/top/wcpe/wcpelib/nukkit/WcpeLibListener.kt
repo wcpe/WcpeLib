@@ -25,18 +25,15 @@ class WcpeLibListener : Listener {
         if (packet is AvailableEntityIdentifiersPacket) {
             val tags = NBTIO.read(packet.tag, ByteOrder.LITTLE_ENDIAN, true)
             val idList = tags.getList("idlist", CompoundTag::class.java)
-            WcpeLib.getRegisterEntity().getSection("register-entity")?.run {
-                for (key in getKeys()) {
-                    val keySection = getSection(key) ?: continue
-                    idList.add(
-                        CompoundTag()
-                            .putBoolean("hasspawnegg", keySection.getBoolean("hasSpawnEgg"))
-                            .putBoolean("summonable", keySection.getBoolean("summonAble"))
-                            .putString("id", keySection.getString("id"))
-                            .putString("bid", keySection.getString("bid"))
-                            .putInt("rid", keySection.getInt("rid"))
-                    )
-                }
+            for ((_, value) in WcpeLib.getRegisterEntityInfoMap()) {
+                idList.add(
+                    CompoundTag()
+                        .putBoolean("hasspawnegg", value.hasSpawnEgg)
+                        .putBoolean("summonable", value.summonAble)
+                        .putString("id", value.id)
+                        .putString("bid", value.bid)
+                        .putInt("rid", value.rid)
+                )
             }
             tags.put("idlist", idList)
             packet.tag = NBTIO.write(tags, ByteOrder.LITTLE_ENDIAN, true)
