@@ -71,16 +71,25 @@ public final class WcpeLib extends PluginBase {
         return itemConfig;
     }
 
+    private static ConfigAdapter registerEntity;
+
+    public static ConfigAdapter getRegisterEntity() {
+        return registerEntity;
+    }
+
+
     @Override
     public void saveDefaultConfig() {
         super.saveDefaultConfig();
         itemConfig.saveDefaultConfig();
+        registerEntity.saveDefaultConfig();
     }
 
     @Override
     public void reloadConfig() {
         super.reloadConfig();
         itemConfig.reloadConfig();
+        registerEntity.reloadConfig();
     }
 
     @Override
@@ -88,6 +97,7 @@ public final class WcpeLib extends PluginBase {
         long start = System.currentTimeMillis();
         instance = this;
         itemConfig = new ConfigAdapterNukkitImpl(new File(this.getDataFolder(), "item.yml"));
+        registerEntity = new ConfigAdapterNukkitImpl(new File(this.getDataFolder(), "register-entity.yml"));
         saveDefaultConfig();
         initPlaceholderExtend();
 
@@ -113,6 +123,7 @@ public final class WcpeLib extends PluginBase {
         ktor = wcpeLibCommon.getKtor();
         enableKtor = ktor != null;
         new WcpeLibCommands();
+        getServer().getPluginManager().registerEvents(new WcpeLibListener(), this);
         getLogger().info("load time: §e" + (System.currentTimeMillis() - start) + " ms");
         getServer().getConsoleSender().sendMessage("§a  _       __                          __     _     __  ");
         getServer().getConsoleSender().sendMessage("§a | |     / /  _____    ____   ___    / /    (_)   / /_ ");
