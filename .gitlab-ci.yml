@@ -1,7 +1,6 @@
 image: java:8-jdk
 
 stages:
-  - testCI
   - shadowJar
   - publish
 
@@ -10,20 +9,12 @@ before_script:
   - echo `pwd`
   - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE"
   - export GRADLE_USER_HOME=`pwd`/.gradle
-  - export ORG_GRADLE_PROJECT_username="$NEXUS_USERNAME"
-  - export ORG_GRADLE_PROJECT_password="$NEXUS_PASSWORD"
+
 cache:
   paths:
     - .gradle/wrapper
     - .gradle/caches
-testCI:
-  stage: testCI
-  script:
-    - echo "Test CI"
-    - chmod +x ./gradlew
-    - ./gradlew publish
-  tags:
-    - common
+
 shadowJar:
   stage: shadowJar
   script:
@@ -43,7 +34,7 @@ publish:
   stage: publish
   script:
     - chmod +x ./gradlew
-    - ./gradlew publish
+    - ./gradlew publish -Pusername=$NEXUS_USERNAME -Ppassword=$NEXUS_PASSWORD
   only:
     - tags
   tags:
