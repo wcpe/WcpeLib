@@ -43,7 +43,7 @@ publish:
   stage: publish
   script:
     - chmod +x ./gradlew
-    - ./gradlew publish
+    - ./gradlew publish -Pusername=$NEXUS_USERNAME -Ppassword=$NEXUS_PASSWORD
   only:
     - tags
   tags:

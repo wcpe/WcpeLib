@@ -17,13 +17,13 @@ public class StringActionUtil {
      * [ACTION]快捷栏消息
      * [BD]服务器公告
      *
-     * @param commands
-     * @param hasPapi  是否解析Papi变量
-     * @param p
+     * @param stringActionList
+     * @param parserPlaceholderApi 是否解析 PlaceholderApi 注册的变量
+     * @param player
      */
-    public static void executionCommands(List<String> commands, boolean hasPapi, Player p) {
-        for (String command : commands) {
-            executionCommands(command, hasPapi, p);
+    public static void executionCommands(List<String> stringActionList, boolean parserPlaceholderApi, Player player) {
+        for (String command : stringActionList) {
+            executionCommands(command, parserPlaceholderApi, player);
         }
     }
 
@@ -48,55 +48,56 @@ public class StringActionUtil {
      * [ACTION]快捷栏消息
      * [BD]服务器公告
      *
-     * @param command
-     * @param p
+     * @param stringAction
+     * @param parserPlaceholderApi 是否解析 PlaceholderApi 注册的变量
+     * @param player
      */
-    public static void executionCommands(String command, boolean hasPapi, Player p) {
-        if (p != null)
-            command = command.replace("%player%", p.getName());
-        if (command.startsWith("[CMD]")) {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.substring(5));
+    public static void executionCommands(String stringAction, boolean parserPlaceholderApi, Player player) {
+        if (player != null)
+            stringAction = stringAction.replace("%player%", player.getName());
+        if (stringAction.startsWith("[CMD]")) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), stringAction.substring(5));
             return;
         }
-        if (command.startsWith("[BD]")) {
-            Bukkit.broadcastMessage(hasPapi ? setPlaceholders(p, command.substring(4)) : command.substring(4));
+        if (stringAction.startsWith("[BD]")) {
+            Bukkit.broadcastMessage(parserPlaceholderApi ? setPlaceholders(player, stringAction.substring(4)) : stringAction.substring(4));
             return;
         }
-        if (p != null) {
-            if (command.startsWith("[OP]")) {
-                boolean isOp = p.isOp();
+        if (player != null) {
+            if (stringAction.startsWith("[OP]")) {
+                boolean isOp = player.isOp();
                 try {
-                    p.setOp(true);
-                    p.chat(hasPapi ? setPlaceholders(p, command.substring(4)) : command.substring(4));
+                    player.setOp(true);
+                    player.chat(parserPlaceholderApi ? setPlaceholders(player, stringAction.substring(4)) : stringAction.substring(4));
                 } catch (Exception e) {
                 } finally {
-                    p.setOp(isOp);
+                    player.setOp(isOp);
                 }
                 return;
             }
 
-            if (command.startsWith("[PLAYER]")) {
-                Bukkit.dispatchCommand(p, command.substring(8));
+            if (stringAction.startsWith("[PLAYER]")) {
+                Bukkit.dispatchCommand(player, stringAction.substring(8));
                 return;
             }
 
-            if (command.startsWith("[CHAT]")) {
-                p.chat(hasPapi ? setPlaceholders(p, command.substring(6)) : command.substring(6));
+            if (stringAction.startsWith("[CHAT]")) {
+                player.chat(parserPlaceholderApi ? setPlaceholders(player, stringAction.substring(6)) : stringAction.substring(6));
                 return;
             }
 
-            if (command.startsWith("[TITLE]")) {
-                String[] split = command.substring(7).split(";");
-                p.sendTitle(hasPapi ? setPlaceholders(p, split[3]) : split[3], hasPapi ? setPlaceholders(p, split[4]) : split[4], Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+            if (stringAction.startsWith("[TITLE]")) {
+                String[] split = stringAction.substring(7).split(";");
+                player.sendTitle(parserPlaceholderApi ? setPlaceholders(player, split[3]) : split[3], parserPlaceholderApi ? setPlaceholders(player, split[4]) : split[4], Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
                 return;
             }
 
-            if (command.startsWith("[ACTION]")) {
-                NetMinecraftServerUtil.sendAction(p, hasPapi ? setPlaceholders(p, command.substring(8)) : command.substring(8));
+            if (stringAction.startsWith("[ACTION]")) {
+                NetMinecraftServerUtil.sendAction(player, parserPlaceholderApi ? setPlaceholders(player, stringAction.substring(8)) : stringAction.substring(8));
                 return;
             }
 
-            p.sendMessage(hasPapi ? setPlaceholders(p, command) : command);
+            player.sendMessage(parserPlaceholderApi ? setPlaceholders(player, stringAction) : stringAction);
         }
     }
 }

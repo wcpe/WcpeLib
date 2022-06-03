@@ -28,7 +28,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
 
-    version = '1.0.11'
+    version = '1.0.12'
     group 'top.wcpe.wcpelib'
     processResources {
         def props = [version: version]
@@ -89,7 +89,7 @@ subprojects {
     }
 
     task sourcesJar(type: Jar) {
-        from sourceSets.main.allJava
+        from sourceSets.main.allSource
         archiveClassifier = 'sources'
     }
 

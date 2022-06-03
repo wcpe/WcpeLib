@@ -14,7 +14,7 @@ import java.util.*
  * GitHub  : https://github.com/wcpe
  * QQ      : 1837019522
  * @author : WCPE
- * @since  : v
+ * @since  : v1.0.11-alpha-dev-1
  */
 class PlayOutChatAdapter1171Impl(versionInfo: VersionInfo) : PlayOutChatAdapter(versionInfo) {
     override fun sendAction(player: Player, message: String) {

@@ -1,5 +1,4 @@
 repositories {
-    maven { url 'https://jitpack.io' }
     maven {
         url("https://repo.opencollab.dev/snapshot")
     }
@@ -17,9 +16,6 @@ repositories {
     }
     maven {
         url("https://maven.aliyun.com/repository/spring")
-    }
-    maven {
-        url("https://repo.dakanilabs.com/repository/public")
     }
 }
 

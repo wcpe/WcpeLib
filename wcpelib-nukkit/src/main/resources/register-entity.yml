@@ -1,0 +1,7 @@
+register-entity:
+  "test":
+    hasSpawnEgg: false
+    summonAble: false
+    id: "test:monster"
+    bid: ""
+    rid: 122
