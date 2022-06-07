@@ -24,8 +24,11 @@ public class ServerPlaceholder extends PlaceholderExtend {
 
     @Override
     public String onPlaceholderRequest(Player p, String identifier) {
-        if ("name".equals(identifier)) {
-            return WcpeLib.getServerName();
+        switch (identifier) {
+            case "name":
+                return WcpeLib.getServerName();
+            case "view_name":
+                return WcpeLib.getServerInfo(WcpeLib.getServerName()).getViewName();
         }
         return null;
     }

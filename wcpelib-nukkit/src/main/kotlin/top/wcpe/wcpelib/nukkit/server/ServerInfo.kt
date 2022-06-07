@@ -13,5 +13,6 @@ package top.wcpe.wcpelib.nukkit.server
 data class ServerInfo(
     val serverName: String,
     val host: String,
-    val port: Int
+    val port: Int,
+    val viewName: String
 )

@@ -109,8 +109,8 @@ public final class WcpeLib extends PluginBase {
         ConfigSection serverInfoCfg = getConfig().getSection("server.server-info");
         for (String key : serverInfoCfg.getKeys(false)) {
             ConfigSection serverInfoCfgSection = serverInfoCfg.getSection(key);
-            serverInfoMap.put(key, new ServerInfo(key, serverInfoCfgSection.getString("host"), serverInfoCfgSection.getInt("port")));
-            getLogger().info(key + " -> " + serverInfoCfgSection.getString("host") + ":" + serverInfoCfgSection.getInt("port"));
+            serverInfoMap.put(key, new ServerInfo(key, serverInfoCfgSection.getString("host"), serverInfoCfgSection.getInt("port"), serverInfoCfgSection.getString("view-name", key)));
+            getLogger().info(key + ":" + serverInfoCfgSection.getString("view-name", key) + " -> " + serverInfoCfgSection.getString("host") + ":" + serverInfoCfgSection.getInt("port"));
         }
         getLogger().info("开始读取注册实体信息");
         registerEntityInfoMap.clear();
@@ -122,7 +122,6 @@ public final class WcpeLib extends PluginBase {
                 getLogger().info("读取 " + key + "成功 id -> " + keySection.getString("id"));
             }
         }
-
     }
 
     @Override

@@ -4,3 +4,4 @@ server:
     "xxx":
       host: "127.0.0.1"
       port: 19132
+      view-name: "xxx服务器"
