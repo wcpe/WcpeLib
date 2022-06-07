@@ -51,25 +51,30 @@ object StringActionUtil {
      */
     @JvmStatic
     fun executionCommands(stringAction: String, parserPlaceHolder: Boolean, player: Player?) {
+        val finalStringAction = stringAction.let {
+            if (player == null) {
+                stringAction
+            } else {
+                if (parserPlaceHolder) PlaceholderManager.replaceString(
+                    player,
+                    stringAction
+                ) else stringAction.replace("%player%", player.name)
+            }
+        }
 
         if (stringAction.startsWith("[CMD]")) {
             WcpeLib.getInstance().runTask {
                 Server.getInstance()
-                    .dispatchCommand(Server.getInstance().consoleSender, stringAction.substring(5))
+                    .dispatchCommand(Server.getInstance().consoleSender, finalStringAction.substring(5))
             }
             return
         }
         if (stringAction.startsWith("[BD]")) {
-            Server.getInstance().broadcastMessage(stringAction.substring(4))
+            Server.getInstance().broadcastMessage(finalStringAction.substring(4))
             return
         }
 
         player ?: return
-
-        val finalStringAction = (if (parserPlaceHolder) PlaceholderManager.replaceString(
-            player,
-            stringAction
-        ) else stringAction).replace("%player%", player.name)
 
         if (finalStringAction.startsWith("[OP]")) {
             val isOp = player.isOp
