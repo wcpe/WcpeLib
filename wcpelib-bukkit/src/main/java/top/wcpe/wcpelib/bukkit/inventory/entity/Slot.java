@@ -4,12 +4,14 @@ import java.util.*;
 
 import lombok.Data;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import lombok.Getter;
+import org.bukkit.material.MaterialData;
 import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
 import top.wcpe.wcpelib.bukkit.inventory.listener.inter.SlotEventFunctional;
 import top.wcpe.wcpelib.bukkit.utils.NameBinaryTagUtil;
@@ -36,14 +38,16 @@ public class Slot<E extends SlotExtend> {
 
     public ItemStack getItemStack() {
         ItemStack itemStack;
-
         if (VersionManager.getVersionInfo().getVersionNumber() >= VersionInfo.V1_13_2.getVersionNumber()) {
             itemStack = new ItemStack(this.type);
             itemStack.setAmount(this.amount);
-            itemStack.setDurability((short) this.durability);
         } else {
-            itemStack = new ItemStack(this.type, this.amount, (short) this.durability, (byte) this.data);
+            itemStack = new MaterialData(this.type, (byte) this.data).toItemStack(this.amount);
         }
+        if (itemStack.getDurability() < 0) {
+            itemStack.setDurability((short) this.durability);
+        }
+
         if (nameBinaryTagUtil != null) {
             itemStack = nameBinaryTagUtil.writeToItemStack(itemStack);
             if (itemStack == null) {
