@@ -14,15 +14,30 @@ import cn.nukkit.scheduler.TaskHandler
  * @author : WCPE
  * @since  : v1.0.12-alpha-dev-1
  */
-fun PluginBase.runTask(isAsynchronously: Boolean = false, runnable: Runnable): TaskHandler {
+inline fun PluginBase.runTask(isAsynchronously: Boolean = false, runnable: Runnable): TaskHandler {
     return Server.getInstance().scheduler.scheduleTask(this, runnable, isAsynchronously)
 }
 
-fun PluginBase.runTaskLater(tick: Int, isAsynchronously: Boolean = false, runnable: Runnable): TaskHandler {
+inline fun <I : PluginBase> I.runTask(
+    isAsynchronously: Boolean = false,
+    crossinline runnable: I.() -> Unit
+): TaskHandler {
+    return Server.getInstance().scheduler.scheduleTask(this, { runnable(this) }, isAsynchronously)
+}
+
+inline fun PluginBase.runTaskLater(tick: Int, isAsynchronously: Boolean = false, runnable: Runnable): TaskHandler {
     return Server.getInstance().scheduler.scheduleDelayedTask(this, runnable, tick, isAsynchronously)
 }
 
-fun PluginBase.runTaskTimer(
+inline fun <I : PluginBase> I.runTaskLater(
+    tick: Int,
+    isAsynchronously: Boolean = false,
+    crossinline runnable: I.() -> Unit
+): TaskHandler {
+    return Server.getInstance().scheduler.scheduleDelayedTask(this, { runnable(this) }, tick, isAsynchronously)
+}
+
+inline fun PluginBase.runTaskTimer(
     startTick: Int,
     repeatTick: Int = startTick,
     isAsynchronously: Boolean = false,
@@ -30,6 +45,21 @@ fun PluginBase.runTaskTimer(
 ): TaskHandler {
     return Server.getInstance().scheduler.scheduleDelayedRepeatingTask(
         this, runnable,
+        startTick,
+        repeatTick,
+        isAsynchronously
+    )
+}
+
+inline fun <I : PluginBase> I.runTaskLater(
+    startTick: Int,
+    repeatTick: Int = startTick,
+    isAsynchronously: Boolean = false,
+    crossinline runnable: I.() -> Unit
+): TaskHandler {
+    return Server.getInstance().scheduler.scheduleDelayedRepeatingTask(
+        this,
+        { runnable(this) },
         startTick,
         repeatTick,
         isAsynchronously
