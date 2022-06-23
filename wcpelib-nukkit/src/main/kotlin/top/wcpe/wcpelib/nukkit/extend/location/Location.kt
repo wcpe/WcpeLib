@@ -18,6 +18,6 @@ fun Location.locationToString(): String {
     return SerializeClassUtil.locationToString(this)
 }
 
-fun String.locationToString(): Location {
+fun String.stringToLocation(): Location {
     return SerializeClassUtil.stringToLocation(this)
 }

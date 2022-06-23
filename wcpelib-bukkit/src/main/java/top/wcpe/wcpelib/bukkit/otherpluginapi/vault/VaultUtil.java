@@ -19,33 +19,35 @@ public class VaultUtil {
 	private static Permission permission = null;
 
 	public static Economy getEconomy() {
-		if (economy == null)
+		if (economy == null) {
 			if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
 				RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager()
-						.getRegistration(net.milkbowl.vault.economy.Economy.class);
+						.getRegistration(Economy.class);
 				economy = economyProvider.getProvider();
 			}
+		}
 		return economy;
 	}
 
 	public static Chat getChat() {
-		if (chat == null)
+		if (chat == null) {
 			if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
 				RegisteredServiceProvider<Chat> chatProvider = Bukkit.getServer().getServicesManager()
-						.getRegistration(net.milkbowl.vault.chat.Chat.class);
+						.getRegistration(Chat.class);
 				chat = chatProvider.getProvider();
 			}
+		}
 		return chat;
 	}
 
 	public static Permission getPermission() {
-		if (permission == null)
+		if (permission == null) {
 			if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
 				RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer().getServicesManager()
-						.getRegistration(net.milkbowl.vault.permission.Permission.class);
+						.getRegistration(Permission.class);
 				permission = permissionProvider.getProvider();
-
 			}
+		}
 		return permission;
 	}
 }

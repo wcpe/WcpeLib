@@ -14,10 +14,11 @@ public class EconomyUtil {
 
 
     public static EconomyAPI getEconomy() {
-        if (economy == null)
+        if (economy == null) {
             if (Server.getInstance().getPluginManager().getPlugin("EconomyAPI") != null) {
                 economy = EconomyAPI.getInstance();
             }
+        }
         return economy;
     }
 
