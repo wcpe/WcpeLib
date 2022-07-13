@@ -3,7 +3,6 @@ package top.wcpe.wcpelib.bukkit;
 import lombok.Getter;
 import lombok.val;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import top.wcpe.wcpelib.bukkit.adapter.ConfigAdapterBukkitImpl;
 import top.wcpe.wcpelib.bukkit.adapter.LoggerAdapterBukkitImpl;
 import top.wcpe.wcpelib.bukkit.version.VersionManager;
@@ -90,6 +89,8 @@ public final class WcpeLib extends JavaPlugin {
         ktor = wcpeLibCommon.getKtor();
         enableKtor = ktor != null;
 
+        new WcpeLibCommands();
+
         getLogger().info("load time: " + (System.currentTimeMillis() - start) + " ms");
         getServer().getConsoleSender().sendMessage("§a  _       __                          __     _     __  ");
         getServer().getConsoleSender().sendMessage("§a | |     / /  _____    ____   ___    / /    (_)   / /_ ");
@@ -109,8 +110,4 @@ public final class WcpeLib extends JavaPlugin {
         getLogger().info("始化默认 Mapper 完成 耗时:" + (System.currentTimeMillis() - start) + " Ms");
     }
 
-    @Override
-    public void onDisable() {
-        getLogger().info("Disable！！！");
-    }
 }
