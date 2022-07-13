@@ -16,18 +16,17 @@ public class SerializeClassUtil {
         if (loc == null) return null;
         World world = loc.getWorld();
         if (world == null) return null;
-        StringBuilder sb = new StringBuilder(world.getName());
-        sb.append(";");
-        sb.append(loc.getX());
-        sb.append(";");
-        sb.append(loc.getY());
-        sb.append(";");
-        sb.append(loc.getZ());
-        sb.append(";");
-        sb.append(loc.getYaw());
-        sb.append(";");
-        sb.append(loc.getPitch());
-        return sb.toString();
+        String sb = world.getName() + ";" +
+                loc.getX() +
+                ";" +
+                loc.getY() +
+                ";" +
+                loc.getZ() +
+                ";" +
+                loc.getYaw() +
+                ";" +
+                loc.getPitch();
+        return sb;
     }
 
     public static Location stringToLocation(String stringLocation) {

@@ -4,7 +4,7 @@ import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import top.wcpe.wcpelib.bukkit.version.VersionInfo
 import top.wcpe.wcpelib.bukkit.version.adapter.player.PlayerNmsManager
-import java.util.UUID
+import java.util.*
 
 /**
  * 由 WCPE 在 2022/4/3 20:19 创建

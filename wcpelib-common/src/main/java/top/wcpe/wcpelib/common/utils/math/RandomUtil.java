@@ -1,6 +1,9 @@
 package top.wcpe.wcpelib.common.utils.math;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 /**
  * 随机数
@@ -24,6 +27,7 @@ public class RandomUtil {
 
     /**
      * 生成 [min, max] 区间随机值
+     *
      * @param min
      * @param max
      * @return

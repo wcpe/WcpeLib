@@ -4,8 +4,6 @@ package top.wcpe.wcpelib.nukkit.command;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.PluginIdentifiableCommand;
-import cn.nukkit.command.data.CommandEnum;
-import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.plugin.Plugin;
 import lombok.Getter;
 import top.wcpe.wcpelib.common.utils.collector.ListUtil;
@@ -26,25 +24,29 @@ import java.util.stream.Collectors;
  * @date 2021年4月23日 下午4:48:48
  */
 public class CommandPlus extends cn.nukkit.command.Command implements PluginIdentifiableCommand {
+    @Getter
+    private final Plugin plugin;
+    private final List<String> aliases;
+    @Getter
+    private final LinkedHashMap<String, Command> subCommandMap = new LinkedHashMap<>();
+    private final Command mainCommand;
+
+    private CommandPlus(Builder builder) {
+        super(builder.name);
+        this.aliases = builder.aliases;
+        this.plugin = builder.plugin;
+        this.mainCommand = builder.mainCommand;
+    }
+
     public CommandPlus registerThis() {
         CommandManager.registerCommandPlus(this);
         return this;
     }
 
-    @Getter
-    private final Plugin plugin;
-
-    private final List<String> aliases;
-
     @Override
     public String[] getAliases() {
         return aliases.toArray(new String[0]);
     }
-
-    @Getter
-    private LinkedHashMap<String, Command> subCommandMap = new LinkedHashMap<>();
-
-    private Command mainCommand;
 
     public String getSubPermission(Command command) {
         if (mainCommand != null) {
@@ -55,17 +57,9 @@ public class CommandPlus extends cn.nukkit.command.Command implements PluginIden
                 : command.getPermission();
     }
 
-
     public CommandPlus registerSubCommand(Command subCommand) {
         subCommandMap.put(subCommand.getName(), subCommand);
         return this;
-    }
-
-    private CommandPlus(Builder builder) {
-        super(builder.name);
-        this.aliases = builder.aliases;
-        this.plugin = builder.plugin;
-        this.mainCommand = builder.mainCommand;
     }
 
     private boolean executeJudge(Command command, CommandSender sender) {
@@ -190,8 +184,8 @@ public class CommandPlus extends cn.nukkit.command.Command implements PluginIden
 
     public static class Builder {
         private final String name;
-        private List<String> aliases = new ArrayList<>();
         private final Plugin plugin;
+        private final List<String> aliases = new ArrayList<>();
         private Command mainCommand;
 
         public Builder(String name, Plugin plugin) {
@@ -206,9 +200,7 @@ public class CommandPlus extends cn.nukkit.command.Command implements PluginIden
         }
 
         public Builder aliases(String... aliases) {
-            for (String s : aliases) {
-                this.aliases.add(s);
-            }
+            Collections.addAll(this.aliases, aliases);
             return this;
         }
 

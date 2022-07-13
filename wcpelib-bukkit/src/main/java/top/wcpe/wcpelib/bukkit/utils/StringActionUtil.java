@@ -1,10 +1,10 @@
 package top.wcpe.wcpelib.bukkit.utils;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 public class StringActionUtil {
     /**
@@ -32,7 +32,8 @@ public class StringActionUtil {
             Class<?> forName = Class.forName("me.clip.placeholderapi.PlaceholderAPI");
             text = (String) forName.getMethod("setPlaceholders", Player.class, String.class).invoke(null, p,
                     text);
-        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException |
+                 IllegalArgumentException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return text;

@@ -50,14 +50,10 @@ class InventoryPlus {
     var slotMap: MutableMap<Int, SlotPlus> = mutableMapOf()
 
     var lastInventory: InventoryPlus? = null
-        get
 
     var nextInventory: InventoryPlus? = null
-        get
-        set
 
     var title: String = " "
-        get
 
     var doubleInventory = false
     var disDoubleClick = false
@@ -69,7 +65,7 @@ class InventoryPlus {
     var close = true
     val isLockSlot: List<Int> = ArrayList()
 
-    fun setSlot(index: Int, slot: SlotPlus): InventoryPlus? {
+    fun setSlot(index: Int, slot: SlotPlus): InventoryPlus {
         slotMap[index] = slot
         this.refreshInventory(index)
         return this

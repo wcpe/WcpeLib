@@ -26,15 +26,15 @@ open class ChestRawInventory(type: InventoryType, holder: InventoryHolder, title
             try {
                 return NBTIO.write(tag, ByteOrder.LITTLE_ENDIAN, true)
             } catch (e: IOException) {
-                throw  RuntimeException("Unable to create NBT for chest")
+                throw RuntimeException("Unable to create NBT for chest")
             }
         }
     }
 
     override fun onOpenBlock(paramPlayer: Player): MutableList<BlockVector3> {
-        var blockPosition = BlockVector3(paramPlayer.x.toInt(), (paramPlayer.y + 2).toInt(), paramPlayer.z.toInt());
+        var blockPosition = BlockVector3(paramPlayer.x.toInt(), (paramPlayer.y + 2).toInt(), paramPlayer.z.toInt())
         placeChest(paramPlayer, blockPosition)
-        return Collections.singletonList(blockPosition);
+        return Collections.singletonList(blockPosition)
     }
 
     open fun placeChest(who: Player, pos: BlockVector3) {

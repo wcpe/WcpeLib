@@ -3,7 +3,6 @@ package top.wcpe.wcpelib.nukkit.inventory
 import cn.nukkit.item.Item
 import cn.nukkit.item.enchantment.Enchantment
 import top.wcpe.wcpelib.nukkit.inventory.action.ClickListener
-import top.wcpe.wcpelib.nukkit.inventory.entity.SaveItem
 
 class SlotPlusBuilder {
 

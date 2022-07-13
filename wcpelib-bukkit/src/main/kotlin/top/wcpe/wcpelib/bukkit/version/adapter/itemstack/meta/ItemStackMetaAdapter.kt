@@ -13,7 +13,7 @@ import top.wcpe.wcpelib.bukkit.version.VersionInfo
  * @author : WCPE
  * @since  : v1.0.11-alpha-dev-1
  */
-abstract class ItemStackMetaAdapter(val versionInfo: VersionInfo)  {
+abstract class ItemStackMetaAdapter(val versionInfo: VersionInfo) {
     abstract fun setUnbreakable(itemMeta: ItemMeta, unbreakable: Boolean)
     abstract fun isUnbreakable(itemMeta: ItemMeta): Boolean
 }

@@ -63,7 +63,7 @@ class ConfigAdapterNukkitImpl(private val file: File) : ConfigAdapter {
         return config.getKeys(false)
     }
 
-    override fun getSection(key: String): SectionAdapter? {
+    override fun getSection(key: String): SectionAdapter {
         return SectionAdapterNukkitImpl(config.getSection(key))
     }
 

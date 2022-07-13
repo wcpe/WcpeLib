@@ -13,7 +13,7 @@ import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
  */
 public class WcpeLibInventoryHolder implements InventoryHolder {
     @Getter
-    private InventoryPlus inventoryPlus;
+    private final InventoryPlus inventoryPlus;
 
     public WcpeLibInventoryHolder(InventoryPlus inventoryPlus) {
         this.inventoryPlus = inventoryPlus;

@@ -2,16 +2,15 @@ package top.wcpe.wcpelib.bukkit.itemstack;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import top.wcpe.wcpelib.bukkit.WcpeLib;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import top.wcpe.wcpelib.bukkit.version.VersionInfo;
 import top.wcpe.wcpelib.bukkit.version.VersionManager;
 
@@ -35,7 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class SkullManager {
     public static AtomicInteger limitTime = new AtomicInteger(0);
-    private static HashMap<String, String[]> playerSkin = new HashMap<>();
+    private static final HashMap<String, String[]> playerSkin = new HashMap<>();
 
     static {
         Bukkit.getScheduler().runTaskTimerAsynchronously(WcpeLib.getInstance(), () -> limitTime.set(0), 12000L, 12000L);
@@ -46,14 +45,14 @@ public class SkullManager {
                 }
             } catch (Exception exception) {
             }
-        }, (20 * WcpeLib.getInstance().getConfig().getInt("skull-save-time")), (20 * WcpeLib.getInstance().getConfig().getInt("Setting.skullSaveTime")));
+        }, (20L * WcpeLib.getInstance().getConfig().getInt("skull-save-time")), (20L * WcpeLib.getInstance().getConfig().getInt("skull-save-time")));
     }
 
     static void savePlayerSkullSkin(Player p) {
         String[] playerTexture;
         try {
-            Object entityPlayer = p.getClass().getMethod("getHandle", new Class[0]).invoke(p, new Object[0]);
-            Method getProfileMethod = entityPlayer.getClass().getMethod("getProfile", new Class[0]);
+            Object entityPlayer = p.getClass().getMethod("getHandle", new Class[0]).invoke(p);
+            Method getProfileMethod = entityPlayer.getClass().getMethod("getProfile");
             GameProfile gameProfile = (GameProfile) getProfileMethod.invoke(entityPlayer, new Object[0]);
             Property property = gameProfile.getProperties().get("textures").iterator().next();
             playerTexture = new String[]{property.getSignature(), property.getValue()};

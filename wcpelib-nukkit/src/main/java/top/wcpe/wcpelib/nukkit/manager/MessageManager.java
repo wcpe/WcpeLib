@@ -6,24 +6,24 @@ import cn.nukkit.utils.Config;
 import cn.nukkit.utils.LogLevel;
 import top.wcpe.wcpelib.common.utils.string.StringUtil;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 
 public class MessageManager {
-    private String fileName;
-    private Plugin plugin;
+    private final HashMap<String, String> messageMap = new HashMap<>();
+    private final String fileName;
+    private final Plugin plugin;
+    private Path messagePath;
+    private Config messageYaml;
 
     public MessageManager(Plugin plugin, String lang) {
         this.fileName = "Message_" + lang + ".yml";
         this.plugin = plugin;
         reload();
     }
-
-
-    private Path messagePath;
-    private Config messageYaml;
 
     public void reload() {
         Path dataFolderPath = plugin.getDataFolder().toPath();
@@ -69,8 +69,6 @@ public class MessageManager {
         }
 
     }
-
-    private final HashMap<String, String> messageMap = new HashMap<>();
 
     public String getMessage(String loc, String... rep) {
         return StringUtil.replaceString(messageMap.get(loc), rep);

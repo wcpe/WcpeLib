@@ -108,10 +108,6 @@ public class TimeUtil {
                 + (sec % 86400L % 60L) + s;
     }
 
-    public enum TimeType {
-        S, M, H, D
-    }
-
     /**
      * 将秒转化为 分 时 天
      *
@@ -130,5 +126,9 @@ public class TimeUtil {
             return sec / 86400L;
 
         return null;
+    }
+
+    public enum TimeType {
+        S, M, H, D
     }
 }

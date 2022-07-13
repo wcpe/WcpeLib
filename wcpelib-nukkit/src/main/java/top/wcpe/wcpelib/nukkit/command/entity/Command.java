@@ -4,6 +4,7 @@ import lombok.Data;
 import top.wcpe.wcpelib.nukkit.command.intel.ExecuteComponentFunctional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,23 +15,41 @@ import java.util.List;
  */
 @Data
 public class Command {
-    /** 名称 */
+    /**
+     * 名称
+     */
     private String name;
-    /** 参数 */
+    /**
+     * 参数
+     */
     private List<CommandArgument> args;
-    /** 是否隐藏无权限帮助 */
+    /**
+     * 是否隐藏无权限帮助
+     */
     private boolean hideNoPermissionHelp;
-    /** 介绍 */
+    /**
+     * 介绍
+     */
     private String describe;
-    /** 权限 */
+    /**
+     * 权限
+     */
     private String permission;
-    /** 无权限提示 */
+    /**
+     * 无权限提示
+     */
     private String noPermissionMessage;
-    /** 是否只能玩家用 */
+    /**
+     * 是否只能玩家用
+     */
     private boolean onlyPlayerUse;
-    /** 不是玩家使用提示 */
+    /**
+     * 不是玩家使用提示
+     */
     private String noPlayerMessage;
-    /** 命令执行组件 */
+    /**
+     * 命令执行组件
+     */
     private ExecuteComponentFunctional executeComponent;
 
 
@@ -48,9 +67,9 @@ public class Command {
 
     public static class Builder {
         private final String name;
-        private List<CommandArgument> args = new ArrayList<>();
-        private boolean hideNoPermissionHelp = false;
         private final String describe;
+        private final List<CommandArgument> args = new ArrayList<>();
+        private boolean hideNoPermissionHelp = false;
         private String permission;
         private String noPermissionMessage = "§c你莫得权限!";
         private boolean onlyPlayerUse = false;
@@ -63,9 +82,7 @@ public class Command {
         }
 
         public Builder args(CommandArgument... args) {
-            for (CommandArgument arg : args) {
-                this.args.add(arg);
-            }
+            Collections.addAll(this.args, args);
             return this;
         }
 

@@ -1,14 +1,13 @@
 package top.wcpe.wcpelib.bukkit.utils;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-
 import top.wcpe.wcpelib.bukkit.utils.ReflectionUtil.PackageType;
+
+import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * Create a "Virtual" book gui that doesn't require the user to have a book in their hand.
@@ -18,10 +17,6 @@ import top.wcpe.wcpelib.bukkit.utils.ReflectionUtil.PackageType;
  * @author Jed
  */
 public class BookUtil {
-
-    private BookUtil() {
-        throw new IllegalStateException("Utility class");
-    }
 
     private static boolean initialised = false;
     private static Method getHandle;
@@ -38,6 +33,10 @@ public class BookUtil {
             Bukkit.getServer().getLogger().warning("Cannot force open book!");
             initialised = false;
         }
+    }
+
+    private BookUtil() {
+        throw new IllegalStateException("Utility class");
     }
 
     public static boolean isInitialised() {

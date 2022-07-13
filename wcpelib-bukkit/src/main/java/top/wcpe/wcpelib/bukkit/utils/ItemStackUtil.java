@@ -1,13 +1,13 @@
 package top.wcpe.wcpelib.bukkit.utils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ItemStackUtil {
     /**
@@ -88,6 +88,7 @@ public class ItemStackUtil {
 
     /**
      * 获取 ItemLore 中 字符串的索引位置
+     *
      * @param itemLore
      * @param str
      * @return
@@ -177,7 +178,7 @@ public class ItemStackUtil {
             if (item1DisplayName == null && item2DisplayName == null) {
                 return true;
             }
-            if (item1DisplayName.equals(item2DisplayName)) return true;
+            return item1DisplayName.equals(item2DisplayName);
         }
         return false;
     }

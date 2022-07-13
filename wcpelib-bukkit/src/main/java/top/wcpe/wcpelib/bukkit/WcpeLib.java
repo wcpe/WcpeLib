@@ -27,6 +27,18 @@ import java.io.File;
 public final class WcpeLib extends JavaPlugin {
 
     private static WcpeLib instance;
+    @Getter
+    private static boolean enableMysql;
+    @Getter
+    private static Mybatis mybatis;
+    @Getter
+    private static boolean enableRedis;
+    @Getter
+    private static Redis redis;
+    @Getter
+    private static boolean enableKtor;
+    @Getter
+    private static Ktor ktor;
 
     public static WcpeLib getInstance() {
         return instance;
@@ -35,21 +47,6 @@ public final class WcpeLib extends JavaPlugin {
     public static String getServerName() {
         return instance.getConfig().getString("server-name");
     }
-
-    @Getter
-    private static boolean enableMysql;
-    @Getter
-    private static Mybatis mybatis;
-
-    @Getter
-    private static boolean enableRedis;
-    @Getter
-    private static Redis redis;
-
-    @Getter
-    private static boolean enableKtor;
-    @Getter
-    private static Ktor ktor;
 
 //    @Getter
 //    private static ConfigAdapterBukkitImpl itemConfig;
@@ -105,7 +102,7 @@ public final class WcpeLib extends JavaPlugin {
     }
 
     private void initDefaultMapper() {
-        final Long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
         getLogger().info("开始初始化默认 Mapper");
         getLogger().info("始化默认 Mapper 完成 耗时:" + (System.currentTimeMillis() - start) + " Ms");
     }

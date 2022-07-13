@@ -56,7 +56,7 @@ public class ListUtil {
      * @return List<String>
      */
     public static List<String> replaceString(List<String> sours, String... replaces) {
-        if(sours==null)
+        if (sours == null)
             return new ArrayList<>();
         for (int i = 0; i < sours.size(); i++) {
             for (String s : replaces) {

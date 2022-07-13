@@ -64,7 +64,6 @@ class WcpeLibCommon(
         }
         null
     }
-        get
 
     val redis: Redis? = redisConfigAdapter.run {
         if (getBoolean("redis.enable")) {
@@ -98,11 +97,9 @@ class WcpeLibCommon(
         }
         null
     }
-        get
 
-    val ktor: Ktor? = ktorConfigAdapter.run {
+    val ktor: Ktor = ktorConfigAdapter.run {
         Ktor(getInt("ktor.port"))
     }
-        get
 
 }

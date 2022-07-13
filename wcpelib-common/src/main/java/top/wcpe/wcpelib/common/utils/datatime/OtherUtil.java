@@ -12,6 +12,8 @@ import java.util.TimerTask;
  */
 public class OtherUtil {
 
+    private static final HashMap<String, Long> coolTimeMap = new HashMap<>();
+
     /**
      * 创建倒计时任务
      *
@@ -20,7 +22,7 @@ public class OtherUtil {
      * @param m
      */
     public static void putCountDownTask(CountDownPerSecondTask perSecondTask, CountDownFinishTask finishTask, int m) {
-        long time = System.currentTimeMillis() + m * 1000;
+        long time = System.currentTimeMillis() + m * 1000L;
         new Timer().schedule(new TimerTask() {
             int times = m;
 
@@ -51,26 +53,10 @@ public class OtherUtil {
                 if (!perSecondTask.onRun()) {
                     finishTask.onRun();
                     cancel();
-                    return;
                 }
             }
         }, 0, period);
     }
-
-    @FunctionalInterface
-    public interface CountDownFinishTask {
-        void onRun();
-    }
-    @FunctionalInterface
-    public interface CountDownPerSecondJudgeTask {
-        boolean onRun();
-    }
-    @FunctionalInterface
-    public interface CountDownPerSecondTask {
-        void onRun(int time);
-    }
-
-    private static HashMap<String, Long> coolTimeMap = new HashMap<>();
 
     public static void putCoolTime(String key, long l) {
         coolTimeMap.put(key, System.currentTimeMillis() + l * 1000);
@@ -80,5 +66,20 @@ public class OtherUtil {
         Long aLong = coolTimeMap.get(key);
         if (aLong != null && aLong > System.currentTimeMillis()) return aLong - System.currentTimeMillis();
         return -1;
+    }
+
+    @FunctionalInterface
+    public interface CountDownFinishTask {
+        void onRun();
+    }
+
+    @FunctionalInterface
+    public interface CountDownPerSecondJudgeTask {
+        boolean onRun();
+    }
+
+    @FunctionalInterface
+    public interface CountDownPerSecondTask {
+        void onRun(int time);
     }
 }

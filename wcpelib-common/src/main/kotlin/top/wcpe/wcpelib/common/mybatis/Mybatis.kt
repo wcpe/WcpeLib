@@ -47,9 +47,7 @@ class Mybatis(
     asyncInit: Boolean
 ) {
     var databaseName: String
-        get
     var sqlSessionFactory: SqlSessionFactory
-        get
 
     init {
         databaseName = database

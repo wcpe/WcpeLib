@@ -1,16 +1,12 @@
 package top.wcpe.wcpelib.bukkit.inventory.entity;
 
-import java.util.*;
-
 import lombok.Data;
+import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import lombok.Getter;
 import org.bukkit.material.MaterialData;
 import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
 import top.wcpe.wcpelib.bukkit.inventory.listener.inter.SlotEventFunctional;
@@ -18,6 +14,8 @@ import top.wcpe.wcpelib.bukkit.utils.NameBinaryTagUtil;
 import top.wcpe.wcpelib.bukkit.version.VersionInfo;
 import top.wcpe.wcpelib.bukkit.version.VersionManager;
 import top.wcpe.wcpelib.bukkit.version.adapter.itemstack.ItemStackManager;
+
+import java.util.*;
 
 /**
  * {@link InventoryPlus}中的格子
@@ -29,12 +27,53 @@ import top.wcpe.wcpelib.bukkit.version.adapter.itemstack.ItemStackManager;
 public class Slot<E extends SlotExtend> {
 
 
+    private final Object slotExtend;
+    private NameBinaryTagUtil nameBinaryTagUtil;
+    @Getter
+    @Setter
+    private Material type;
+    @Getter
+    @Setter
+    private int data;
+    @Getter
+    @Setter
+    private String name;
+    @Getter
+    @Setter
+    private List<String> lores;
+    @Getter
+    @Setter
+    private int durability;
+    @Getter
+    @Setter
+    private int amount;
+    @Getter
+    @Setter
+    private Map<Enchantment, Integer> enchantments;
+    @Getter
+    @Setter
+    private boolean unbreakable;
+    @Getter
+    @Setter
+    private SlotEventFunctional onClick;
+    private Slot(Builder<E> builder) {
+        this.type = builder.type;
+        this.data = builder.data;
+        this.name = builder.name;
+        this.lores = builder.lores;
+        this.durability = builder.durability;
+        this.amount = builder.amount;
+        this.enchantments = builder.enchantments;
+        this.unbreakable = builder.unbreakable;
+        this.onClick = builder.onClick;
+        this.slotExtend = builder.slotExtend;
+        this.nameBinaryTagUtil = builder.nameBinaryTagUtil;
+    }
+
     @Override
     public Slot clone() {
         return new Slot.Builder<>(getItemStack()).onClick(onClick).slotExtend(getSlotExtend()).build();
     }
-
-    private NameBinaryTagUtil nameBinaryTagUtil;
 
     public ItemStack getItemStack() {
         ItemStack itemStack;
@@ -82,51 +121,6 @@ public class Slot<E extends SlotExtend> {
             this.unbreakable = ItemStackManager.getItemMetaAdapter().isUnbreakable(itemMeta);
         }
     }
-
-    @Getter
-    @Setter
-    private Material type;
-    @Getter
-    @Setter
-    private int data;
-    @Getter
-    @Setter
-    private String name;
-    @Getter
-    @Setter
-    private List<String> lores;
-    @Getter
-    @Setter
-    private int durability;
-    @Getter
-    @Setter
-    private int amount;
-    @Getter
-    @Setter
-    private Map<Enchantment, Integer> enchantments;
-    @Getter
-    @Setter
-    private boolean unbreakable;
-    @Getter
-    @Setter
-    private SlotEventFunctional onClick;
-
-    private final Object slotExtend;
-
-    private Slot(Builder<E> builder) {
-        this.type = builder.type;
-        this.data = builder.data;
-        this.name = builder.name;
-        this.lores = builder.lores;
-        this.durability = builder.durability;
-        this.amount = builder.amount;
-        this.enchantments = builder.enchantments;
-        this.unbreakable = builder.unbreakable;
-        this.onClick = builder.onClick;
-        this.slotExtend = builder.slotExtend;
-        this.nameBinaryTagUtil = builder.nameBinaryTagUtil;
-    }
-
 
     @SuppressWarnings("unchecked")
     public E getSlotExtend() {

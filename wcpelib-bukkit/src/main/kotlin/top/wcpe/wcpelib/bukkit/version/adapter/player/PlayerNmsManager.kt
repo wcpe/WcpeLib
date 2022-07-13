@@ -3,7 +3,10 @@ package top.wcpe.wcpelib.bukkit.version.adapter.player
 import org.bukkit.entity.Player
 import top.wcpe.wcpelib.bukkit.version.VersionInfo
 import top.wcpe.wcpelib.bukkit.version.VersionManager
-import top.wcpe.wcpelib.bukkit.version.adapter.player.chat.*
+import top.wcpe.wcpelib.bukkit.version.adapter.player.chat.PlayOutChatAdapter1121Impl
+import top.wcpe.wcpelib.bukkit.version.adapter.player.chat.PlayOutChatAdapter1161Impl
+import top.wcpe.wcpelib.bukkit.version.adapter.player.chat.PlayOutChatAdapter1171Impl
+import top.wcpe.wcpelib.bukkit.version.adapter.player.chat.PlayOutChatAdapter188Impl
 
 /**
  * 由 WCPE 在 2022/4/1 23:18 创建
@@ -50,15 +53,19 @@ object PlayerNmsManager {
                 in VersionInfo.V1_8_8.versionNumber until VersionInfo.V1_12_1.versionNumber -> {
                     PlayOutChatAdapter188Impl(this)
                 }
+
                 in VersionInfo.V1_12_1.versionNumber until VersionInfo.V1_16_1.versionNumber -> {
                     PlayOutChatAdapter1121Impl(this)
                 }
+
                 in VersionInfo.V1_16_1.versionNumber until VersionInfo.V1_17_1.versionNumber -> {
                     PlayOutChatAdapter1161Impl(this)
                 }
+
                 in VersionInfo.V1_17_1.versionNumber..VersionInfo.V1_17_1.versionNumber -> {
                     PlayOutChatAdapter1171Impl(this)
                 }
+
                 else -> {
                     TODO("Unknown Version")
                 }

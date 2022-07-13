@@ -18,8 +18,9 @@ import java.util.*
  */
 class PlayOutChatAdapter1171Impl(versionInfo: VersionInfo) : PlayOutChatAdapter(versionInfo) {
     override fun sendAction(player: Player, message: String) {
-        val chatComponentTextInstance = versionInfo.getNmsClass("network.chat.ChatComponentText").getConstructor(String::class.java)
-            .newInstance(ChatColor.translateAlternateColorCodes('&', message))
+        val chatComponentTextInstance =
+            versionInfo.getNmsClass("network.chat.ChatComponentText").getConstructor(String::class.java)
+                .newInstance(ChatColor.translateAlternateColorCodes('&', message))
 
         val chatMessageTypeClass = versionInfo.getNmsClass("network.chat.ChatMessageType")
         val chatMessageType = chatMessageTypeClass.getField("c").get(null)

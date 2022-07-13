@@ -1,14 +1,13 @@
 package top.wcpe.wcpelib.bukkit.inventory;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.bukkit.inventory.Inventory;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import org.bukkit.inventory.Inventory;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Inventory管理类
@@ -18,6 +17,7 @@ import lombok.Setter;
  */
 public class InventoryManager {
 
+    private final Map<Inventory, InventoryPlus> map = new HashMap<>();
     @Getter
     @Setter
     private InventoryPlus firstInventoryPlus;
@@ -28,8 +28,6 @@ public class InventoryManager {
     public InventoryManager() {
 
     }
-
-    private final Map<Inventory, InventoryPlus> map = new HashMap<>();
 
     public InventoryPlus get(Inventory i) {
         return map.get(i);

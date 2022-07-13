@@ -1,32 +1,32 @@
 package top.wcpe.wcpelib.bukkit.manager;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
+import top.wcpe.wcpelib.common.utils.string.StringUtil;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
-import top.wcpe.wcpelib.common.utils.string.StringUtil;
-
 public class MessageManager {
 
-    private String fileName;
-    private Plugin plugin;
+    private final HashMap<String, String> messageMap = new HashMap<>();
+    private final String fileName;
+    private final Plugin plugin;
+    private Path messagePath;
+    private YamlConfiguration messageYaml;
 
     public MessageManager(Plugin plugin, String lang) {
         this.fileName = "Message_" + lang + ".yml";
         this.plugin = plugin;
         reload();
     }
-
-
-    private Path messagePath;
-    private YamlConfiguration messageYaml;
 
     public void reload() {
         Path dataFolderPath = plugin.getDataFolder().toPath();
@@ -55,11 +55,7 @@ public class MessageManager {
 
         } else {
             YamlConfiguration yaml = null;
-            try {
-                yaml = YamlConfiguration.loadConfiguration(new InputStreamReader(resource, "utf-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            yaml = YamlConfiguration.loadConfiguration(new InputStreamReader(resource, StandardCharsets.UTF_8));
             for (String s : yaml.getKeys(true)) {
                 if (!messageYaml.isString(s))
                     messageYaml.set(s, yaml.get(s));
@@ -80,8 +76,6 @@ public class MessageManager {
         }
 
     }
-
-    private final HashMap<String, String> messageMap = new HashMap<>();
 
     public String getMessage(String loc, String... rep) {
         return StringUtil.replaceString(messageMap.get(loc), rep);

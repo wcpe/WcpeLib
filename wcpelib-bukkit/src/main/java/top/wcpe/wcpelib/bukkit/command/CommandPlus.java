@@ -1,20 +1,19 @@
 package top.wcpe.wcpelib.bukkit.command;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
+import lombok.Getter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-
-import lombok.Getter;
 import top.wcpe.wcpelib.bukkit.command.entity.Command;
 import top.wcpe.wcpelib.bukkit.command.entity.CommandArgument;
 import top.wcpe.wcpelib.bukkit.command.intel.ExecuteComponentFunctional;
 import top.wcpe.wcpelib.bukkit.command.intel.TabCompleterFunctional;
 import top.wcpe.wcpelib.common.utils.collector.ListUtil;
 import top.wcpe.wcpelib.common.utils.string.StringUtil;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 命令增强类
@@ -25,20 +24,25 @@ import top.wcpe.wcpelib.common.utils.string.StringUtil;
  * @date 2021年4月23日 下午4:48:48
  */
 public class CommandPlus extends org.bukkit.command.Command implements PluginIdentifiableCommand {
-    public CommandPlus registerThis() {
-        CommandManager.registerCommandPlus(this);
-        return this;
-    }
-
     @Getter
     private final Plugin plugin;
     @Getter
     private final List<String> aliases;
     @Getter
-    private LinkedHashMap<String, Command> subCommandMap = new LinkedHashMap<>();
+    private final LinkedHashMap<String, Command> subCommandMap = new LinkedHashMap<>();
+    private final Command mainCommand;
 
-    private Command mainCommand;
+    private CommandPlus(Builder builder) {
+        super(builder.name);
+        this.aliases = builder.aliases;
+        this.plugin = builder.plugin;
+        this.mainCommand = builder.mainCommand;
+    }
 
+    public CommandPlus registerThis() {
+        CommandManager.registerCommandPlus(this);
+        return this;
+    }
 
     public String getSubPermission(Command command) {
         if (mainCommand != null) {
@@ -49,17 +53,9 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
                 : command.getPermission();
     }
 
-
     public CommandPlus registerSubCommand(Command subCommand) {
         subCommandMap.put(subCommand.getName(), subCommand);
         return this;
-    }
-
-    private CommandPlus(Builder builder) {
-        super(builder.name);
-        this.aliases = builder.aliases;
-        this.plugin = builder.plugin;
-        this.mainCommand = builder.mainCommand;
     }
 
     private boolean executeJudge(Command command, CommandSender sender) {
@@ -192,13 +188,13 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
         }
         if (args.length == 1) {
             return subCommandMap.values().stream()
-                    .filter(sub -> sub.isHideNoPermissionHelp() ? sender.hasPermission(getSubPermission(sub)) : true)
+                    .filter(sub -> !sub.isHideNoPermissionHelp() || sender.hasPermission(getSubPermission(sub)))
                     .filter(sub -> sub.getName().startsWith(args[0]))
                     .map(Command::getName).collect(Collectors.toList());
         }
         if (args.length > 1) {
             Command command = subCommandMap.get(args[0]);
-            if (command != null && (command.isOnlyPlayerUse() ? sender instanceof Player : true)) {
+            if (command != null && (!command.isOnlyPlayerUse() || sender instanceof Player)) {
                 TabCompleterFunctional tabCompleter = command.getTabCompleter();
                 if (tabCompleter != null)
                     return tabCompleter.onTabComplete(sender, Arrays.copyOfRange(args, 1, args.length));
@@ -209,8 +205,8 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
 
     public static class Builder {
         private final String name;
-        private List<String> aliases = new ArrayList<>();
         private final Plugin plugin;
+        private final List<String> aliases = new ArrayList<>();
         private Command mainCommand;
 
         public Builder(String name, Plugin plugin) {
@@ -225,9 +221,7 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
         }
 
         public Builder aliases(String... aliases) {
-            for (String s : aliases) {
-                this.aliases.add(s);
-            }
+            Collections.addAll(this.aliases, aliases);
             return this;
         }
 

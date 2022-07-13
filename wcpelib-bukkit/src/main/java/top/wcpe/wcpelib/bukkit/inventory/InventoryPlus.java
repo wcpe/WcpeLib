@@ -1,23 +1,22 @@
 package top.wcpe.wcpelib.bukkit.inventory;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
+import top.wcpe.wcpelib.bukkit.WcpeLib;
+import top.wcpe.wcpelib.bukkit.inventory.entity.Slot;
+import top.wcpe.wcpelib.bukkit.inventory.listener.InventoryListener;
+import top.wcpe.wcpelib.bukkit.inventory.listener.WcpeLibInventoryHolder;
+import top.wcpe.wcpelib.bukkit.inventory.listener.inter.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
-
-import lombok.Getter;
-import lombok.Setter;
-import top.wcpe.wcpelib.bukkit.WcpeLib;
-import top.wcpe.wcpelib.bukkit.inventory.listener.InventoryListener;
-import top.wcpe.wcpelib.bukkit.inventory.listener.WcpeLibInventoryHolder;
-import top.wcpe.wcpelib.bukkit.inventory.listener.inter.*;
-import top.wcpe.wcpelib.bukkit.inventory.entity.Slot;
 
 /**
  * {@link Inventory}增强版 233
@@ -40,17 +39,17 @@ public class InventoryPlus {
     @Setter
     private InventoryPlus nextInventory;
     @Getter
-    private String title;
+    private final String title;
     @Getter
-    private int row;
+    private final int row;
     @Getter
-    private boolean disDoubleClick;
+    private final boolean disDoubleClick;
     @Getter
-    private boolean disDrag;
+    private final boolean disDrag;
     @Getter
-    private boolean disClickPlayerGui;
+    private final boolean disClickPlayerGui;
     @Getter
-    private boolean disClickNullSlot;
+    private final boolean disClickNullSlot;
     @Getter
     @Setter
     private InventoryOpenEventFunctional onOpen;
@@ -71,6 +70,24 @@ public class InventoryPlus {
     @Getter
     @Setter
     private List<Integer> isLockSlot = new ArrayList<>();
+
+    private InventoryPlus(Builder builder) {
+        this.nextInventory = builder.nextInventory;
+        this.lastInventory = builder.lastInventory;
+        this.title = builder.title;
+        this.row = builder.row;
+        Inventory inv = Bukkit.createInventory(new WcpeLibInventoryHolder(this), this.row * 9, this.title);
+        this.slotMap = builder.slotMap;
+        this.rawInventory = inv;
+        this.disDoubleClick = builder.disDoubleClick;
+        this.disClickNullSlot = builder.disClickNullSlot;
+        this.disDrag = builder.disDrag;
+        this.disClickPlayerGui = builder.disClickPlayerGui;
+        this.onOpen = builder.onOpen;
+        this.onDrag = builder.onDrag;
+        this.onClick = builder.onClick;
+        this.onClose = builder.onClose;
+    }
 
     public InventoryPlus setSlot(int index, Slot<?> slot) {
         slotMap.put(index, slot);
@@ -94,9 +111,7 @@ public class InventoryPlus {
                 if (topInventory != null) {
                     if (topInventory.getHolder() instanceof WcpeLibInventoryHolder) {
                         InventoryPlus inventoryPlus = ((WcpeLibInventoryHolder) topInventory.getHolder()).getInventoryPlus();
-                        if (inventoryPlus != null) {
-                            return true;
-                        }
+                        return inventoryPlus != null;
                     }
                 }
             }
@@ -134,28 +149,10 @@ public class InventoryPlus {
         return this.rawInventory;
     }
 
-    private InventoryPlus(Builder builder) {
-        this.nextInventory = builder.nextInventory;
-        this.lastInventory = builder.lastInventory;
-        this.title = builder.title;
-        this.row = builder.row;
-        Inventory inv = Bukkit.createInventory(new WcpeLibInventoryHolder(this), this.row * 9, this.title);
-        this.slotMap = builder.slotMap;
-        this.rawInventory = inv;
-        this.disDoubleClick = builder.disDoubleClick;
-        this.disClickNullSlot = builder.disClickNullSlot;
-        this.disDrag = builder.disDrag;
-        this.disClickPlayerGui = builder.disClickPlayerGui;
-        this.onOpen = builder.onOpen;
-        this.onDrag = builder.onDrag;
-        this.onClick = builder.onClick;
-        this.onClose = builder.onClose;
-    }
-
     public static class Builder {
         private int row = 6;
         private String title = " ";
-        private HashMap<Integer, Slot<?>> slotMap = new HashMap<>();
+        private final HashMap<Integer, Slot<?>> slotMap = new HashMap<>();
         private InventoryPlus lastInventory;
         private InventoryPlus nextInventory;
 

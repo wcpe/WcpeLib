@@ -34,7 +34,24 @@ import java.util.HashMap;
  */
 public final class WcpeLib extends PluginBase {
 
+    @Getter
+    private static final HashMap<String, ServerInfo> serverInfoMap = new HashMap<>();
+    private static final HashMap<String, RegisterEntityInfo> registerEntityInfoMap = new HashMap<>();
+    @Getter
+    public static boolean enableMysql;
+    @Getter
+    public static boolean enableRedis;
+    @Getter
+    public static boolean enableKtor;
     private static WcpeLib instance;
+    @Getter
+    private static Mybatis mybatis;
+    @Getter
+    private static Redis redis;
+    @Getter
+    private static Ktor ktor;
+    private static ConfigAdapter itemConfig;
+    private static ConfigAdapter registerEntityConfig;
 
     public static WcpeLib getInstance() {
         return instance;
@@ -44,29 +61,9 @@ public final class WcpeLib extends PluginBase {
         return instance.getConfig().getString("server.server-name");
     }
 
-    @Getter
-    public static boolean enableMysql;
-    @Getter
-    private static Mybatis mybatis;
-
-    @Getter
-    public static boolean enableRedis;
-    @Getter
-    private static Redis redis;
-
-    @Getter
-    public static boolean enableKtor;
-    @Getter
-    private static Ktor ktor;
-
-    @Getter
-    private static final HashMap<String, ServerInfo> serverInfoMap = new HashMap<>();
-
     public static ServerInfo getServerInfo(String serverName) {
         return serverInfoMap.get(serverName);
     }
-
-    private static final HashMap<String, RegisterEntityInfo> registerEntityInfoMap = new HashMap<>();
 
     public static HashMap<String, RegisterEntityInfo> getRegisterEntityInfoMap() {
         return registerEntityInfoMap;
@@ -76,13 +73,9 @@ public final class WcpeLib extends PluginBase {
         return registerEntityInfoMap.get(registerEntityKey);
     }
 
-    private static ConfigAdapter itemConfig;
-
     public static ConfigAdapter getItemConfig() {
         return itemConfig;
     }
-
-    private static ConfigAdapter registerEntityConfig;
 
     public static ConfigAdapter getRegisterEntityConfig() {
         return registerEntityConfig;
@@ -166,14 +159,9 @@ public final class WcpeLib extends PluginBase {
     }
 
     private void initDefaultMapper() {
-        final Long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
         getLogger().info("开始初始化默认 Mapper");
         getLogger().info("始化默认 Mapper 完成 耗时:" + (System.currentTimeMillis() - start) + " Ms");
-    }
-
-    @Override
-    public void onDisable() {
-        getLogger().info("Disable！！！");
     }
 
 }

@@ -3,12 +3,7 @@ package top.wcpe.wcpelib.bukkit.inventory.listener;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-
+import org.bukkit.event.inventory.*;
 import top.wcpe.wcpelib.bukkit.inventory.InventoryPlus;
 import top.wcpe.wcpelib.bukkit.inventory.entity.*;
 import top.wcpe.wcpelib.bukkit.inventory.listener.inter.*;
@@ -77,7 +72,6 @@ public class InventoryListener implements Listener {
         }
         if (inventoryPlus.isDisDrag()) {
             e.setCancelled(true);
-            return;
         }
 
     }
@@ -96,7 +90,6 @@ public class InventoryListener implements Listener {
             return;
         }
         onOpen.run(new InventoryOpenEventDTO(e, inventoryPlus));
-        return;
 
     }
 
@@ -116,6 +109,5 @@ public class InventoryListener implements Listener {
             return;
         }
         onClose.run(new InventoryCloseEventDTO(e, inventoryPlus));
-        return;
     }
 }
