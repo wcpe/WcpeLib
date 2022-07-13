@@ -51,7 +51,7 @@ inline fun PluginBase.runTaskTimer(
     )
 }
 
-inline fun <I : PluginBase> I.runTaskLater(
+inline fun <I : PluginBase> I.runTaskTimer(
     startTick: Int,
     repeatTick: Int = startTick,
     isAsynchronously: Boolean = false,
