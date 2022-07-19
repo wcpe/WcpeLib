@@ -15,7 +15,7 @@ import top.wcpe.wcpelib.bukkit.version.adapter.player.PlayerNmsManager
  * @author : WCPE
  * @since  : v1.0.11-alpha-dev-1
  */
-class PlayOutChatAdapter1121Impl(versionInfo: VersionInfo) : PlayOutChatAdapter(versionInfo) {
+class PlayOutChatAdapter1121Impl(private val versionInfo: VersionInfo) : PlayOutChatAdapter {
     override fun sendAction(player: Player, message: String) {
         val chatComponentText = versionInfo.getNmsClass("ChatComponentText").getConstructor(String::class.java)
             .newInstance(ChatColor.translateAlternateColorCodes('&', message))

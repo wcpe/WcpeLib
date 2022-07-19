@@ -1,7 +1,6 @@
 package top.wcpe.wcpelib.bukkit.version.adapter.player.chat
 
 import org.bukkit.entity.Player
-import top.wcpe.wcpelib.bukkit.version.VersionInfo
 
 /**
  * 由 WCPE 在 2022/4/1 20:53 创建
@@ -13,6 +12,6 @@ import top.wcpe.wcpelib.bukkit.version.VersionInfo
  * @author : WCPE
  * @since  : v1.0.11-alpha-dev-1
  */
-abstract class PlayOutChatAdapter(val versionInfo: VersionInfo) {
-    abstract fun sendAction(player: Player, message: String)
+interface PlayOutChatAdapter {
+    fun sendAction(player: Player, message: String)
 }

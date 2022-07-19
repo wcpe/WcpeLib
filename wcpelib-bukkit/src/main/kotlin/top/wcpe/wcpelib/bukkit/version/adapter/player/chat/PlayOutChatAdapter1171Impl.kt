@@ -16,7 +16,7 @@ import java.util.*
  * @author : WCPE
  * @since  : v1.0.11-alpha-dev-1
  */
-class PlayOutChatAdapter1171Impl(versionInfo: VersionInfo) : PlayOutChatAdapter(versionInfo) {
+class PlayOutChatAdapter1171Impl(private val versionInfo: VersionInfo) : PlayOutChatAdapter {
     override fun sendAction(player: Player, message: String) {
         val chatComponentTextInstance =
             versionInfo.getNmsClass("network.chat.ChatComponentText").getConstructor(String::class.java)

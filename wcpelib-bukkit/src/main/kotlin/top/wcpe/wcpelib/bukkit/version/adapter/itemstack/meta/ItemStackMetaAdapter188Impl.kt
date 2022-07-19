@@ -1,7 +1,6 @@
 package top.wcpe.wcpelib.bukkit.version.adapter.itemstack.meta
 
 import org.bukkit.inventory.meta.ItemMeta
-import top.wcpe.wcpelib.bukkit.version.VersionInfo
 
 /**
  * 由 WCPE 在 2022/4/3 23:24 创建
@@ -13,7 +12,7 @@ import top.wcpe.wcpelib.bukkit.version.VersionInfo
  * @author : WCPE
  * @since  : v1.0.11-alpha-dev-1
  */
-class ItemStackMetaAdapter188Impl(versionInfo: VersionInfo) : ItemStackMetaAdapter(versionInfo) {
+class ItemStackMetaAdapter188Impl : ItemStackMetaAdapter {
     override fun setUnbreakable(itemMeta: ItemMeta, unbreakable: Boolean) {
         itemMeta.spigot().isUnbreakable = unbreakable
     }
