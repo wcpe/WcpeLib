@@ -71,7 +71,7 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
         return true;
     }
 
-    public int requiredArgs(String[] args, List<CommandArgument> listCommandArgument) {
+    private int requiredArgs(String[] args, List<CommandArgument> listCommandArgument) {
         if (args.length < listCommandArgument.size()) {
             args = Arrays.copyOf(args, listCommandArgument.size());
         }
@@ -84,7 +84,7 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
         return -1;
     }
 
-    public String[] ignoreArgReplace(String[] args, List<CommandArgument> listCommandArgument) {
+    private String[] ignoreArgReplace(String[] args, List<CommandArgument> listCommandArgument) {
         if (args.length < listCommandArgument.size()) {
             args = Arrays.copyOf(args, listCommandArgument.size());
         }
@@ -150,8 +150,8 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
-            List<List<Command>> splitSubCommandList = ListUtil.splitList(subCommandMap.values().stream().collect(Collectors.toList()), 5);
-            page = page > splitSubCommandList.size() ? splitSubCommandList.size() : page;
+            List<List<Command>> splitSubCommandList = ListUtil.splitList(new ArrayList<>(subCommandMap.values()), 5);
+            page = Math.min(page, splitSubCommandList.size());
             sender.sendMessage("§6===== §e" + getName() + " §a指令帮助 §e" + page + "§a/§e" + splitSubCommandList.size()
                     + " §a页 §6=====");
             sender.sendMessage("§b/" + getName());
@@ -179,28 +179,28 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
     }
 
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-        if (!this.plugin.isEnabled() || args.length < 1)
-            return null;
+        if (!this.plugin.isEnabled() || args.length < 1) {
+            return Collections.emptyList();
+        }
         if (mainCommand != null && sender.hasPermission(getSubPermission(mainCommand))) {
             TabCompleterFunctional tabCompleter = mainCommand.getTabCompleter();
-            if (tabCompleter != null)
+            if (tabCompleter != null) {
                 return tabCompleter.onTabComplete(sender, args);
+            }
         }
         if (args.length == 1) {
             return subCommandMap.values().stream()
                     .filter(sub -> !sub.isHideNoPermissionHelp() || sender.hasPermission(getSubPermission(sub)))
-                    .filter(sub -> sub.getName().startsWith(args[0]))
-                    .map(Command::getName).collect(Collectors.toList());
+                    .map(Command::getName)
+                    .filter(name -> name.startsWith(args[0])).collect(Collectors.toList());
         }
-        if (args.length > 1) {
-            Command command = subCommandMap.get(args[0]);
-            if (command != null && (!command.isOnlyPlayerUse() || sender instanceof Player)) {
-                TabCompleterFunctional tabCompleter = command.getTabCompleter();
-                if (tabCompleter != null)
-                    return tabCompleter.onTabComplete(sender, Arrays.copyOfRange(args, 1, args.length));
-            }
+        Command command = subCommandMap.get(args[0]);
+        if (command != null && (!command.isOnlyPlayerUse() || sender instanceof Player)) {
+            TabCompleterFunctional tabCompleter = command.getTabCompleter();
+            if (tabCompleter != null)
+                return tabCompleter.onTabComplete(sender, Arrays.copyOfRange(args, 1, args.length));
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public static class Builder {
@@ -210,8 +210,14 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
         private Command mainCommand;
 
         public Builder(String name, Plugin plugin) {
-            super();
             this.name = name;
+            this.plugin = plugin;
+        }
+
+        public Builder(Command mainCommand
+                , Plugin plugin) {
+            this.mainCommand = mainCommand;
+            this.name = mainCommand.getName();
             this.plugin = plugin;
         }
 
