@@ -1,7 +1,5 @@
 package top.wcpe.wcpelib.common.utils.string;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  * 字符串工具类
@@ -49,7 +47,7 @@ public class StringUtil {
      * @return String
      */
     public static String joining(String splitString, String... strings) {
-        return Arrays.asList(strings).stream().collect(Collectors.joining(splitString));
+        return String.join(splitString, strings);
     }
 
     /**
