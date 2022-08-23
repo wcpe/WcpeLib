@@ -14,7 +14,7 @@ import org.bukkit.scheduler.BukkitTask
  * @author : WCPE
  * @since  : v1.0.12-alpha-dev-1
  */
-inline fun JavaPlugin.runTask(isAsynchronously: Boolean = false, runnable: Runnable): BukkitTask {
+fun JavaPlugin.runTask(isAsynchronously: Boolean = false, runnable: Runnable): BukkitTask {
     return if (isAsynchronously) {
         Bukkit.getScheduler().runTaskAsynchronously(this, runnable)
     } else {

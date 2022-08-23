@@ -15,14 +15,13 @@ import java.util.HashMap;
  * @author WCPE
  * @date 2021年4月23日 下午4:48:26
  */
-@SuppressWarnings("all")
 public class CommandManager {
     @Getter
     private static SimpleCommandMap bukkitSimpleCommandMap;
     @Getter
     private static HashMap<String, Command> bukkitCommandMap;
     @Getter
-    private static HashMap<String, CommandPlus> commandPlusMap = new HashMap<>();
+    private static final HashMap<String, CommandPlus> commandPlusMap = new HashMap<>();
 
     static {
         final Class<?> c = Bukkit.getServer().getClass();

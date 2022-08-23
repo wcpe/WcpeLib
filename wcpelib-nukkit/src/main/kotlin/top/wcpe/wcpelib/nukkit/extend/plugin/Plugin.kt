@@ -14,7 +14,7 @@ import cn.nukkit.scheduler.TaskHandler
  * @author : WCPE
  * @since  : v1.0.12-alpha-dev-1
  */
-inline fun PluginBase.runTask(isAsynchronously: Boolean = false, runnable: Runnable): TaskHandler {
+fun PluginBase.runTask(isAsynchronously: Boolean = false, runnable: Runnable): TaskHandler {
     return Server.getInstance().scheduler.scheduleTask(this, runnable, isAsynchronously)
 }
 
@@ -25,7 +25,7 @@ inline fun <I : PluginBase> I.runTask(
     return Server.getInstance().scheduler.scheduleTask(this, { runnable(this) }, isAsynchronously)
 }
 
-inline fun PluginBase.runTaskLater(tick: Int, isAsynchronously: Boolean = false, runnable: Runnable): TaskHandler {
+fun PluginBase.runTaskLater(tick: Int, isAsynchronously: Boolean = false, runnable: Runnable): TaskHandler {
     return Server.getInstance().scheduler.scheduleDelayedTask(this, runnable, tick, isAsynchronously)
 }
 
@@ -37,7 +37,7 @@ inline fun <I : PluginBase> I.runTaskLater(
     return Server.getInstance().scheduler.scheduleDelayedTask(this, { runnable(this) }, tick, isAsynchronously)
 }
 
-inline fun PluginBase.runTaskTimer(
+fun PluginBase.runTaskTimer(
     startTick: Int,
     repeatTick: Int = startTick,
     isAsynchronously: Boolean = false,
