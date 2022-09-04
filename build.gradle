@@ -1,18 +1,23 @@
 buildscript {
+
+    ext {
+        ktor_version = "2.1.0"
+        kotlin_version = "1.7.10"
+    }
+
     repositories {
+        gradlePluginPortal()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
-        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.1"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
-
 }
 allprojects {
-    apply plugin: "com.github.johnrengelman.shadow"
-    apply plugin: "org.jetbrains.kotlin.jvm"
+    apply plugin: 'com.github.johnrengelman.shadow'
     apply plugin: 'maven-publish'
     repositories {
         mavenLocal()
@@ -24,11 +29,14 @@ allprojects {
         gradlePluginPortal()
     }
 }
-subprojects {
-    apply plugin: 'java'
-    apply plugin: 'idea'
 
-    version = '1.0.17'
+
+subprojects {
+    apply plugin: 'idea'
+    apply plugin: 'java'
+    apply plugin: 'kotlin'
+
+    version = '1.1.0-alpha-dev-1'
     group 'top.wcpe'
     processResources {
         def props = [version: version]
@@ -46,44 +54,75 @@ subprojects {
     }
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
+
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
     }
+
     dependencies {
-        implementation "org.msgpack:msgpack-core:0.9.0"
-        implementation "redis.clients:jedis:3.6.0"
-        implementation "org.slf4j:slf4j-api:1.7.33"
-        implementation "ch.qos.logback:logback-core:1.2.10"
-        implementation "ch.qos.logback:logback-classic:1.2.10"
-        implementation "ch.qos.logback:logback-access:1.2.10"
-        implementation "mysql:mysql-connector-java:5.1.35"
-        implementation "org.mybatis:mybatis:3.5.6"
-        implementation 'com.alibaba:druid:1.2.8'
-        implementation "org.quartz-scheduler:quartz:2.3.0"
-        implementation "com.google.code.gson:gson:2.8.9"
+        implementation 'org.msgpack:msgpack-core:0.9.3'
+        implementation 'redis.clients:jedis:4.2.3'
+        implementation 'org.slf4j:slf4j-api:1.7.33'
+        implementation "ch.qos.logback:logback-core:1.2.11"
+        implementation "ch.qos.logback:logback-classic:1.2.11"
+        implementation 'mysql:mysql-connector-java:8.0.29'
+        implementation 'org.mybatis:mybatis:3.5.10'
+        implementation 'com.alibaba:druid:1.2.11'
+        implementation 'org.quartz-scheduler:quartz:2.3.2'
+        implementation "com.google.code.gson:gson:2.9.0"
         implementation "com.squareup.moshi:moshi:1.13.0"
         implementation "com.squareup.moshi:moshi-kotlin:1.13.0"
-        implementation "dev.zacsweers.moshix:moshi-metadata-reflect:0.17.0"
+        implementation 'dev.zacsweers.moshix:moshi-metadata-reflect:0.18.3'
 
-        implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
-        implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.1"
-        implementation "io.ktor:ktor-server-core:1.4.0"
-        implementation "io.ktor:ktor-server-netty:1.4.0"
-        implementation "io.ktor:ktor-client-core:1.4.0"
-        implementation "io.ktor:ktor-client-okhttp:1.4.0"
-        implementation "io.ktor:ktor-client-gson:1.4.0"
-        implementation "io.ktor:ktor-gson:1.4.0"
+        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4'
 
-        compileOnly 'org.projectlombok:lombok:1.18.22'
-        annotationProcessor 'org.projectlombok:lombok:1.18.22'
-        testCompileOnly 'org.projectlombok:lombok:1.18.22'
-        testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+        implementation "io.ktor:ktor-server-core-jvm:$ktor_version"
+        implementation "io.ktor:ktor-server-netty-jvm:$ktor_version"
+        implementation "io.ktor:ktor-server-content-negotiation:$ktor_version"
 
-        implementation "org.jetbrains.kotlin:kotlin-stdlib"
-        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+        implementation "io.ktor:ktor-client-core:$ktor_version"
+        implementation "io.ktor:ktor-client-okhttp:$ktor_version"
+        implementation "io.ktor:ktor-client-gson:$ktor_version"
+        implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
+        implementation "io.ktor:ktor-serialization-gson:$ktor_version"
+
+        compileOnly 'org.projectlombok:lombok:1.18.24'
+        annotationProcessor 'org.projectlombok:lombok:1.18.24'
+        testCompileOnly 'org.projectlombok:lombok:1.18.24'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+        implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+        implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+        implementation "org.jetbrains:annotations:13.0"
+
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
     }
+
+    def intoCommon = { task ->
+        task.into('/') {
+            from('../wcpelib-common/build/classes/java/main') {
+                include '**/*.*'
+            }
+            from('../wcpelib-common/build/classes/kotlin/main') {
+                include '**/*.*'
+            }
+            from('../wcpelib-common/build/resources/main') {
+                include '**/*.*'
+            }
+        }
+    }
+
+    shadowJar {
+        relocate 'io.netty', 'top.wcpe.lib.io.netty'
+        intoCommon(it)
+
+    }
+
     test {
         useJUnitPlatform()
     }
@@ -92,7 +131,6 @@ subprojects {
         from sourceSets.main.allSource
         archiveClassifier = 'sources'
     }
-
 
     publishing {
         publications {

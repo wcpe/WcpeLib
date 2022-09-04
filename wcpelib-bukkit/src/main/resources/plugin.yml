@@ -2,3 +2,4 @@ name: WcpeLib
 main: top.wcpe.wcpelib.bukkit.WcpeLib
 version: "${version}"
 author: "WCPE-QQ1837019522"
+load: STARTUP

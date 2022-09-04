@@ -7,7 +7,6 @@ import top.wcpe.wcpelib.common.utils.string.StringUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,8 +18,6 @@ public class MessageManager {
     private final HashMap<String, String> messageMap = new HashMap<>();
     private final String fileName;
     private final Plugin plugin;
-    private Path messagePath;
-    private YamlConfiguration messageYaml;
 
     public MessageManager(Plugin plugin, String lang) {
         this.fileName = "Message_" + lang + ".yml";
@@ -37,7 +34,7 @@ public class MessageManager {
                 e.printStackTrace();
             }
         }
-        messagePath = plugin.getDataFolder().toPath().resolve(fileName);
+        Path messagePath = plugin.getDataFolder().toPath().resolve(fileName);
         if (Files.notExists(messagePath)) {
             try {
                 Files.createFile(messagePath);
@@ -45,7 +42,7 @@ public class MessageManager {
                 e.printStackTrace();
             }
         }
-        this.messageYaml = YamlConfiguration.loadConfiguration(messagePath.toFile());
+        YamlConfiguration messageYaml = YamlConfiguration.loadConfiguration(messagePath.toFile());
 
         InputStream resource = plugin.getResource(fileName);
 

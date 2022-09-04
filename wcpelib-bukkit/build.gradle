@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    implementation project(':wcpelib-common')
+    compileOnly project(':wcpelib-common')
     compileOnly "com.github.MilkBowl:VaultAPI:1.7"
     compileOnly "org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT"
     compileOnly "com.mojang:authlib:1.5.21"
