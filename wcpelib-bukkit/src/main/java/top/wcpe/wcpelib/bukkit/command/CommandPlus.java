@@ -32,11 +32,14 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
     private final LinkedHashMap<String, Command> subCommandMap = new LinkedHashMap<>();
     private final Command mainCommand;
 
+    private boolean hideNoPermissionHelp;
+
     private CommandPlus(Builder builder) {
         super(builder.name);
         this.aliases = builder.aliases;
         this.plugin = builder.plugin;
         this.mainCommand = builder.mainCommand;
+        this.hideNoPermissionHelp = builder.hideNoPermissionHelp;
     }
 
     public CommandPlus registerThis() {
@@ -61,14 +64,14 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
     private boolean executeJudge(Command command, CommandSender sender) {
         if (command.isOnlyPlayerUse() && !(sender instanceof Player)) {
             sender.sendMessage(command.getNoPlayerMessage());
-            return false;
+            return true;
         }
         String permission = getSubPermission(command);
         if (!sender.hasPermission(permission)) {
             sender.sendMessage(StringUtil.replaceString(command.getNoPermissionMessage(), "permission:" + permission));
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     private int requiredArgs(String[] args, List<CommandArgument> listCommandArgument) {
@@ -105,7 +108,9 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
         }
 
         if (mainCommand != null) {
-            if (!executeJudge(mainCommand, sender)) return true;
+            if (executeJudge(mainCommand, sender)) {
+                return true;
+            }
             List<CommandArgument> listCommandArgument = mainCommand.getArgs();
             int i = requiredArgs(args, listCommandArgument);
             if (i != -1) {
@@ -121,10 +126,11 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
             Command subCommand = subCommandMap.get(args[0]);
             if (subCommand != null) {
                 String[] subArgs;
-                if (args.length == 1)
+                if (args.length == 1) {
                     subArgs = new String[]{};
-                else
+                } else {
                     subArgs = Arrays.copyOfRange(args, 1, args.length);
+                }
                 List<CommandArgument> listCommandArgument = subCommand.getArgs();
                 int i = requiredArgs(subArgs, listCommandArgument);
                 if (i != -1) {
@@ -134,14 +140,18 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
                 subArgs = ignoreArgReplace(subArgs, listCommandArgument);
 
 
-                if (!executeJudge(subCommand, sender)) return true;
+                if (executeJudge(subCommand, sender)) {
+                    return true;
+                }
                 ExecuteComponentFunctional executeComponent = subCommand.getExecuteComponent();
                 if (executeComponent != null)
                     executeComponent.execute(sender, subArgs);
                 return true;
             }
         }
-
+        if (hideNoPermissionHelp && !sender.hasPermission(getName() + ".help.use")) {
+            return true;
+        }
         if (args.length == 0 || "help".equals(args[0])) {
             int page = 1;
             if (args.length > 1)
@@ -150,7 +160,7 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
-            List<List<Command>> splitSubCommandList = ListUtil.splitList(new ArrayList<>(subCommandMap.values()), 5);
+            List<List<Command>> splitSubCommandList = ListUtil.splitList(subCommandMap.values().stream().filter(command -> command.isHideNoPermissionHelp() && sender.hasPermission(getSubPermission(command))).collect(Collectors.toList()), 5);
             page = Math.min(page, splitSubCommandList.size());
             sender.sendMessage("§6===== §e" + getName() + " §a指令帮助 §e" + page + "§a/§e" + splitSubCommandList.size()
                     + " §a页 §6=====");
@@ -208,6 +218,7 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
         private final Plugin plugin;
         private final List<String> aliases = new ArrayList<>();
         private Command mainCommand;
+        private boolean hideNoPermissionHelp;
 
         public Builder(String name, Plugin plugin) {
             this.name = name;
@@ -228,6 +239,11 @@ public class CommandPlus extends org.bukkit.command.Command implements PluginIde
 
         public Builder aliases(String... aliases) {
             Collections.addAll(this.aliases, aliases);
+            return this;
+        }
+
+        public Builder hideNoPermissionHelp(boolean hideNoPermissionHelp) {
+            this.hideNoPermissionHelp = hideNoPermissionHelp;
             return this;
         }
 
