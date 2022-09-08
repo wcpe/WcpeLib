@@ -26,6 +26,7 @@ public class SkinManager {
     @Getter
     private final HashMap<String, Skin> skinMap = new HashMap<>();
     private final Path skinFolderPath;
+
     public SkinManager(Plugin plugin) throws IOException {
         this.plugin = plugin;
         skinFolderPath = plugin.getDataFolder().toPath().resolve("skins");

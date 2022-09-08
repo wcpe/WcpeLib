@@ -33,8 +33,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @create: 2021-05-12 10:57
  */
 public class SkullManager {
-    public static AtomicInteger limitTime = new AtomicInteger(0);
     private static final HashMap<String, String[]> playerSkin = new HashMap<>();
+    public static AtomicInteger limitTime = new AtomicInteger(0);
 
     static {
         Bukkit.getScheduler().runTaskTimerAsynchronously(WcpeLib.getInstance(), () -> limitTime.set(0), 12000L, 12000L);

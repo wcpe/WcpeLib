@@ -53,9 +53,8 @@ class WcpeLibCommon(
                     removeAbandonedTimeout = getInt("mysql.removeAbandonedTimeout"),
                     logAbandoned = getBoolean("mysql.logAbandoned"),
                     asyncInit = getBoolean("mysql.asyncInit")
-                ).let {
+                ).also {
                     loggerAdapter.info("Mybatis 链接成功! 共耗时:${(System.currentTimeMillis() - start)}Ms")
-                    it
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -74,8 +73,7 @@ class WcpeLibCommon(
                     getString("redis.url"),
                     getInt("redis.port"),
                     getInt("redis.time-out"),
-                    getString("redis.password")
-                        .let { password -> return@let password.ifEmpty { null } },
+                    getString("redis.password").ifEmpty { null },
                     getInt("redis.max-total"),
                     getInt("redis.max-idle"),
                     getInt("redis.min-idle"),

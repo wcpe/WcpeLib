@@ -37,7 +37,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'kotlin'
 
-    version = '1.1.0-alpha-dev-2'
+    version = '1.1.0-alpha-dev-3'
     group 'top.wcpe'
     processResources {
         def props = [version: version]
@@ -58,6 +58,20 @@ subprojects {
 
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
+    }
+
+    compileKotlin {
+        kotlinOptions{
+            jvmTarget = '1.8'
+            freeCompilerArgs += "-Xjvm-default=all-compatibility"
+        }
+    }
+
+    compileTestKotlin {
+        kotlinOptions{
+            jvmTarget = '1.8'
+            freeCompilerArgs += "-Xjvm-default=all-compatibility"
+        }
     }
 
     dependencies {

@@ -15,10 +15,10 @@ import top.wcpe.wcpelib.bukkit.inventory.entity.Slot;
  */
 public class SlotClickEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
-
-    private boolean cancel;
     private final InventoryClickEvent inventoryClickEvent;
     private final Slot<?> slot;
+    private boolean cancel;
+
     public SlotClickEvent(InventoryClickEvent inventoryClickEvent, Slot<?> slot) {
         super();
         this.inventoryClickEvent = inventoryClickEvent;

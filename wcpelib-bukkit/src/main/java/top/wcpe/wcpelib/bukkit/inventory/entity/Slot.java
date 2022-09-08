@@ -56,6 +56,7 @@ public class Slot<E extends SlotExtend> {
     @Getter
     @Setter
     private SlotEventFunctional onClick;
+
     private Slot(Builder<E> builder) {
         this.type = builder.type;
         this.data = builder.data;

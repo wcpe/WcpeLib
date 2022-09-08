@@ -1,6 +1,9 @@
 package top.wcpe.wcpelib.bukkit.command.entity;
 
-import lombok.Data;
+import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import top.wcpe.wcpelib.bukkit.command.BukkitCommand;
 import top.wcpe.wcpelib.bukkit.command.intel.ExecuteComponentFunctional;
 import top.wcpe.wcpelib.bukkit.command.intel.TabCompleterFunctional;
 
@@ -14,62 +17,120 @@ import java.util.List;
  * @author WCPE
  * @date 2021年4月23日 下午4:47:57
  */
-@Data
-public class Command {
+public class Command implements BukkitCommand {
     /**
      * 名称
      */
-    private String name;
+    private final String name;
     /**
      * 参数
      */
-    private List<CommandArgument> args;
+    private final List<top.wcpe.wcpelib.common.command.CommandArgument> args = new ArrayList<>();
     /**
      * 是否隐藏无权限帮助
      */
-    private boolean hideNoPermissionHelp;
+    private final boolean hideNoPermissionHelp;
     /**
      * 介绍
      */
-    private String describe;
+    private final String describe;
     /**
      * 权限
      */
-    private String permission;
+    private final String permission;
     /**
      * 无权限提示
      */
-    private String noPermissionMessage;
+    private final String noPermissionMessage;
     /**
      * 是否只能玩家用
      */
-    private boolean onlyPlayerUse;
+    private final boolean onlyPlayerUse;
     /**
      * 不是玩家使用提示
      */
-    private String noPlayerMessage;
+    private final String noPlayerMessage;
     /**
      * 命令执行组件
      */
-    private ExecuteComponentFunctional executeComponent;
+    private final top.wcpe.wcpelib.common.command.CommandExecute executeComponent;
     /**
      * tab补全器
      */
-    private TabCompleterFunctional tabCompleter;
+    private final TabCompleterFunctional tabCompleter;
 
 
     private Command(Command.Builder builder) {
         this.name = builder.name;
         this.hideNoPermissionHelp = builder.hideNoPermissionHelp;
-        this.args = builder.args;
+        this.args.addAll(builder.args);
         this.describe = builder.describe;
         this.permission = builder.permission;
         this.noPermissionMessage = builder.noPermissionMessage;
         this.onlyPlayerUse = builder.onlyPlayerUse;
         this.noPlayerMessage = builder.noPlayerMessage;
-        this.executeComponent = builder.executeComponent;
+        this.executeComponent = (sender, args) -> builder.executeComponent.execute((CommandSender) sender.getAdapter(), args);
         this.tabCompleter = builder.tabCompleter;
     }
+
+    @Nullable
+    @Override
+    public TabCompleterFunctional getTabCompleter() {
+        return tabCompleter;
+    }
+
+    @NotNull
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @NotNull
+    @Override
+    public String getDescribe() {
+        return describe;
+    }
+
+    @NotNull
+    @Override
+    public List<top.wcpe.wcpelib.common.command.CommandArgument> getArgs() {
+        return args;
+    }
+
+    @Override
+    public boolean getHideNoPermissionHelp() {
+        return hideNoPermissionHelp;
+    }
+
+    @Nullable
+    @Override
+    public String getPermission() {
+        return permission;
+    }
+
+    @NotNull
+    @Override
+    public String getNoPermissionMessage() {
+        return noPermissionMessage;
+    }
+
+    @Override
+    public boolean getOnlyPlayerUse() {
+        return onlyPlayerUse;
+    }
+
+    @NotNull
+    @Override
+    public String getNoPlayerMessage() {
+        return noPlayerMessage;
+    }
+
+    @Nullable
+    @Override
+    public top.wcpe.wcpelib.common.command.CommandExecute getExecuteComponent() {
+        return executeComponent;
+    }
+
 
     public static class Builder {
         private final String name;

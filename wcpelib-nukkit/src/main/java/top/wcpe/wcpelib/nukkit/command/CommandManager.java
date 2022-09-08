@@ -15,14 +15,13 @@ import java.util.Map;
  * @author WCPE
  * @date 2021年4月23日 下午4:48:26
  */
-@SuppressWarnings("all")
 public class CommandManager {
     @Getter
-    private static SimpleCommandMap nukkitSimpleCommandMap;
+    private static final SimpleCommandMap nukkitSimpleCommandMap;
     @Getter
     private static Map<String, Command> nukkitCommandMap = new HashMap<>();
     @Getter
-    private static HashMap<String, CommandPlus> commandPlusMap = new HashMap<>();
+    private static final HashMap<String, CommandPlus> commandPlusMap = new HashMap<>();
 
     static {
         nukkitSimpleCommandMap = Server.getInstance().getCommandMap();

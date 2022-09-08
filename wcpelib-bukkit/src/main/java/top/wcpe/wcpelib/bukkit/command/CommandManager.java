@@ -17,11 +17,11 @@ import java.util.HashMap;
  */
 public class CommandManager {
     @Getter
+    private static final HashMap<String, CommandPlus> commandPlusMap = new HashMap<>();
+    @Getter
     private static SimpleCommandMap bukkitSimpleCommandMap;
     @Getter
     private static HashMap<String, Command> bukkitCommandMap;
-    @Getter
-    private static final HashMap<String, CommandPlus> commandPlusMap = new HashMap<>();
 
     static {
         final Class<?> c = Bukkit.getServer().getClass();

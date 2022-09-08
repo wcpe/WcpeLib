@@ -12,6 +12,7 @@ import java.util.logging.Level;
 public class DataManager {
     private final Plugin plugin;
     private final HashMap<String, DataEntity> dataMap = new HashMap<>();
+
     public DataManager(Plugin plugin) {
         this.plugin = plugin;
     }
@@ -36,6 +37,7 @@ public class DataManager {
     public class DataEntity {
         private final File dataFile;
         private final YamlConfiguration dataYaml;
+
         public DataEntity(String fileName) {
             this.dataFile = new File(plugin.getDataFolder(), fileName);
             if (!this.dataFile.exists())

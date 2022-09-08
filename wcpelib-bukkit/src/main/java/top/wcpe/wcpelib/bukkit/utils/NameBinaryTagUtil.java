@@ -146,7 +146,7 @@ public class NameBinaryTagUtil {
         try {
             Object limiter = Package.MINECRAFT_SERVER.getClass("NBTReadLimiter").getConstructor(Long.TYPE)
                     .newInstance(9223372036854775807L);
-            return READ_NBT.invoke(null, new Object[]{paramDataInput, 0, limiter});
+            return READ_NBT.invoke(null, paramDataInput, 0, limiter);
         } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException |
                  SecurityException | InvocationTargetException localException2) {
             throw new IllegalArgumentException("无法从该位置读取数据" + paramDataInput, localException2);

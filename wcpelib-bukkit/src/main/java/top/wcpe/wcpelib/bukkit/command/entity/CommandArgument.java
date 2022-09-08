@@ -1,6 +1,7 @@
 package top.wcpe.wcpelib.bukkit.command.entity;
 
-import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 子命令参数实体
@@ -8,21 +9,18 @@ import lombok.Getter;
  * @author WCPE
  * @date 2021年4月24日 下午3:36:31
  */
-public class CommandArgument {
+public class CommandArgument implements top.wcpe.wcpelib.common.command.CommandArgument {
     /**
      * 参数名称
      */
-    @Getter
     private final String name;
     /**
      * 参数介绍
      */
-    @Getter
     private final String describe;
     /**
      * 参数忽略默认值
      */
-    @Getter
     private final String ignoreArg;
 
     private CommandArgument(Builder builder) {
@@ -31,9 +29,28 @@ public class CommandArgument {
         this.ignoreArg = builder.ignoreArg;
     }
 
+    @NotNull
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @NotNull
+    @Override
+    public String getDescribe() {
+        return describe;
+    }
+
+    @Nullable
+    @Override
+    public String getIgnoreArg() {
+        return ignoreArg;
+    }
+
+
     public static class Builder {
         private final String name;
-        private String describe;
+        private String describe = "";
         private String ignoreArg;
 
         public Builder(String name) {

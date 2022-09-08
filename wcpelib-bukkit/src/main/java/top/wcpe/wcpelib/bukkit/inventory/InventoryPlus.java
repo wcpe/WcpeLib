@@ -33,12 +33,6 @@ public class InventoryPlus {
     @Getter
     private final HashMap<Integer, Slot<?>> slotMap;
     @Getter
-    @Setter
-    private InventoryPlus lastInventory;
-    @Getter
-    @Setter
-    private InventoryPlus nextInventory;
-    @Getter
     private final String title;
     @Getter
     private final int row;
@@ -50,6 +44,12 @@ public class InventoryPlus {
     private final boolean disClickPlayerGui;
     @Getter
     private final boolean disClickNullSlot;
+    @Getter
+    @Setter
+    private InventoryPlus lastInventory;
+    @Getter
+    @Setter
+    private InventoryPlus nextInventory;
     @Getter
     @Setter
     private InventoryOpenEventFunctional onOpen;
@@ -150,9 +150,9 @@ public class InventoryPlus {
     }
 
     public static class Builder {
+        private final HashMap<Integer, Slot<?>> slotMap = new HashMap<>();
         private int row = 6;
         private String title = " ";
-        private final HashMap<Integer, Slot<?>> slotMap = new HashMap<>();
         private InventoryPlus lastInventory;
         private InventoryPlus nextInventory;
 
