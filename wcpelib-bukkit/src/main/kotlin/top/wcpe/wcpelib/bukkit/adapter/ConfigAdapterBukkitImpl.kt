@@ -20,7 +20,7 @@ import java.nio.file.Path
  *
  * @author WCPE
  */
-class ConfigAdapterBukkitImpl(private val file: File) : ConfigAdapter {
+class ConfigAdapterBukkitImpl(private val file: File, private val defaultPath: String) : ConfigAdapter {
 
     private var config: YamlConfiguration = file.let {
         saveDefaultConfig()
@@ -37,7 +37,7 @@ class ConfigAdapterBukkitImpl(private val file: File) : ConfigAdapter {
         this.config = YamlConfiguration.loadConfiguration(file)
         this.config.defaults = YamlConfiguration.loadConfiguration(
             InputStreamReader(
-                WcpeLib.getInstance().getResource("config.yml"),
+                WcpeLib.getInstance().getResource(defaultPath),
                 Charsets.UTF_8
             )
         )

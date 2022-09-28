@@ -71,9 +71,9 @@ public final class WcpeLib extends JavaPlugin {
         saveDefaultConfig();
         final WcpeLibCommon wcpeLibCommon = new WcpeLibCommon(
                 new LoggerAdapterBukkitImpl(),
-                new ConfigAdapterBukkitImpl(new File(getDataFolder(), "mysql.yml")),
-                new ConfigAdapterBukkitImpl(new File(getDataFolder(), "redis.yml")),
-                new ConfigAdapterBukkitImpl(new File(getDataFolder(), "ktor.yml")));
+                new ConfigAdapterBukkitImpl(new File(getDataFolder(), "mysql.yml"), "mysql.yml"),
+                new ConfigAdapterBukkitImpl(new File(getDataFolder(), "redis.yml"), "redis.yml"),
+                new ConfigAdapterBukkitImpl(new File(getDataFolder(), "ktor.yml"), "ktor.yml"));
         mybatis = wcpeLibCommon.getMybatis();
         if (enableMysql = mybatis != null) {
             initDefaultMapper();
