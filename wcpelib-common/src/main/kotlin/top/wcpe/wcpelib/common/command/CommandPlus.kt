@@ -14,8 +14,7 @@ import top.wcpe.wcpelib.common.utils.string.StringUtil
  * @since  : v1.1.0-alpha-dev-3
  */
 interface CommandPlus {
-
-    val name: String
+    fun getName(): String
     val aliasList: List<String>
     val subCommandMap: LinkedHashMap<String, Command>
     var mainCommand: Command?
@@ -27,7 +26,7 @@ interface CommandPlus {
     fun getSubPermission(command: Command): String {
         return command.permission ?: " ${
             if (mainCommand == null) {
-                "$name."
+                "${getName()}."
             } else {
                 ""
             }
@@ -136,7 +135,7 @@ interface CommandPlus {
                 return
             }
         }
-        if (hideNoPermissionHelp && !sender.hasPermission("$name.help.use")) {
+        if (hideNoPermissionHelp && !sender.hasPermission("${getName()}.help.use")) {
             return
         }
         if (args.isEmpty() || "help" == args[0]) {
@@ -160,12 +159,12 @@ interface CommandPlus {
             )
 
             page = page.coerceAtMost(splitSubCommandList.size)
-            sender.sendMessage("§6===== §e$name §a指令帮助 §e$page§a/§e${splitSubCommandList.size} §a页 §6=====")
-            sender.sendMessage("§b/$name")
+            sender.sendMessage("§6===== §e${getName()} §a指令帮助 §e$page§a/§e${splitSubCommandList.size} §a页 §6=====")
+            sender.sendMessage("§b/${getName()}")
             for (alias: String in aliasList) {
                 sender.sendMessage("§b/$alias")
             }
-            val repeatString = StringUtil.getRepeatString(" ", name.length)
+            val repeatString = StringUtil.getRepeatString(" ", getName().length)
             for (subCommand in splitSubCommandList[page - 1]) {
                 sender.sendMessage(
                     ("§6>$repeatString §e${subCommand.name} ${
@@ -184,7 +183,7 @@ interface CommandPlus {
             sender.sendMessage("§6> []为选填参数 <>为必填参数")
             return
         }
-        sender.sendMessage("§c指令不存在或参数错误! §a请输入§e/${name} help [页码] §a进行查询")
+        sender.sendMessage("§c指令不存在或参数错误! §a请输入§e/${getName()} help [页码] §a进行查询")
 
     }
 

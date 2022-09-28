@@ -1,0 +1,4 @@
+name: WcpeLib
+version: "${version}"
+main: top.wcpe.wcpelib.bungeecord.WcpeLib
+author: "WCPE QQ1837019522"

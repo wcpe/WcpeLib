@@ -11,6 +11,6 @@ package top.wcpe.wcpelib.common.command
  * @since  : v1.1.0-alpha-dev-3
  */
 @FunctionalInterface
-interface CommandExecute {
+fun interface CommandExecute {
     fun execute(sender: CommandSender<*>, args: Array<String?>)
 }
