@@ -11,7 +11,7 @@ import top.wcpe.wcpelib.common.command.CommandSender
  * GitHub  : https://github.com/wcpe
  * QQ      : 1837019522
  * @author : WCPE
- * @since  : v
+ * @since  : v1.1.0-alpha-dev-3
  */
 class NukkitCommandSenderImpl(private val commandSender: cn.nukkit.command.CommandSender) :
     CommandSender<cn.nukkit.command.CommandSender> {

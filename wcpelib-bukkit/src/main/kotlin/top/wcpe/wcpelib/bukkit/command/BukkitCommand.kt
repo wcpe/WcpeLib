@@ -11,7 +11,7 @@ import top.wcpe.wcpelib.common.command.Command
  * GitHub  : https://github.com/wcpe
  * QQ      : 1837019522
  * @author : WCPE
- * @since  : v
+ * @since  : v1.1.0-alpha-dev-3
  */
 interface BukkitCommand : Command {
     val tabCompleter: TabCompleterFunctional?
