@@ -1,8 +1,13 @@
 buildscript {
 
     ext {
-        ktor_version = "2.1.0"
         kotlin_version = "1.7.10"
+        ktor_version = "2.1.0"
+        logback_version = "1.2.11"
+        moshi_version = "1.13.0"
+        kotlinx_coroutines_version = "1.6.4"
+        lombok_version = "1.18.24"
+        junit_version = "5.9.0"
     }
 
     repositories {
@@ -37,13 +42,13 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'kotlin'
 
-    version = '1.1.0-alpha-dev-6'
+    version = '1.1.0'
     group 'top.wcpe'
     processResources {
         def props = [version: version]
         inputs.properties props
         filteringCharset 'UTF-8'
-        filesMatching(["plugin.yml", "bungee.yml"]){
+        filesMatching(["plugin.yml", "bungee.yml"]) {
             expand props
         }
         from('src/main/java') {
@@ -78,19 +83,19 @@ subprojects {
         implementation 'org.msgpack:msgpack-core:0.9.3'
         implementation 'redis.clients:jedis:4.2.3'
         implementation 'org.slf4j:slf4j-api:1.7.33'
-        implementation "ch.qos.logback:logback-core:1.2.11"
-        implementation "ch.qos.logback:logback-classic:1.2.11"
+        implementation "ch.qos.logback:logback-core:$logback_version"
+        implementation "ch.qos.logback:logback-classic:$logback_version"
         implementation 'mysql:mysql-connector-java:8.0.29'
         implementation 'org.mybatis:mybatis:3.5.10'
         implementation 'com.alibaba:druid:1.2.11'
         implementation 'org.quartz-scheduler:quartz:2.3.2'
         implementation "com.google.code.gson:gson:2.9.0"
-        implementation "com.squareup.moshi:moshi:1.13.0"
-        implementation "com.squareup.moshi:moshi-kotlin:1.13.0"
+        implementation "com.squareup.moshi:moshi:$moshi_version"
+        implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
         implementation 'dev.zacsweers.moshix:moshi-metadata-reflect:0.18.3'
 
-        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
-        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4'
+        implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
+        implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$kotlinx_coroutines_version"
 
         implementation "io.ktor:ktor-server-core-jvm:$ktor_version"
         implementation "io.ktor:ktor-server-netty-jvm:$ktor_version"
@@ -102,10 +107,10 @@ subprojects {
         implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
         implementation "io.ktor:ktor-serialization-gson:$ktor_version"
 
-        compileOnly 'org.projectlombok:lombok:1.18.24'
-        annotationProcessor 'org.projectlombok:lombok:1.18.24'
-        testCompileOnly 'org.projectlombok:lombok:1.18.24'
-        testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+        compileOnly "org.projectlombok:lombok:$lombok_version"
+        annotationProcessor "org.projectlombok:lombok:$lombok_version"
+        testCompileOnly "org.projectlombok:lombok:$lombok_version"
+        testAnnotationProcessor "org.projectlombok:lombok:$lombok_version"
 
         implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
         implementation "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
@@ -114,8 +119,8 @@ subprojects {
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
         implementation "org.jetbrains:annotations:13.0"
 
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+        testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_version"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_version"
     }
 
     def intoCommon = { task ->
