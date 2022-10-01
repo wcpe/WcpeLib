@@ -24,7 +24,7 @@ interface CommandPlus {
     fun registerThis(): CommandPlus
 
     fun getSubPermission(command: Command): String {
-        return command.permission ?: " ${
+        return command.permission ?: "${
             if (mainCommand == null) {
                 "${getName()}."
             } else {
