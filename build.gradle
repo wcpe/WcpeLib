@@ -4,7 +4,7 @@ buildscript {
         kotlin_version = "1.7.10"
         ktor_version = "2.1.0"
         logback_version = "1.2.11"
-        moshi_version = "1.13.0"
+        moshi_version = "1.14.0"
         kotlinx_coroutines_version = "1.6.4"
         lombok_version = "1.18.24"
         junit_version = "5.9.0"
