@@ -83,15 +83,43 @@ class Redis {
         return jedisPool.resource
     }
 
+    fun getResource(index: Int): Jedis {
+        return getResource().apply {
+            select(index)
+        }
+    }
+
+    fun getResourceProxy(): ResourceProxy {
+        return ResourceProxy(jedisPool.resource)
+    }
+
+    fun getResourceProxy(index: Int): ResourceProxy {
+        return ResourceProxy(jedisPool.resource).apply {
+            select(index)
+        }
+    }
+
+
     fun useRedisResource(callBack: Consumer<Jedis>) {
-        jedisPool.resource.use {
+        getResource().use {
             callBack.accept(it)
         }
     }
 
     fun useRedisResource(callBack: Consumer<Jedis>, select: Int) {
-        jedisPool.resource.use {
-            it.select(select)
+        getResource(select).use {
+            callBack.accept(it)
+        }
+    }
+
+    fun useRedisResourceProxy(callBack: Consumer<ResourceProxy>) {
+        getResourceProxy().use {
+            callBack.accept(it)
+        }
+    }
+
+    fun useRedisResourceProxy(callBack: Consumer<ResourceProxy>, select: Int) {
+        getResourceProxy(select).use {
             callBack.accept(it)
         }
     }
