@@ -71,6 +71,7 @@ public class StringActionUtil {
                     player.setOp(true);
                     player.chat(parserPlaceholderApi ? setPlaceholders(player, stringAction.substring(4)) : stringAction.substring(4));
                 } catch (Exception e) {
+                    e.printStackTrace();
                 } finally {
                     player.setOp(isOp);
                 }
