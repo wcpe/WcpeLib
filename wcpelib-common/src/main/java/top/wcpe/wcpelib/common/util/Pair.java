@@ -22,6 +22,27 @@ public class Pair<A, B> implements Serializable {
     public A first;
     public B second;
 
+    /**
+     * get a new Pair
+     *
+     * @param a first
+     * @param b second
+     * @return new Pair
+     */
+    public static <A, B> Pair<A, B> of(A a, B b) {
+        return new Pair<>(a, b);
+    }
+
+    /**
+     * copy a new Pair
+     *
+     * @param pair old pair
+     * @return a new Pair
+     */
+    public static <A, B> Pair<A, B> of(Pair<A, B> pair) {
+        return new Pair<>(pair.getFirst(), pair.getSecond());
+    }
+
     @Override
     public String toString() {
         return "(" + first + ", " + second + ")";
