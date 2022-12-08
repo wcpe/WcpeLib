@@ -15,7 +15,7 @@ import java.io.Closeable
  */
 class ResourceProxy(private val jedis: Jedis) : Closeable {
 
-    fun select(index: Int): String {
+    fun select(index: Int): String? {
         return jedis.select(index)
     }
 
@@ -27,11 +27,11 @@ class ResourceProxy(private val jedis: Jedis) : Closeable {
         return jedis.exists(key)
     }
 
-    fun get(key: String): String {
+    fun get(key: String): String? {
         return jedis.get(key)
     }
 
-    fun set(key: String, value: String): String {
+    fun set(key: String, value: String): String? {
         return jedis.set(key, value)
     }
 
