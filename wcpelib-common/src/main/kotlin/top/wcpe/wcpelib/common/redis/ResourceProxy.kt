@@ -11,7 +11,7 @@ import java.io.Closeable
  * GitHub  : https://github.com/wcpe
  * QQ      : 1837019522
  * @author : WCPE
- * @since  : v
+ * @since  : v1.1.1-alpha-dev-2
  */
 class ResourceProxy(private val jedis: Jedis) : Closeable {
 
@@ -27,11 +27,11 @@ class ResourceProxy(private val jedis: Jedis) : Closeable {
         return jedis.exists(key)
     }
 
-    fun get(key: String): String? {
+    operator fun get(key: String): String? {
         return jedis.get(key)
     }
 
-    fun set(key: String, value: String): String? {
+    operator fun set(key: String, value: String): String? {
         return jedis.set(key, value)
     }
 
@@ -45,6 +45,18 @@ class ResourceProxy(private val jedis: Jedis) : Closeable {
 
     fun expire(key: String, value: Long): Long {
         return jedis.expire(key, value)
+    }
+
+    fun lpush(key: String, vararg strings: String): Long {
+        return jedis.lpush(key, *strings)
+    }
+
+    fun lrem(key: String, count: Long, value: String): Long {
+        return jedis.lrem(key, count, value)
+    }
+
+    fun llen(key: String): Long {
+        return jedis.llen(key)
     }
 
     override fun close() {
