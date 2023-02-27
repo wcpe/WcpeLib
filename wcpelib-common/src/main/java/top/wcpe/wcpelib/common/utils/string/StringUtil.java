@@ -45,7 +45,9 @@ public class StringUtil {
      * @param splitString
      * @param strings
      * @return String
+     * @deprecated use {@link String#join(CharSequence, CharSequence...)}
      */
+    @Deprecated
     public static String joining(String splitString, String... strings) {
         return String.join(splitString, strings);
     }

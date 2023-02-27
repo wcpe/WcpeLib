@@ -24,7 +24,7 @@ public class PlaceholderManager {
         while (m.find()) {
             String format = m.group(1);
             int index = format.indexOf("_");
-            if (index > 0 && index < format.length()) {
+            if (index > 0) {
                 String identifier = format.substring(0, index).toLowerCase();
                 String params = format.substring(index + 1);
                 if (placeholderMap.containsKey(identifier)) {

@@ -5,19 +5,12 @@ import cn.nukkit.Server;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Location;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 public class SerializeClassUtil {
-    public static String joining(String appendString, String... args) {
-        return Arrays.asList(args).stream().collect(Collectors.joining(appendString));
-    }
-
     public static String locationToString(Location loc) {
         if (loc == null) return null;
         Level world = loc.getLevel();
         if (world == null) return null;
-        String sb = world.getName() + ";" +
+        return world.getName() + ";" +
                 loc.getX() +
                 ";" +
                 loc.getY() +
@@ -27,7 +20,6 @@ public class SerializeClassUtil {
                 loc.getYaw() +
                 ";" +
                 loc.getPitch();
-        return sb;
     }
 
     public static Location stringToLocation(String stringLocation) {

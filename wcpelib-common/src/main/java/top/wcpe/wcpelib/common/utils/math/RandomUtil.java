@@ -47,7 +47,7 @@ public class RandomUtil {
         for (Double aDouble : mapList) {
             totalChance.add(aDouble < 0d ? 0d : aDouble);
         }
-        if (totalChance == null || totalChance.isEmpty()) {
+        if (totalChance.isEmpty()) {
             return -1;
         }
         int size = totalChance.size();
@@ -56,7 +56,7 @@ public class RandomUtil {
             sumRate += rate;
         }
         List<Double> sortOriginalRates = new ArrayList<>(size);
-        Double tempSumRate = 0d;
+        double tempSumRate = 0d;
         for (double rate : totalChance) {
             tempSumRate += rate;
             sortOriginalRates.add(tempSumRate / sumRate);
