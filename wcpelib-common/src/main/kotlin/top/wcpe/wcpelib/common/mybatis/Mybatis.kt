@@ -7,7 +7,7 @@ import org.apache.ibatis.session.SqlSession
 import org.apache.ibatis.session.SqlSessionFactory
 import org.apache.ibatis.session.SqlSessionFactoryBuilder
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory
-import top.wcpe.wcpelib.common.mapper.WcpeLibBaseMapper
+import top.wcpe.wcpelib.common.mapper.BaseSQLMapper
 import java.util.function.Consumer
 
 
@@ -21,37 +21,39 @@ import java.util.function.Consumer
  * @author : WCPE
  * @since  : v1.0.7-alpha-dev-1
  */
-class Mybatis(
-    url: String,
-    port: Int,
-    database: String,
-    user: String,
-    password: String,
-    parameter: String,
-    filters: String,
-    maxActive: Int,
-    initialSize: Int,
-    maxWait: Long,
-    minIdle: Int,
-    timeBetweenEvictionRunsMillis: Long,
-    minEvictableIdleTimeMillis: Long,
-    validationQuery: String,
-    testWhileIdle: Boolean,
-    testOnBorrow: Boolean,
-    testOnReturn: Boolean,
-    poolPreparedStatements: Boolean,
-    maxOpenPreparedStatements: Int,
-    removeAbandoned: Boolean,
-    removeAbandonedTimeout: Int,
-    logAbandoned: Boolean,
-    asyncInit: Boolean
+data class Mybatis(
+    val url: String,
+    val port: Int,
+    val database: String,
+    val user: String,
+    val password: String,
+    val parameter: String,
+    val filters: String,
+    val maxActive: Int,
+    val initialSize: Int,
+    val maxWait: Long,
+    val minIdle: Int,
+    val timeBetweenEvictionRunsMillis: Long,
+    val minEvictableIdleTimeMillis: Long,
+    val validationQuery: String,
+    val testWhileIdle: Boolean,
+    val testOnBorrow: Boolean,
+    val testOnReturn: Boolean,
+    val poolPreparedStatements: Boolean,
+    val maxOpenPreparedStatements: Int,
+    val removeAbandoned: Boolean,
+    val removeAbandonedTimeout: Int,
+    val logAbandoned: Boolean,
+    val asyncInit: Boolean
 ) {
-    var databaseName: String
-    var sqlSessionFactory: SqlSessionFactory
+    lateinit var sqlSessionFactory: SqlSessionFactory
+        private set
 
     init {
-        databaseName = database
+        reload()
+    }
 
+    fun reload() {
         val druidDataSource = DruidDataSource()
         druidDataSource.url = "jdbc:mysql://$url:$port/$database?$parameter"
 
@@ -75,8 +77,7 @@ class Mybatis(
         druidDataSource.removeAbandonedTimeout = removeAbandonedTimeout
         druidDataSource.isLogAbandoned = logAbandoned
         druidDataSource.isAsyncInit = asyncInit
-
-        sqlSessionFactory = SqlSessionFactoryBuilder().build(
+        this.sqlSessionFactory = SqlSessionFactoryBuilder().build(
             Configuration(
                 Environment(
                     "development",
@@ -85,7 +86,7 @@ class Mybatis(
                 )
             )
         )
-        addMapper(WcpeLibBaseMapper::class.java)
+        addMapper(BaseSQLMapper::class.java)
     }
 
     fun useSession(callBack: Consumer<SqlSession>) {
