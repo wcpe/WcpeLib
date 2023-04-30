@@ -94,6 +94,7 @@ subprojects {
         implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
         implementation 'dev.zacsweers.moshix:moshi-metadata-reflect:0.18.3'
         implementation 'org.xerial:sqlite-jdbc:3.39.3.0'
+        implementation 'cn.hutool:hutool-all:5.8.18'
 
         implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
         implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$kotlinx_coroutines_version"
