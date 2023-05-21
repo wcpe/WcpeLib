@@ -46,6 +46,11 @@ data class Mybatis(
     val logAbandoned: Boolean,
     val asyncInit: Boolean
 ) {
+
+    fun getDatabaseName(): String {
+        return database
+    }
+
     lateinit var sqlSessionFactory: SqlSessionFactory
         private set
 
