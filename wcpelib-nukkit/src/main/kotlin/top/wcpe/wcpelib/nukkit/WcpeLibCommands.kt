@@ -1,5 +1,6 @@
 package top.wcpe.wcpelib.nukkit
 
+import top.wcpe.wcpelib.common.WcpeLibCommon
 import top.wcpe.wcpelib.nukkit.command.CommandPlus
 import top.wcpe.wcpelib.nukkit.command.entity.Command
 
@@ -28,6 +29,7 @@ class WcpeLibCommands {
                     reloadConfig()
                     reloadOtherConfig()
                 }
+                WcpeLibCommon.reload()
                 sender.sendMessage("重载完成")
                 logger.info("${sender.name}重载了配置文件")
             }.build()

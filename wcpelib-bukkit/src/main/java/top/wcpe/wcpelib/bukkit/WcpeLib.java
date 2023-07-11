@@ -1,12 +1,17 @@
 package top.wcpe.wcpelib.bukkit;
 
-import lombok.Getter;
 import lombok.val;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import top.wcpe.wcpelib.bukkit.adapter.ConfigAdapterBukkitImpl;
 import top.wcpe.wcpelib.bukkit.adapter.LoggerAdapterBukkitImpl;
+import top.wcpe.wcpelib.bukkit.data.IDataManager;
+import top.wcpe.wcpelib.bukkit.data.impl.MySQLDataManager;
 import top.wcpe.wcpelib.bukkit.version.VersionManager;
+import top.wcpe.wcpelib.common.PlatformAdapter;
 import top.wcpe.wcpelib.common.WcpeLibCommon;
+import top.wcpe.wcpelib.common.adapter.ConfigAdapter;
+import top.wcpe.wcpelib.common.adapter.LoggerAdapter;
 import top.wcpe.wcpelib.common.ktor.Ktor;
 import top.wcpe.wcpelib.common.mybatis.Mybatis;
 import top.wcpe.wcpelib.common.redis.Redis;
@@ -24,21 +29,38 @@ import java.io.File;
  *
  * @author WCPE
  */
-public final class WcpeLib extends JavaPlugin {
+public final class WcpeLib extends JavaPlugin implements PlatformAdapter {
+    @Deprecated
+    public static boolean isEnableMysql() {
+        return WcpeLibCommon.INSTANCE.getMybatis() != null;
+    }
+
+    @Deprecated
+    public static boolean isEnableRedis() {
+        return WcpeLibCommon.INSTANCE.getRedis() != null;
+    }
+
+    @Deprecated
+    public static boolean isEnableKtor() {
+        return WcpeLibCommon.INSTANCE.getKtor() != null;
+    }
+
+    @Deprecated
+    public static Mybatis getMybatis() {
+        return WcpeLibCommon.INSTANCE.getMybatis();
+    }
+
+    @Deprecated
+    public static Redis getRedis() {
+        return WcpeLibCommon.INSTANCE.getRedis();
+    }
+
+    @Deprecated
+    public static Ktor getKtor() {
+        return WcpeLibCommon.INSTANCE.getKtor();
+    }
 
     private static WcpeLib instance;
-    @Getter
-    private static boolean enableMysql;
-    @Getter
-    private static Mybatis mybatis;
-    @Getter
-    private static boolean enableRedis;
-    @Getter
-    private static Redis redis;
-    @Getter
-    private static boolean enableKtor;
-    @Getter
-    private static Ktor ktor;
 
     public static WcpeLib getInstance() {
         return instance;
@@ -48,46 +70,29 @@ public final class WcpeLib extends JavaPlugin {
         return instance.getConfig().getString("server-name");
     }
 
-//    @Getter
-//    private static ConfigAdapterBukkitImpl itemConfig;
 
     @Override
     public void saveDefaultConfig() {
         super.saveDefaultConfig();
-//        itemConfig.saveDefaultConfig();
     }
 
     @Override
     public void reloadConfig() {
         super.reloadConfig();
-//        itemConfig.reloadConfig();
+    }
+
+    @Override
+    public void onLoad() {
+        instance = this;
+        WcpeLibCommon.INSTANCE.init(this);
     }
 
     @Override
     public void onEnable() {
         long start = System.currentTimeMillis();
-        instance = this;
-//        itemConfig = new ConfigAdapterBukkitImpl(new File(getDataFolder(), "item.yml"));
+        initDefaultMapper();
         saveDefaultConfig();
-        final WcpeLibCommon wcpeLibCommon = new WcpeLibCommon(
-                new LoggerAdapterBukkitImpl(),
-                new ConfigAdapterBukkitImpl(new File(getDataFolder(), "mysql.yml"), "mysql.yml"),
-                new ConfigAdapterBukkitImpl(new File(getDataFolder(), "redis.yml"), "redis.yml"),
-                new ConfigAdapterBukkitImpl(new File(getDataFolder(), "ktor.yml"), "ktor.yml"));
-        mybatis = wcpeLibCommon.getMybatis();
-        if (enableMysql = mybatis != null) {
-            initDefaultMapper();
-        }
-        redis = wcpeLibCommon.getRedis();
-        enableRedis = redis != null;
-//        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-//        getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessageBase());
-
-        ktor = wcpeLibCommon.getKtor();
-        enableKtor = ktor != null;
-
-        new WcpeLibCommands();
-
+        getServer().getPluginManager().registerEvents(new WcpeLibListener(), this);
         getLogger().info("load time: " + (System.currentTimeMillis() - start) + " ms");
         getServer().getConsoleSender().sendMessage("§a  _       __                          __     _     __  ");
         getServer().getConsoleSender().sendMessage("§a | |     / /  _____    ____   ___    / /    (_)   / /_ ");
@@ -95,7 +100,7 @@ public final class WcpeLib extends JavaPlugin {
         getServer().getConsoleSender().sendMessage("§a | |/ |/ /  / /__    / /_/ //  __/ / /___ / /   / /_/ /");
         getServer().getConsoleSender().sendMessage("§a |__/|__/   \\___/   / .___/ \\___/ /_____//_/   /_.___/ ");
         getServer().getConsoleSender().sendMessage("§a                   /_/                                 ");
-        final val versionInfo = VersionManager.getVersionInfo();
+        val versionInfo = VersionManager.getVersionInfo();
         getLogger().info("load version: " + getServer().getVersion());
         getLogger().info("nms version: " + versionInfo.getNmsClassPath());
         getLogger().info("obc version: " + versionInfo.getObcClassPath());
@@ -107,4 +112,31 @@ public final class WcpeLib extends JavaPlugin {
         getLogger().info("始化默认 Mapper 完成 耗时:" + (System.currentTimeMillis() - start) + " Ms");
     }
 
+    private ConfigAdapter createConfigAdapter(String fileName) {
+        return new ConfigAdapterBukkitImpl(new File(getDataFolder(), fileName), fileName);
+    }
+
+    @NotNull
+    @Override
+    public LoggerAdapter createLoggerAdapter() {
+        return new LoggerAdapterBukkitImpl();
+    }
+
+    @NotNull
+    @Override
+    public ConfigAdapter createMySQLConfigAdapter() {
+        return createConfigAdapter("mysql.yml");
+    }
+
+    @NotNull
+    @Override
+    public ConfigAdapter createRedisConfigAdapter() {
+        return createConfigAdapter("redis.yml");
+    }
+
+    @NotNull
+    @Override
+    public ConfigAdapter createKtorConfigAdapter() {
+        return createConfigAdapter("ktor.yml");
+    }
 }

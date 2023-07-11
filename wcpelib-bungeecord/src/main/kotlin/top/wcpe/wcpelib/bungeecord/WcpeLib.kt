@@ -2,7 +2,10 @@ package top.wcpe.wcpelib.bungeecord
 
 import top.wcpe.wcpelib.bungeecord.adapter.ConfigAdapterBungeeCordImpl
 import top.wcpe.wcpelib.bungeecord.adapter.LoggerAdapterBungeeCordImpl
+import top.wcpe.wcpelib.common.PlatformAdapter
 import top.wcpe.wcpelib.common.WcpeLibCommon
+import top.wcpe.wcpelib.common.adapter.ConfigAdapter
+import top.wcpe.wcpelib.common.adapter.LoggerAdapter
 import java.io.File
 
 /**
@@ -15,28 +18,46 @@ import java.io.File
  * @author : WCPE
  * @since  : v1.1.0-alpha-dev-4
  */
-class WcpeLib : BungeeCordPlugin() {
+class WcpeLib : BungeeCordPlugin(), PlatformAdapter {
 
     companion object {
         @JvmStatic
         lateinit var instance: WcpeLib
             private set
 
+        @Deprecated("replace object class...")
         @JvmStatic
-        lateinit var wcpeLibCommon: WcpeLibCommon
-            private set
+        val wcpeLibCommon: WcpeLibCommon = WcpeLibCommon
+    }
+
+    override fun onLoad() {
+        instance = this
+        WcpeLibCommon.init(this)
     }
 
     override fun onEnable() {
-        instance = this
         saveDefaultConfig()
-        wcpeLibCommon = WcpeLibCommon(
-            LoggerAdapterBungeeCordImpl(),
-            ConfigAdapterBungeeCordImpl(File(dataFolder, "mysql.yml"), "mysql.yml"),
-            ConfigAdapterBungeeCordImpl(File(dataFolder, "redis.yml"), "redis.yml"),
-            ConfigAdapterBungeeCordImpl(File(dataFolder, "ktor.yml"), "ktor.yml")
-        )
         WcpeLibCommands()
+    }
+
+    private fun createConfigAdapter(fileName: String): ConfigAdapter {
+        return ConfigAdapterBungeeCordImpl(File(dataFolder, fileName), fileName)
+    }
+
+    override fun createLoggerAdapter(): LoggerAdapter {
+        return LoggerAdapterBungeeCordImpl()
+    }
+
+    override fun createMySQLConfigAdapter(): ConfigAdapter {
+        return createConfigAdapter("mysql.yml")
+    }
+
+    override fun createRedisConfigAdapter(): ConfigAdapter {
+        return createConfigAdapter("redis.yml")
+    }
+
+    override fun createKtorConfigAdapter(): ConfigAdapter {
+        return createConfigAdapter("ktor.yml")
     }
 
 }

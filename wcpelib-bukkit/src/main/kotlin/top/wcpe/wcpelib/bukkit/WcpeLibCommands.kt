@@ -2,6 +2,7 @@ package top.wcpe.wcpelib.bukkit
 
 import top.wcpe.wcpelib.bukkit.command.CommandPlus
 import top.wcpe.wcpelib.bukkit.command.entity.Command
+import top.wcpe.wcpelib.common.WcpeLibCommon
 
 /**
  * 由 WCPE 在 2022/7/14 4:37 创建
@@ -26,6 +27,7 @@ class WcpeLibCommands {
                 WcpeLib.getInstance().run {
                     reloadConfig()
                 }
+                WcpeLibCommon.reload()
                 sender.sendMessage("重载完成")
                 logger.info("${sender.name}重载了配置文件")
             }.build()

@@ -2,6 +2,7 @@ package top.wcpe.wcpelib.bungeecord
 
 import top.wcpe.wcpelib.bungeecord.command.Command
 import top.wcpe.wcpelib.bungeecord.command.CommandPlus
+import top.wcpe.wcpelib.common.WcpeLibCommon
 
 /**
  * 由 WCPE 在 2022/9/12 13:52 创建
@@ -24,6 +25,7 @@ class WcpeLibCommands {
                 WcpeLib.instance.run {
                     reloadConfig()
                 }
+                WcpeLibCommon.reload()
                 sender.sendMessage("重载完成")
             }.build()
         )
