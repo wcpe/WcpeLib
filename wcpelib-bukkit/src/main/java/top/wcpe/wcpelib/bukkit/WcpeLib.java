@@ -66,6 +66,14 @@ public final class WcpeLib extends JavaPlugin implements PlatformAdapter {
         return instance;
     }
 
+
+    private static IDataManager dataManager;
+
+    public static IDataManager getDataManager() {
+        return dataManager;
+    }
+
+
     public static String getServerName() {
         return instance.getConfig().getString("server-name");
     }
@@ -109,6 +117,12 @@ public final class WcpeLib extends JavaPlugin implements PlatformAdapter {
     private void initDefaultMapper() {
         final long start = System.currentTimeMillis();
         getLogger().info("开始初始化默认 Mapper");
+        val mybatis = WcpeLibCommon.INSTANCE.getMybatis();
+        if (mybatis == null) {
+            getLogger().info("Mybatis 未连接 初始化失败!");
+            return;
+        }
+        dataManager = new MySQLDataManager(mybatis);
         getLogger().info("始化默认 Mapper 完成 耗时:" + (System.currentTimeMillis() - start) + " Ms");
     }
 
