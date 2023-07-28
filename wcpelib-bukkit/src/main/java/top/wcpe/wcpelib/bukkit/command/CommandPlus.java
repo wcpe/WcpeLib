@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
  * @author WCPE
  * @date 2021年4月23日 下午4:48:48
  */
+@Deprecated
 public class CommandPlus extends org.bukkit.command.Command implements top.wcpe.wcpelib.common.command.CommandPlus, PluginIdentifiableCommand {
 
     private final Plugin plugin;

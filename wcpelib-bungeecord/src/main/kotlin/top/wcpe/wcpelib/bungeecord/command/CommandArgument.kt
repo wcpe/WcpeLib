@@ -12,6 +12,7 @@ import top.wcpe.wcpelib.common.command.CommandArgument
  * @author : WCPE
  * @since  : v1.1.0-alpha-dev-4
  */
+@Deprecated("replace common command v2")
 class CommandArgument private constructor(
     override val name: String,
     override val describe: String,

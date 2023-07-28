@@ -10,11 +10,13 @@ import top.wcpe.wcpelib.common.WcpeLibCommon;
 import top.wcpe.wcpelib.common.adapter.ConfigAdapter;
 import top.wcpe.wcpelib.common.adapter.LoggerAdapter;
 import top.wcpe.wcpelib.common.adapter.SectionAdapter;
+import top.wcpe.wcpelib.common.command.v2.AbstractCommand;
 import top.wcpe.wcpelib.common.ktor.Ktor;
 import top.wcpe.wcpelib.common.mybatis.Mybatis;
 import top.wcpe.wcpelib.common.redis.Redis;
 import top.wcpe.wcpelib.nukkit.adapter.ConfigAdapterNukkitImpl;
 import top.wcpe.wcpelib.nukkit.adapter.LoggerAdapterNukkitImpl;
+import top.wcpe.wcpelib.nukkit.command.v2.CommandManager;
 import top.wcpe.wcpelib.nukkit.placeholder.data.PlayerPlaceholderExtend;
 import top.wcpe.wcpelib.nukkit.placeholder.data.ServerPlaceholder;
 import top.wcpe.wcpelib.nukkit.server.RegisterEntityInfo;
@@ -42,6 +44,8 @@ public final class WcpeLib extends PluginBase implements PlatformAdapter {
     private static final HashMap<String, RegisterEntityInfo> registerEntityInfoMap = new HashMap<>();
 
     private static WcpeLib instance;
+    private static ConfigAdapter itemConfig;
+    private static ConfigAdapter registerEntityConfig;
 
     @Deprecated
     public static boolean isEnableMysql() {
@@ -72,9 +76,6 @@ public final class WcpeLib extends PluginBase implements PlatformAdapter {
     public static Ktor getKtor() {
         return WcpeLibCommon.INSTANCE.getKtor();
     }
-
-    private static ConfigAdapter itemConfig;
-    private static ConfigAdapter registerEntityConfig;
 
     public static WcpeLib getInstance() {
         return instance;
@@ -134,7 +135,9 @@ public final class WcpeLib extends PluginBase implements PlatformAdapter {
         if (registerEntitySection != null) {
             for (String key : registerEntitySection.getKeys(false)) {
                 SectionAdapter keySection = registerEntitySection.getSection(key);
-                if (keySection == null) continue;
+                if (keySection == null) {
+                    continue;
+                }
                 registerEntityInfoMap.put(key, new RegisterEntityInfo(key, keySection.getBoolean("hasSpawnEgg"), keySection.getBoolean("summonAble"), keySection.getString("id"), keySection.getString("bid"), keySection.getInt("rid")));
                 getLogger().info("读取 " + key + "成功 id -> " + keySection.getString("id"));
             }
@@ -157,7 +160,6 @@ public final class WcpeLib extends PluginBase implements PlatformAdapter {
         reloadOtherConfig();
 
         initDefaultMapper();
-        new WcpeLibCommands();
         getServer().getPluginManager().registerEvents(new WcpeLibListener(), this);
         getLogger().info("load time: §e" + (System.currentTimeMillis() - start) + " ms");
         getServer().getConsoleSender().sendMessage("§a  _       __                          __     _     __  ");
@@ -180,8 +182,14 @@ public final class WcpeLib extends PluginBase implements PlatformAdapter {
         getLogger().info("始化默认 Mapper 完成 耗时:" + (System.currentTimeMillis() - start) + " Ms");
     }
 
-    private ConfigAdapter createConfigAdapter(String fileName) {
-        return new ConfigAdapterNukkitImpl(new File(getDataFolder(), fileName));
+    @Override
+    public boolean reloadAllConfig() {
+        try {
+            reloadConfig();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @NotNull
@@ -192,19 +200,22 @@ public final class WcpeLib extends PluginBase implements PlatformAdapter {
 
     @NotNull
     @Override
-    public ConfigAdapter createMySQLConfigAdapter() {
-        return createConfigAdapter("mysql.yml");
+    public File getDataFolderFile() {
+        return getDataFolder();
     }
 
     @NotNull
     @Override
-    public ConfigAdapter createRedisConfigAdapter() {
-        return createConfigAdapter("redis.yml");
+    public ConfigAdapter createConfigAdapter(@NotNull String fileName) {
+        return new ConfigAdapterNukkitImpl(new File(getDataFolder(), fileName));
     }
 
-    @NotNull
     @Override
-    public ConfigAdapter createKtorConfigAdapter() {
-        return createConfigAdapter("ktor.yml");
+    public boolean registerCommand(@NotNull AbstractCommand abstractCommand, @NotNull Object pluginInstance) {
+        if (!(pluginInstance instanceof PluginBase)) {
+            return false;
+        }
+        return CommandManager.registerCommand(abstractCommand, (PluginBase) pluginInstance);
     }
+
 }

@@ -5,6 +5,7 @@
 主要用来打包依赖 共用公共代码
 
 ## 适用平台
+
 - Bukkit
 - Nukkit
 - BungeeCord

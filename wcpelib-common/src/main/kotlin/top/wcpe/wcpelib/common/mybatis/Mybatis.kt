@@ -47,6 +47,14 @@ data class Mybatis(
     val asyncInit: Boolean
 ) {
 
+    companion object {
+        private val mybatisConfiguration = Configuration()
+
+        init {
+            mybatisConfiguration.addMapper(BaseSQLMapper::class.java)
+        }
+    }
+
     fun getDatabaseName(): String {
         return database
     }
@@ -55,10 +63,7 @@ data class Mybatis(
         private set
 
     init {
-        reload()
-    }
 
-    fun reload() {
         val druidDataSource = DruidDataSource()
         druidDataSource.url = "jdbc:mysql://$url:$port/$database?$parameter"
 
@@ -82,16 +87,11 @@ data class Mybatis(
         druidDataSource.removeAbandonedTimeout = removeAbandonedTimeout
         druidDataSource.isLogAbandoned = logAbandoned
         druidDataSource.isAsyncInit = asyncInit
-        this.sqlSessionFactory = SqlSessionFactoryBuilder().build(
-            Configuration(
-                Environment(
-                    "development",
-                    JdbcTransactionFactory(),
-                    druidDataSource
-                )
-            )
+        val environment = Environment(
+            "development", JdbcTransactionFactory(), druidDataSource
         )
-        addMapper(BaseSQLMapper::class.java)
+        mybatisConfiguration.environment = environment
+        this.sqlSessionFactory = SqlSessionFactoryBuilder().build(mybatisConfiguration)
     }
 
     fun useSession(callBack: Consumer<SqlSession>) {
@@ -108,6 +108,7 @@ data class Mybatis(
 
     fun addMapper(vararg classes: Class<*>?) {
         for (clazz in classes) {
+            if (clazz == null) continue
             sqlSessionFactory.configuration.addMapper(clazz)
         }
     }

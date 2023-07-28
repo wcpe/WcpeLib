@@ -19,9 +19,9 @@ public class CommandManager {
     @Getter
     private static final SimpleCommandMap nukkitSimpleCommandMap;
     @Getter
-    private static Map<String, Command> nukkitCommandMap = new HashMap<>();
-    @Getter
     private static final HashMap<String, CommandPlus> commandPlusMap = new HashMap<>();
+    @Getter
+    private static Map<String, Command> nukkitCommandMap = new HashMap<>();
 
     static {
         nukkitSimpleCommandMap = Server.getInstance().getCommandMap();

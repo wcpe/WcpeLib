@@ -14,6 +14,7 @@ import top.wcpe.wcpelib.common.command.CommandExecute
  * @author : WCPE
  * @since  : v1.1.0-alpha-dev-4
  */
+@Deprecated("replace common command v2")
 class Command(
     override val name: String,
     override val describe: String,

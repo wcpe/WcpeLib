@@ -19,6 +19,8 @@ interface ConfigAdapter {
 
     fun reloadConfig()
 
+    fun getStringList(key: String): List<String>
+
     fun getString(key: String): String
 
     fun getBoolean(key: String): Boolean

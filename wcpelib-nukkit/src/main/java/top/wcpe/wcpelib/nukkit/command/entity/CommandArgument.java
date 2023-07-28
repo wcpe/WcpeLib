@@ -2,13 +2,16 @@ package top.wcpe.wcpelib.nukkit.command.entity;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.wcpe.wcpelib.common.command.v2.Argument;
 
 /**
  * 子命令参数实体
  *
  * @author WCPE
  * @date 2021年4月24日 下午3:36:31
+ * @deprecated This class is deprecated. Use the {@link Argument}.
  */
+@Deprecated
 public class CommandArgument implements top.wcpe.wcpelib.common.command.CommandArgument {
     /**
      * 参数名称

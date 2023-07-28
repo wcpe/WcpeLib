@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.SimpleCommandMap;
+import top.wcpe.wcpelib.common.command.v2.AbstractCommand;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -14,7 +15,9 @@ import java.util.HashMap;
  *
  * @author WCPE
  * @date 2021年4月23日 下午4:48:26
+ * @deprecated This class is deprecated. Use the {@link top.wcpe.wcpelib.common.PlatformAdapter#registerCommand(AbstractCommand, Object)}.
  */
+@Deprecated
 public class CommandManager {
     @Getter
     private static final HashMap<String, CommandPlus> commandPlusMap = new HashMap<>();

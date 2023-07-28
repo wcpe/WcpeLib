@@ -6,6 +6,9 @@ import org.jetbrains.annotations.Nullable;
 import top.wcpe.wcpelib.bukkit.command.BukkitCommand;
 import top.wcpe.wcpelib.bukkit.command.intel.ExecuteComponentFunctional;
 import top.wcpe.wcpelib.bukkit.command.intel.TabCompleterFunctional;
+import top.wcpe.wcpelib.common.command.v2.ChildCommand;
+import top.wcpe.wcpelib.common.command.v2.ParentCommand;
+import top.wcpe.wcpelib.common.command.v2.SingleCommand;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +19,9 @@ import java.util.List;
  *
  * @author WCPE
  * @date 2021年4月23日 下午4:47:57
+ * @deprecated This class is deprecated. Use the {@link SingleCommand} Or {@link ParentCommand} And {@link ChildCommand}.
  */
+@Deprecated
 public class Command implements BukkitCommand {
     /**
      * 名称

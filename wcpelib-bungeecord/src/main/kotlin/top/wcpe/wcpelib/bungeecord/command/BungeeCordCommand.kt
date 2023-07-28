@@ -12,6 +12,7 @@ import top.wcpe.wcpelib.common.command.Command
  * @author : WCPE
  * @since  : v1.1.0-alpha-dev-4
  */
+@Deprecated("replace common command v2")
 interface BungeeCordCommand : Command {
     val tabCompleter: TabCompleter?
 }

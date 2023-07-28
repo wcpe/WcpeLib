@@ -79,6 +79,10 @@ class Redis {
         this.jedisPool = JedisPool(jedisPoolConfig, url, port, timeOut, password)
     }
 
+    fun close() {
+        jedisPool.close()
+    }
+
     fun getResource(): Jedis {
         return jedisPool.resource
     }

@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import top.wcpe.wcpelib.bukkit.adapter.ConfigAdapterBukkitImpl;
 import top.wcpe.wcpelib.bukkit.adapter.LoggerAdapterBukkitImpl;
+import top.wcpe.wcpelib.bukkit.command.v2.CommandManager;
 import top.wcpe.wcpelib.bukkit.data.IDataManager;
 import top.wcpe.wcpelib.bukkit.data.impl.MySQLDataManager;
 import top.wcpe.wcpelib.bukkit.version.VersionManager;
@@ -12,6 +13,7 @@ import top.wcpe.wcpelib.common.PlatformAdapter;
 import top.wcpe.wcpelib.common.WcpeLibCommon;
 import top.wcpe.wcpelib.common.adapter.ConfigAdapter;
 import top.wcpe.wcpelib.common.adapter.LoggerAdapter;
+import top.wcpe.wcpelib.common.command.v2.AbstractCommand;
 import top.wcpe.wcpelib.common.ktor.Ktor;
 import top.wcpe.wcpelib.common.mybatis.Mybatis;
 import top.wcpe.wcpelib.common.redis.Redis;
@@ -30,6 +32,9 @@ import java.io.File;
  * @author WCPE
  */
 public final class WcpeLib extends JavaPlugin implements PlatformAdapter {
+    private static WcpeLib instance;
+    private static IDataManager dataManager;
+
     @Deprecated
     public static boolean isEnableMysql() {
         return WcpeLibCommon.INSTANCE.getMybatis() != null;
@@ -60,14 +65,9 @@ public final class WcpeLib extends JavaPlugin implements PlatformAdapter {
         return WcpeLibCommon.INSTANCE.getKtor();
     }
 
-    private static WcpeLib instance;
-
     public static WcpeLib getInstance() {
         return instance;
     }
-
-
-    private static IDataManager dataManager;
 
     public static IDataManager getDataManager() {
         return dataManager;
@@ -78,16 +78,6 @@ public final class WcpeLib extends JavaPlugin implements PlatformAdapter {
         return instance.getConfig().getString("server-name");
     }
 
-
-    @Override
-    public void saveDefaultConfig() {
-        super.saveDefaultConfig();
-    }
-
-    @Override
-    public void reloadConfig() {
-        super.reloadConfig();
-    }
 
     @Override
     public void onLoad() {
@@ -126,8 +116,15 @@ public final class WcpeLib extends JavaPlugin implements PlatformAdapter {
         getLogger().info("始化默认 Mapper 完成 耗时:" + (System.currentTimeMillis() - start) + " Ms");
     }
 
-    private ConfigAdapter createConfigAdapter(String fileName) {
-        return new ConfigAdapterBukkitImpl(new File(getDataFolder(), fileName), fileName);
+
+    @Override
+    public boolean reloadAllConfig() {
+        try {
+            reloadConfig();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @NotNull
@@ -138,19 +135,22 @@ public final class WcpeLib extends JavaPlugin implements PlatformAdapter {
 
     @NotNull
     @Override
-    public ConfigAdapter createMySQLConfigAdapter() {
-        return createConfigAdapter("mysql.yml");
+    public File getDataFolderFile() {
+        return getDataFolder();
     }
 
     @NotNull
     @Override
-    public ConfigAdapter createRedisConfigAdapter() {
-        return createConfigAdapter("redis.yml");
+    public ConfigAdapter createConfigAdapter(@NotNull String fileName) {
+        return new ConfigAdapterBukkitImpl(new File(getDataFolder(), fileName), fileName);
     }
 
-    @NotNull
     @Override
-    public ConfigAdapter createKtorConfigAdapter() {
-        return createConfigAdapter("ktor.yml");
+    public boolean registerCommand(@NotNull AbstractCommand abstractCommand, @NotNull Object pluginInstance) {
+        if (!(pluginInstance instanceof JavaPlugin)) {
+            return false;
+        }
+        return CommandManager.registerCommand(abstractCommand, (JavaPlugin) pluginInstance);
     }
+
 }

@@ -2,6 +2,7 @@ package top.wcpe.wcpelib.common
 
 import top.wcpe.wcpelib.common.adapter.ConfigAdapter
 import top.wcpe.wcpelib.common.adapter.LoggerAdapter
+import top.wcpe.wcpelib.common.commands.wcpelib.WcpeLibParentCommand
 import top.wcpe.wcpelib.common.ktor.Ktor
 import top.wcpe.wcpelib.common.mybatis.Mybatis
 import top.wcpe.wcpelib.common.redis.Redis
@@ -19,22 +20,32 @@ import top.wcpe.wcpelib.common.redis.Redis
  */
 object WcpeLibCommon {
 
+    var platformAdapter: PlatformAdapter? = null
+
+    var messageConfigAdapter: ConfigAdapter? = null
+
     private var loggerAdapter: LoggerAdapter = object : LoggerAdapter {
         override fun info(msg: String) {
             println("[WcpeLibCommon] $msg")
         }
     }
+
     private var mysqlConfigAdapter: ConfigAdapter? = null
     private var redisConfigAdapter: ConfigAdapter? = null
     private var ktorConfigAdapter: ConfigAdapter? = null
 
     fun init(platformAdapter: PlatformAdapter) {
+        this.platformAdapter = platformAdapter
         loggerAdapter.info("开始初始化 WcpeLibCommon...")
         loggerAdapter = platformAdapter.createLoggerAdapter()
-        mysqlConfigAdapter = platformAdapter.createMySQLConfigAdapter()
-        redisConfigAdapter = platformAdapter.createRedisConfigAdapter()
-        ktorConfigAdapter = platformAdapter.createKtorConfigAdapter()
-        create()
+        mysqlConfigAdapter = platformAdapter.createConfigAdapter("mysql.yml")
+        redisConfigAdapter = platformAdapter.createConfigAdapter("redis.yml")
+        ktorConfigAdapter = platformAdapter.createConfigAdapter("ktor.yml")
+        messageConfigAdapter = platformAdapter.createConfigAdapter("message.yml")
+        createCompose()
+
+        WcpeLibParentCommand().register(platformAdapter)
+
         loggerAdapter.info("初始化 WcpeLibCommon 完成...")
     }
 
@@ -42,19 +53,21 @@ object WcpeLibCommon {
         mysqlConfigAdapter?.reloadConfig()
         redisConfigAdapter?.reloadConfig()
         ktorConfigAdapter?.reloadConfig()
-        create()
+        messageConfigAdapter?.reloadConfig()
+        createCompose()
     }
 
     var mybatis: Mybatis? = null
     var redis: Redis? = null
     var ktor: Ktor? = null
 
-    fun create(){
+    private fun createCompose() {
         createMyBatis()
         createRedis()
         createKtor()
     }
-    fun createMyBatis() {
+
+    private fun createMyBatis() {
         val configAdapter = mysqlConfigAdapter ?: return
         if (!configAdapter.getBoolean("mysql.enable")) {
             loggerAdapter.info("Mybatis 未开启! 无法连接数据库!")
@@ -95,7 +108,8 @@ object WcpeLibCommon {
         }
     }
 
-    fun createRedis() {
+    private fun createRedis() {
+        redis?.close()
         val configAdapter = redisConfigAdapter ?: return
         if (!configAdapter.getBoolean("redis.enable")) {
             return
@@ -128,7 +142,7 @@ object WcpeLibCommon {
         }
     }
 
-    fun createKtor() {
+    private fun createKtor() {
         val configAdapter = ktorConfigAdapter ?: return
         ktor = Ktor(configAdapter.getInt("ktor.port"))
     }

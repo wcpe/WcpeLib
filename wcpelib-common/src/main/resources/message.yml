@@ -1,0 +1,23 @@
+should-permission: "需要权限 %permission% 才能执行此命令!"
+player-only: "执行人必须是玩家!"
+optional-format: "§e[§8%command_name%§e]"
+required-format: "§e<§6%command_name%§e>"
+usage-message-format:
+  - '§e使用方式: §b/%command_name% %arguments%'
+  - '%argument_tip%'
+alias-format: "\n§e> §b/%alias%"
+command-help-top:
+  - '§e===== §6%command_name% §e命令帮助 §6%page%§e / §6%total_page% §e页 ====='
+  - '§e> §b/%command_name%%aliases%'
+command-help-format:
+  - '§e>   %space%§6%command_name% %arguments%'
+  - '§e>   %space%§a描述: §r%description%'
+  - '§e>   %space%§a权限: §c%permission%'
+command-help-bottom:
+  - ''
+  - '§e> %argument_tip%'
+  - '§e> §b/%command_name% §6help §8[页] §r来查询其他页'
+
+command-args-error: "§c指令执行错误 请填写必填参数 %arguments% §c!"
+argument-tip: "§6<> §e为必填参数 §8[] §e为选填参数 选填参数需要使用 §l§7. §e占位"
+command-not-exist: "§c命令不存在或参数错误! §e请输入§b/%command_name% §6help §8[页码] §e进行查询"

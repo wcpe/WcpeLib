@@ -16,7 +16,10 @@ import top.wcpe.wcpelib.common.command.CommandPlus
  * QQ      : 1837019522
  * @author : WCPE
  * @since  : v1.1.0-alpha-dev-4
+ * @deprecated This class is deprecated. Use {@link AbstractCommand} instead.
+ * For more information, see {@link AbstractCommand}.
  */
+@Deprecated("This class is deprecated. Use AbstractCommand instead.")
 class CommandPlus private constructor(
     name: String,
     private val plugin: Plugin,
@@ -90,6 +93,7 @@ class CommandPlus private constructor(
         return this
     }
 
+    @Deprecated("replace common command v2")
     class Builder {
         private val name: String
         private val plugin: Plugin

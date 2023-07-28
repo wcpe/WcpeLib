@@ -43,6 +43,10 @@ class ConfigAdapterBukkitImpl(private val file: File, private val defaultPath: S
         )
     }
 
+    override fun getStringList(key: String): List<String> {
+        return config.getStringList(key)
+    }
+
     override fun getString(key: String): String {
         return config.getString(key) ?: ""
     }

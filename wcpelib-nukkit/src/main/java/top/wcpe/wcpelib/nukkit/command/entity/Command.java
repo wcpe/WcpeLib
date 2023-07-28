@@ -3,6 +3,9 @@ package top.wcpe.wcpelib.nukkit.command.entity;
 import cn.nukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.wcpe.wcpelib.common.command.v2.ChildCommand;
+import top.wcpe.wcpelib.common.command.v2.ParentCommand;
+import top.wcpe.wcpelib.common.command.v2.SingleCommand;
 import top.wcpe.wcpelib.nukkit.command.intel.ExecuteComponentFunctional;
 
 import java.util.ArrayList;
@@ -14,7 +17,9 @@ import java.util.List;
  *
  * @author WCPE
  * @date 2021年4月23日 下午4:47:57
+ * @deprecated This class is deprecated. Use the {@link SingleCommand} Or {@link ParentCommand} And {@link ChildCommand}.
  */
+@Deprecated
 public class Command implements top.wcpe.wcpelib.common.command.Command {
     /**
      * 名称
