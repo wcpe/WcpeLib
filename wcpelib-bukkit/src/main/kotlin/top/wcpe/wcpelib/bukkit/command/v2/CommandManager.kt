@@ -71,6 +71,16 @@ object CommandManager {
 
     @JvmStatic
     fun registerCommand(abstractCommand: AbstractCommand, instance: JavaPlugin): Boolean {
+        val commandName = abstractCommand.name
+        val coverBukkitCommand = bukkitCommandMap[commandName]
+        if (coverBukkitCommand != null) {
+            logger.info("检测到已注册的指令: ${coverBukkitCommand.name}")
+            if (unregisterCommand(coverBukkitCommand, instance)) {
+                logger.info("注销指令: ${coverBukkitCommand.name} 成功!")
+            } else {
+                logger.info("注销指令: ${coverBukkitCommand.name} 失败! 您的指令可能并不会生效")
+            }
+        }
         val commandMap = getCommandMap(Bukkit.getServer()) ?: return false
         val bukkitCommand = BukkitCommand(abstractCommand)
         val knownCommands = getKnownCommands(commandMap) ?: return false
@@ -83,7 +93,13 @@ object CommandManager {
             knownCommands["${commandName.lowercase()}:$alias"] = bukkitCommand
         }
         bukkitCommandMap[commandName] = bukkitCommand
-        return bukkitCommand.register(commandMap)
+        return if (bukkitCommand.register(commandMap)) {
+            logger.info("注册指令: ${bukkitCommand.name} 成功!")
+            true
+        } else {
+            logger.info("注册指令: ${bukkitCommand.name} 失败! 您的指令可能并不会生效")
+            false
+        }
     }
 
     private fun unregisterCommand(bukkitCommand: BukkitCommand, instance: JavaPlugin): Boolean {
