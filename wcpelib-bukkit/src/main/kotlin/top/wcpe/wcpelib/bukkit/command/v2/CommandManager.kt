@@ -66,7 +66,7 @@ object CommandManager {
         }
     }
 
-    private val logger = WcpeLib.getInstance().logger
+    private val logger = WcpeLib.instance.logger
     private val bukkitCommandMap = mutableMapOf<String, BukkitCommand>()
 
     @JvmStatic
@@ -74,17 +74,6 @@ object CommandManager {
         val commandMap = getCommandMap(Bukkit.getServer()) ?: return false
         val bukkitCommand = BukkitCommand(abstractCommand)
         val knownCommands = getKnownCommands(commandMap) ?: return false
-        val commandName = abstractCommand.name
-
-        val coverBukkitCommand = bukkitCommandMap[commandName]
-        if (coverBukkitCommand != null) {
-            logger.info("检测到已注册的指令: ${coverBukkitCommand.name}")
-            if (unregisterCommand(coverBukkitCommand, instance)) {
-                logger.info("注销指令: ${coverBukkitCommand.name} 成功!")
-            } else {
-                logger.info("注销指令: ${coverBukkitCommand.name} 失败! 您的指令可能并不会生效")
-            }
-        }
 
         knownCommands[commandName] = bukkitCommand
         knownCommands[commandName.lowercase()] = bukkitCommand

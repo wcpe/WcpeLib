@@ -51,7 +51,7 @@ object ChatAcceptParameterManager {
                     it.judgeFalseTask(e.player, e.message)
                 }
             }
-        }, WcpeLib.getInstance())
+        }, WcpeLib.instance)
     }
 
     fun putChatAcceptParameterTask(

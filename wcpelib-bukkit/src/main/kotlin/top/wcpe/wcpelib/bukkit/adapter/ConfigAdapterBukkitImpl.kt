@@ -29,7 +29,7 @@ class ConfigAdapterBukkitImpl(private val file: File, private val defaultPath: S
 
     override fun saveDefaultConfig() {
         if (!file.exists()) {
-            WcpeLib.getInstance().saveResource(file.name, false)
+            WcpeLib.instance.saveResource(file.name, false)
         }
     }
 
@@ -37,7 +37,7 @@ class ConfigAdapterBukkitImpl(private val file: File, private val defaultPath: S
         this.config = YamlConfiguration.loadConfiguration(file)
         this.config.defaults = YamlConfiguration.loadConfiguration(
             InputStreamReader(
-                WcpeLib.getInstance().getResource(defaultPath),
+                WcpeLib.instance.getResource(defaultPath),
                 Charsets.UTF_8
             )
         )

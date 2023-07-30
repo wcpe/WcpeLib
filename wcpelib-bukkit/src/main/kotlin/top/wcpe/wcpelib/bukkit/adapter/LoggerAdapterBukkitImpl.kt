@@ -16,6 +16,6 @@ import top.wcpe.wcpelib.common.adapter.LoggerAdapter
  */
 class LoggerAdapterBukkitImpl : LoggerAdapter {
     override fun info(msg: String) {
-        WcpeLib.getInstance().logger.info(msg)
+        WcpeLib.instance.logger.info(msg)
     }
 }

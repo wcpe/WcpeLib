@@ -18,17 +18,17 @@ import top.wcpe.wcpelib.bukkit.entity.PlayerData
  * @since  : v1.1.5-alpha-dev-3
  */
 class WcpeLibListener : Listener {
-    private val logger = WcpeLib.getInstance().logger
+    private val logger = WcpeLib.instance.logger
 
     @EventHandler
     fun listenerPlayerJoinEvent(e: PlayerJoinEvent) {
         val player = e.player
         val firstPlayed = player.firstPlayed
 
-        val playerData = WcpeLib.getDataManager().getPlayerDataByName(player.name)
+        val playerData = WcpeLib.dataManager.getPlayerDataByName(player.name)
         if (playerData == null) {
             logger.info("由于玩家: [${player.name}] 未上线过 自动读取本地 firstPlayed: [$firstPlayed] 填入")
-            WcpeLib.getDataManager().savePlayerData(
+            WcpeLib.dataManager.savePlayerData(
                 PlayerData(
                     playerName = player.name,
                     uuid = player.uniqueId.toString(),
@@ -46,6 +46,6 @@ class WcpeLibListener : Listener {
         logger.info("玩家: [${player.name}] 上一次进入的服务器: [${playerData.lastServerName}]")
         playerData.lastServerName = WcpeLib.getServerName()
         playerData.lastLoginTime = System.currentTimeMillis()
-        WcpeLib.getDataManager().savePlayerData(playerData)
+        WcpeLib.dataManager.savePlayerData(playerData)
     }
 }
