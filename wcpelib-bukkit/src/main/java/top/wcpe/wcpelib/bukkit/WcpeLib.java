@@ -1,5 +1,6 @@
 package top.wcpe.wcpelib.bukkit;
 
+import lombok.Getter;
 import lombok.val;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +9,7 @@ import top.wcpe.wcpelib.bukkit.adapter.LoggerAdapterBukkitImpl;
 import top.wcpe.wcpelib.bukkit.command.v2.CommandManager;
 import top.wcpe.wcpelib.bukkit.data.IDataManager;
 import top.wcpe.wcpelib.bukkit.data.impl.MySQLDataManager;
+import top.wcpe.wcpelib.bukkit.data.impl.NullDataManager;
 import top.wcpe.wcpelib.bukkit.version.VersionManager;
 import top.wcpe.wcpelib.common.PlatformAdapter;
 import top.wcpe.wcpelib.common.WcpeLibCommon;
@@ -32,8 +34,10 @@ import java.io.File;
  * @author WCPE
  */
 public final class WcpeLib extends JavaPlugin implements PlatformAdapter {
+    @Getter
     private static WcpeLib instance;
-    private static IDataManager dataManager;
+    @Getter
+    private static IDataManager dataManager = new NullDataManager();
 
     @Deprecated
     public static boolean isEnableMysql() {
@@ -63,14 +67,6 @@ public final class WcpeLib extends JavaPlugin implements PlatformAdapter {
     @Deprecated
     public static Ktor getKtor() {
         return WcpeLibCommon.INSTANCE.getKtor();
-    }
-
-    public static WcpeLib getInstance() {
-        return instance;
-    }
-
-    public static IDataManager getDataManager() {
-        return dataManager;
     }
 
 
