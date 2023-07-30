@@ -1,6 +1,7 @@
 package top.wcpe.wcpelib.common.command.v2
 
 import top.wcpe.wcpelib.common.Message
+import top.wcpe.wcpelib.common.command.v2.extend.childCommand
 import top.wcpe.wcpelib.common.utils.string.StringUtil
 
 /**
@@ -71,20 +72,24 @@ abstract class ParentCommand @JvmOverloads constructor(
         commandExecutor: CommandExecutor? = null,
         tabCompleter: TabCompleter? = null,
     ): ChildCommand {
-        return childCommand(
+        return object : ChildCommand(
+            this,
             name,
             description,
-            aliases,
-            arguments,
-            playerOnly,
-            playerOnlyMessage,
-            usageMessage,
-            permission,
-            permissionMessage,
-            shouldDisplay,
-            commandExecutor,
-            tabCompleter
-        )
+            aliases = aliases,
+            arguments = arguments,
+            playerOnly = playerOnly,
+            playerOnlyMessage = playerOnlyMessage,
+            usageMessage = usageMessage,
+            permission = permission,
+            permissionMessage = permissionMessage,
+            shouldDisplay = shouldDisplay
+        ) {
+            init {
+                this.commandExecutor = commandExecutor
+                this.tabCompleter = tabCompleter
+            }
+        }
     }
 
     private val pageSize = 5

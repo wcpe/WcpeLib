@@ -78,16 +78,8 @@ inline fun parentCommand(
     crossinline runnable: ParentCommand.() -> Unit = {}
 ): ParentCommand {
     return object : ParentCommand(
-        name,
-        description,
-        aliases,
-        playerOnly,
-        playerOnlyMessage,
-        usageMessage,
-        permission,
-        permissionMessage
-    ) {
-    }.also(runnable)
+        name, description, aliases, playerOnly, playerOnlyMessage, usageMessage, permission, permissionMessage
+    ) {}.also(runnable)
 }
 
 inline fun parentCommand(
@@ -121,29 +113,24 @@ inline fun ParentCommand.childCommand(
     tabCompleter: TabCompleter? = null,
     crossinline runnable: ChildCommand.() -> Unit = {}
 ): ChildCommand {
-    return object : ChildCommand(
-        this,
+    return childCommand(
         name,
         description,
-        aliases = aliases,
-        arguments = arguments,
-        playerOnly = playerOnly,
-        playerOnlyMessage = playerOnlyMessage,
-        usageMessage = usageMessage,
-        permission = permission,
-        permissionMessage = permissionMessage,
-        shouldDisplay = shouldDisplay
-    ) {
-        init {
-            this.commandExecutor = commandExecutor
-            this.tabCompleter = tabCompleter
-        }
-    }.also(runnable)
+        aliases,
+        arguments,
+        playerOnly,
+        playerOnlyMessage,
+        usageMessage,
+        permission,
+        permissionMessage,
+        shouldDisplay,
+        commandExecutor,
+        tabCompleter
+    ).also(runnable)
 }
 
 inline fun ParentCommand.childCommand(
-    childCommandBuilder: ChildCommandBuilder,
-    crossinline runnable: ChildCommand.() -> Unit = {}
+    childCommandBuilder: ChildCommandBuilder, crossinline runnable: ChildCommand.() -> Unit = {}
 ): ChildCommand {
     return childCommand(
         name = childCommandBuilder.name,
