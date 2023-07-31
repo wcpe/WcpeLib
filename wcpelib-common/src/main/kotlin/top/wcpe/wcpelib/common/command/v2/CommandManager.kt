@@ -4,7 +4,6 @@ import top.wcpe.wcpelib.common.WcpeLibCommon
 import top.wcpe.wcpelib.common.command.v2.annotation.ChildCommand
 import top.wcpe.wcpelib.common.command.v2.annotation.ParentCommand
 import top.wcpe.wcpelib.common.command.v2.annotation.SingleCommand
-import top.wcpe.wcpelib.common.command.v2.extend.childCommand
 import top.wcpe.wcpelib.common.command.v2.extend.parentCommand
 import top.wcpe.wcpelib.common.command.v2.extend.singleCommand
 import kotlin.reflect.KClass
@@ -102,10 +101,23 @@ object CommandManager {
         )
     }
 
+
     /**
      * 注册命令
      * 通过含有命令注解的类和插件主类实例来注册
-     * @param commandClass
+     * @param commandClass 含 ParentCommand 注解的 javaClass 类
+     * @param pluginInstance 插件主类实例
+     * @return 返回注册是否成功
+     */
+    @JvmStatic
+    fun registerCommand(commandClass: Class<*>, pluginInstance: Any): Boolean {
+        return registerCommand(commandClass.kotlin, pluginInstance)
+    }
+
+    /**
+     * 注册命令
+     * 通过含有命令注解的类和插件主类实例来注册
+     * @param commandClass 含 ParentCommand 注解的 KClass 类
      * @param pluginInstance 插件主类实例
      * @return 返回注册是否成功
      */
