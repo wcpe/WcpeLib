@@ -42,7 +42,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'kotlin'
 
-    version = '1.2.2'
+    version = '1.2.2-alpha-dev-2'
     group 'top.wcpe'
     processResources {
         def props = [version: version]

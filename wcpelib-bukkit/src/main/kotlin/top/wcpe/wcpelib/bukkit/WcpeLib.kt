@@ -6,6 +6,7 @@ import top.wcpe.wcpelib.bukkit.adapter.LoggerAdapterBukkitImpl
 import top.wcpe.wcpelib.bukkit.command.v2.CommandManager
 import top.wcpe.wcpelib.bukkit.data.IDataManager
 import top.wcpe.wcpelib.bukkit.data.impl.MySQLDataManager
+import top.wcpe.wcpelib.bukkit.data.impl.NullDataManager
 import top.wcpe.wcpelib.bukkit.version.VersionManager.versionInfo
 import top.wcpe.wcpelib.common.PlatformAdapter
 import top.wcpe.wcpelib.common.WcpeLibCommon.init
@@ -113,7 +114,8 @@ class WcpeLib : JavaPlugin(), PlatformAdapter {
         logger.info("开始初始化默认 Mapper")
         val mybatis = mybatis
         if (mybatis == null) {
-            logger.info("Mybatis 未连接 初始化失败!")
+            dataManager = NullDataManager()
+            logger.info("MySQL 未连接 Mybatis 初始化失败!")
             return
         }
         dataManager = MySQLDataManager(mybatis)
