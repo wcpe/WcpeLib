@@ -70,6 +70,28 @@ object CommandManager {
     private val bukkitCommandMap = mutableMapOf<String, BukkitCommand>()
 
     @JvmStatic
+    fun registerBukkitCommand(command: Command, instance: JavaPlugin): Boolean {
+        val commandName = command.name
+        val commandMap = getCommandMap(Bukkit.getServer()) ?: return false
+        val knownCommands = getKnownCommands(commandMap) ?: return false
+
+        knownCommands[commandName] = command
+        knownCommands[commandName.lowercase()] = command
+        knownCommands["${instance.name.lowercase()}:$commandName"] = command
+        for (alias in command.aliases) {
+            knownCommands[alias] = command
+            knownCommands["${commandName.lowercase()}:$alias"] = command
+        }
+        return if (command.register(commandMap)) {
+            logger.info("注册指令: ${command.name} 成功!")
+            true
+        } else {
+            logger.info("注册指令: ${command.name} 失败! 您的指令可能并不会生效")
+            false
+        }
+    }
+
+    @JvmStatic
     fun registerCommand(abstractCommand: AbstractCommand, instance: JavaPlugin): Boolean {
         val commandName = abstractCommand.name
         val coverBukkitCommand = bukkitCommandMap[commandName]
@@ -81,23 +103,11 @@ object CommandManager {
                 logger.info("注销指令: ${coverBukkitCommand.name} 失败! 您的指令可能并不会生效")
             }
         }
-        val commandMap = getCommandMap(Bukkit.getServer()) ?: return false
         val bukkitCommand = BukkitCommand(abstractCommand)
-        val knownCommands = getKnownCommands(commandMap) ?: return false
-
-        knownCommands[commandName] = bukkitCommand
-        knownCommands[commandName.lowercase()] = bukkitCommand
-        knownCommands["${instance.name.lowercase()}:$commandName"] = bukkitCommand
-        for (alias in abstractCommand.aliases) {
-            knownCommands[alias] = bukkitCommand
-            knownCommands["${commandName.lowercase()}:$alias"] = bukkitCommand
-        }
-        bukkitCommandMap[commandName] = bukkitCommand
-        return if (bukkitCommand.register(commandMap)) {
-            logger.info("注册指令: ${bukkitCommand.name} 成功!")
+        return if (registerBukkitCommand(bukkitCommand, instance)) {
+            bukkitCommandMap[commandName] = bukkitCommand
             true
         } else {
-            logger.info("注册指令: ${bukkitCommand.name} 失败! 您的指令可能并不会生效")
             false
         }
     }
