@@ -53,6 +53,32 @@ interface BaseSQLMapper {
         @Param("columnName") columnName: String
     ): Boolean
 
+
+    @Select(
+        """
+        SELECT
+        CASE
+        WHEN COUNT(*) > 1
+        THEN 1
+        ELSE 0
+        END
+        FROM
+        INFORMATION_SCHEMA.STATISTICS
+        WHERE
+        TABLE_SCHEMA =#{databaseName}
+        AND
+        TABLE_NAME = #{tableName}
+        AND
+        INDEX_NAME = #{indexName};
+        """
+    )
+    fun existIndex(
+        @Param("databaseName") databaseName: String,
+        @Param("tableName") tableName: String,
+        @Param("indexName") indexName: String
+    ): Boolean
+
+
     @Update(
         """
         ALTER TABLE #{oldTableName} RENAME TO #{newTableName};
