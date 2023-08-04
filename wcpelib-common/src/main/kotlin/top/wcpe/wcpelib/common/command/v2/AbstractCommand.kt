@@ -64,12 +64,13 @@ abstract class AbstractCommand(
     }
 
     fun handleExecute(commandSender: CommandSender<*>, args: Array<String?>) {
-        if (beforeExecute(commandSender, args)) {
-            notRequiredArgsReplace(args, arguments)
+        val argsStrings = args.copyOf(max(args.size, arguments.size))
+        if (beforeExecute(commandSender, argsStrings)) {
+            notRequiredArgsReplace(argsStrings, arguments)
             if (this is CommandExecutor) {
-                execute(commandSender, args)
+                execute(commandSender, argsStrings)
             } else {
-                commandExecutor?.execute(commandSender, args)
+                commandExecutor?.execute(commandSender, argsStrings)
             }
         }
     }
@@ -103,8 +104,7 @@ abstract class AbstractCommand(
         if (arguments.isEmpty()) {
             return true
         }
-        val argsStrings = args.copyOf(max(args.size, arguments.size))
-        val requiredArgResult = requiredArgs(argsStrings, arguments)
+        val requiredArgResult = requiredArgs(args, arguments)
         if (requiredArgResult.isNotEmpty()) {
             commandSender.sendMessage(usageMessage)
             commandSender.sendMessage(
