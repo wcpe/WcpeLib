@@ -36,7 +36,11 @@ class ConfigAdapterNukkitImpl(private val file: File) : ConfigAdapter {
     }
 
     override fun getStringList(key: String): List<String> {
-        return config.getStringList(key)
+        return if (config.isList(key)) {
+            config.getStringList(key)
+        } else {
+            listOf(config.getString(key))
+        }
     }
 
     override fun getString(key: String): String {
