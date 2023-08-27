@@ -1,8 +1,8 @@
 package top.wcpe.wcpelib.common.command.v2
 
 import top.wcpe.wcpelib.common.Message
-import top.wcpe.wcpelib.common.command.v2.extend.childCommand
 import top.wcpe.wcpelib.common.utils.string.StringUtil
+import kotlin.math.max
 
 /**
  * 由 WCPE 在 2023/7/22 11:20 创建
@@ -99,7 +99,7 @@ abstract class ParentCommand @JvmOverloads constructor(
             command.shouldDisplay || commandSender.hasPermission(command.permission)
         }.map { it.value }
 
-        val totalPages = (childCommands.size + pageSize - 1) / pageSize
+        val totalPages = max(1, (childCommands.size + pageSize - 1) / pageSize)
         val pageNumber = page.coerceIn(1, totalPages)
         val startIndex = (pageNumber - 1) * pageSize
         val endIndex = minOf(startIndex + pageSize, childCommands.size)
