@@ -21,6 +21,8 @@ class ParentCommandBuilder @JvmOverloads constructor(
     val aliases: List<String> = listOf(),
     val playerOnly: Boolean = false,
     playerOnlyMessage: String = "",
+    val opOnly: Boolean = false,
+    opOnlyMessage: String = "",
     usageMessage: String = "",
     permission: String = "",
     permissionMessage: String = "",
@@ -56,6 +58,13 @@ class ParentCommandBuilder @JvmOverloads constructor(
         get() {
             return field.ifEmpty {
                 Message.PlayerOnly.toLocalization()
+            }
+        }
+
+    val opOnlyMessage: String = opOnlyMessage
+        get() {
+            return field.ifEmpty {
+                Message.OpOnly.toLocalization()
             }
         }
 

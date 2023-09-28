@@ -43,6 +43,8 @@ object CommandManager {
     private fun parseSingleCommand(commandClass: KClass<*>): AbstractCommand? {
         val singleCommandAnnotation = commandClass.findAnnotation<SingleCommand>() ?: return null
 
+        val newInstance = commandClass.createInstance()
+
         return singleCommand(
             singleCommandAnnotation.name,
             singleCommandAnnotation.description,
@@ -50,9 +52,13 @@ object CommandManager {
             singleCommandAnnotation.arguments.map { Argument(it.name, it.required, it.description) }.toList(),
             singleCommandAnnotation.playerOnly,
             singleCommandAnnotation.playerOnlyMessage,
+            singleCommandAnnotation.opOnly,
+            singleCommandAnnotation.opOnlyMessage,
             singleCommandAnnotation.usageMessage,
             singleCommandAnnotation.permission,
-            singleCommandAnnotation.permissionMessage
+            singleCommandAnnotation.permissionMessage,
+            newInstance as? CommandExecutor,
+            newInstance as? TabCompleter
         )
     }
 
@@ -65,6 +71,8 @@ object CommandManager {
             parentCommandAnnotation.aliases.toList(),
             parentCommandAnnotation.playerOnly,
             parentCommandAnnotation.playerOnlyMessage,
+            parentCommandAnnotation.opOnly,
+            parentCommandAnnotation.opOnlyMessage,
             parentCommandAnnotation.usageMessage,
             parentCommandAnnotation.permission,
             parentCommandAnnotation.permissionMessage
@@ -78,8 +86,7 @@ object CommandManager {
     }
 
     private fun parseChildCommand(
-        parentInstance: top.wcpe.wcpelib.common.command.v2.ParentCommand,
-        commandClass: KClass<*>
+        parentInstance: top.wcpe.wcpelib.common.command.v2.ParentCommand, commandClass: KClass<*>
     ): top.wcpe.wcpelib.common.command.v2.ChildCommand? {
         val childCommandAnnotation = commandClass.findAnnotation<ChildCommand>() ?: return null
 
@@ -92,6 +99,8 @@ object CommandManager {
             childCommandAnnotation.arguments.map { Argument(it.name, it.required, it.description) }.toList(),
             childCommandAnnotation.playerOnly,
             childCommandAnnotation.playerOnlyMessage,
+            childCommandAnnotation.opOnly,
+            childCommandAnnotation.opOnlyMessage,
             childCommandAnnotation.usageMessage,
             childCommandAnnotation.permission,
             childCommandAnnotation.permissionMessage,

@@ -22,6 +22,8 @@ abstract class ParentCommand @JvmOverloads constructor(
     aliases: List<String> = listOf(),
     playerOnly: Boolean = false,
     playerOnlyMessage: String = "",
+    opOnly: Boolean = false,
+    opOnlyMessage: String = "",
     usageMessage: String = "",
     permission: String = "",
     permissionMessage: String = "",
@@ -31,6 +33,8 @@ abstract class ParentCommand @JvmOverloads constructor(
         aliases = aliases,
         playerOnly = playerOnly,
         playerOnlyMessage = playerOnlyMessage,
+        opOnly = opOnly,
+        opOnlyMessage = opOnlyMessage,
         usageMessage = usageMessage,
         permission = permission,
         permissionMessage = permissionMessage
@@ -44,7 +48,9 @@ abstract class ParentCommand @JvmOverloads constructor(
     arguments = emptyList(),
     usageMessage = parentCommandBuilder.usageMessage,
     playerOnly = parentCommandBuilder.playerOnly,
-    playerOnlyMessage = parentCommandBuilder.playerOnlyMessage
+    playerOnlyMessage = parentCommandBuilder.playerOnlyMessage,
+    opOnly = parentCommandBuilder.opOnly,
+    opOnlyMessage = parentCommandBuilder.opOnlyMessage
 ), CommandExecutor, TabCompleter {
 
     private val childCommandMap: MutableMap<String, ChildCommand> = mutableMapOf()
@@ -65,6 +71,8 @@ abstract class ParentCommand @JvmOverloads constructor(
         arguments: List<Argument> = listOf(),
         playerOnly: Boolean = false,
         playerOnlyMessage: String = "",
+        opOnly: Boolean = false,
+        opOnlyMessage: String = "",
         usageMessage: String = "",
         permission: String = "",
         permissionMessage: String = "",
@@ -80,6 +88,8 @@ abstract class ParentCommand @JvmOverloads constructor(
             arguments = arguments,
             playerOnly = playerOnly,
             playerOnlyMessage = playerOnlyMessage,
+            opOnly = opOnly,
+            opOnlyMessage = opOnlyMessage,
             usageMessage = usageMessage,
             permission = permission,
             permissionMessage = permissionMessage,
@@ -96,7 +106,7 @@ abstract class ParentCommand @JvmOverloads constructor(
 
     private fun sendHelper(commandSender: CommandSender<*>, page: Int) {
         val childCommands = childCommandMap.filter { (_, command) ->
-            command.shouldDisplay || commandSender.hasPermission(command.permission)
+            command.shouldDisplay || command.permission == "*" || commandSender.hasPermission(command.permission)
         }.map { it.value }
 
         val totalPages = max(1, (childCommands.size + pageSize - 1) / pageSize)

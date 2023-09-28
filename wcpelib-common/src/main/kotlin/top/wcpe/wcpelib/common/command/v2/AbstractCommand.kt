@@ -24,7 +24,9 @@ abstract class AbstractCommand(
     val arguments: List<Argument>,
     val usageMessage: String,
     val playerOnly: Boolean,
-    val playerOnlyMessage: String
+    val playerOnlyMessage: String,
+    val opOnly: Boolean,
+    val opOnlyMessage: String
 ) {
 
     var commandExecutor: CommandExecutor? = null
@@ -97,9 +99,16 @@ abstract class AbstractCommand(
             commandSender.sendMessage(playerOnlyMessage)
             return false
         }
-        if (!commandSender.hasPermission(permission)) {
-            commandSender.sendMessage(permissionMessage)
-            return false
+        if (opOnly) {
+            if (!commandSender.isOp()) {
+                commandSender.sendMessage(opOnlyMessage)
+                return false
+            }
+        } else {
+            if (permission != "*" && !commandSender.hasPermission(permission)) {
+                commandSender.sendMessage(permissionMessage)
+                return false
+            }
         }
         if (arguments.isEmpty()) {
             return true

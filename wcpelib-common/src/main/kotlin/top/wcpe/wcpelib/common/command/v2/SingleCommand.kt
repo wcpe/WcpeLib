@@ -19,6 +19,8 @@ abstract class SingleCommand @JvmOverloads constructor(
     arguments: List<Argument> = listOf(),
     playerOnly: Boolean = false,
     playerOnlyMessage: String = "",
+    opOnly: Boolean = false,
+    opOnlyMessage: String = "",
     usageMessage: String = "",
     permission: String = "",
     permissionMessage: String = "",
@@ -29,6 +31,8 @@ abstract class SingleCommand @JvmOverloads constructor(
         arguments,
         playerOnly,
         playerOnlyMessage,
+        opOnly,
+        opOnlyMessage,
         usageMessage,
         permission,
         permissionMessage
@@ -42,5 +46,7 @@ abstract class SingleCommand @JvmOverloads constructor(
     arguments = singleCommandBuilder.arguments,
     usageMessage = singleCommandBuilder.usageMessage,
     playerOnly = singleCommandBuilder.playerOnly,
-    playerOnlyMessage = singleCommandBuilder.playerOnlyMessage
+    playerOnlyMessage = singleCommandBuilder.playerOnlyMessage,
+    opOnly = singleCommandBuilder.opOnly,
+    opOnlyMessage = singleCommandBuilder.opOnlyMessage
 )

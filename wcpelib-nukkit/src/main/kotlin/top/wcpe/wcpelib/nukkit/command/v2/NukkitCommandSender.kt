@@ -30,6 +30,10 @@ value class NukkitCommandSender(private val commandSender: cn.nukkit.command.Com
         return commandSender is Player
     }
 
+    override fun isOp(): Boolean {
+        return commandSender.isOp
+    }
+
     override fun sendMessage(message: String) {
         commandSender.sendMessage(message)
     }

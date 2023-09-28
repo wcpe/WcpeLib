@@ -23,6 +23,8 @@ class ChildCommandBuilder @JvmOverloads constructor(
     val arguments: List<Argument> = listOf(),
     val playerOnly: Boolean = false,
     playerOnlyMessage: String = "",
+    val opOnly: Boolean = false,
+    opOnlyMessage: String = "",
     usageMessage: String = "",
     permission: String = "",
     permissionMessage: String = "",
@@ -41,6 +43,13 @@ class ChildCommandBuilder @JvmOverloads constructor(
         get() {
             return field.ifEmpty {
                 Message.PlayerOnly.toLocalization()
+            }
+        }
+
+    val opOnlyMessage: String = opOnlyMessage
+        get() {
+            return field.ifEmpty {
+                Message.OpOnly.toLocalization()
             }
         }
 

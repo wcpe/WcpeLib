@@ -26,6 +26,11 @@ interface CommandSender<T> {
     fun isPlayer(): Boolean
 
     /**
+     * 是否为管理员
+     */
+    fun isOp(): Boolean
+
+    /**
      * 发送消息
      */
     fun sendMessage(message: String)

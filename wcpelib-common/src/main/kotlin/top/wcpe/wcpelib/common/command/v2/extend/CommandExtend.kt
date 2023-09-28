@@ -21,6 +21,8 @@ inline fun singleCommand(
     arguments: List<Argument> = listOf(),
     playerOnly: Boolean = false,
     playerOnlyMessage: String = "",
+    opOnly: Boolean = false,
+    opOnlyMessage: String = "",
     usageMessage: String = "",
     permission: String = "",
     permissionMessage: String = "",
@@ -35,6 +37,8 @@ inline fun singleCommand(
         arguments,
         playerOnly,
         playerOnlyMessage,
+        opOnly,
+        opOnlyMessage,
         usageMessage,
         permission,
         permissionMessage
@@ -72,13 +76,24 @@ inline fun parentCommand(
     aliases: List<String> = listOf(),
     playerOnly: Boolean = false,
     playerOnlyMessage: String = "",
+    opOnly: Boolean = false,
+    opOnlyMessage: String = "",
     usageMessage: String = "",
     permission: String = "",
     permissionMessage: String = "",
     crossinline runnable: ParentCommand.() -> Unit = {}
 ): ParentCommand {
     return object : ParentCommand(
-        name, description, aliases, playerOnly, playerOnlyMessage, usageMessage, permission, permissionMessage
+        name,
+        description,
+        aliases,
+        playerOnly,
+        playerOnlyMessage,
+        opOnly,
+        opOnlyMessage,
+        usageMessage,
+        permission,
+        permissionMessage
     ) {}.also(runnable)
 }
 
@@ -105,6 +120,8 @@ inline fun ParentCommand.childCommand(
     arguments: List<Argument> = listOf(),
     playerOnly: Boolean = false,
     playerOnlyMessage: String = "",
+    opOnly: Boolean = false,
+    opOnlyMessage: String = "",
     usageMessage: String = "",
     permission: String = "",
     permissionMessage: String = "",
@@ -120,6 +137,8 @@ inline fun ParentCommand.childCommand(
         arguments,
         playerOnly,
         playerOnlyMessage,
+        opOnly,
+        opOnlyMessage,
         usageMessage,
         permission,
         permissionMessage,

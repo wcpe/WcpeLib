@@ -22,6 +22,8 @@ class SingleCommandBuilder @JvmOverloads constructor(
     val arguments: List<Argument>,
     val playerOnly: Boolean = false,
     playerOnlyMessage: String = "",
+    val opOnly: Boolean = false,
+    opOnlyMessage: String = "",
     usageMessage: String = "",
     permission: String = "",
     permissionMessage: String = "",
@@ -36,6 +38,12 @@ class SingleCommandBuilder @JvmOverloads constructor(
             }
         }
 
+    val opOnlyMessage: String = opOnlyMessage
+        get() {
+            return field.ifEmpty {
+                Message.OpOnly.toLocalization()
+            }
+        }
     val usageMessage: String = usageMessage
         get() {
             return field.ifEmpty {

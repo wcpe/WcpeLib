@@ -20,6 +20,8 @@ annotation class ParentCommand(
     val aliases: Array<String> = [],
     val playerOnly: Boolean = false,
     val playerOnlyMessage: String = "",
+    val opOnly: Boolean = false,
+    val opOnlyMessage: String = "",
     val usageMessage: String = "",
     val permission: String = "",
     val permissionMessage: String = "",

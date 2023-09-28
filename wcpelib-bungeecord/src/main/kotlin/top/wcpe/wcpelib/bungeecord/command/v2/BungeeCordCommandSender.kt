@@ -30,6 +30,10 @@ value class BungeeCordCommandSender(private val commandSender: net.md_5.bungee.a
         return commandSender is ProxiedPlayer
     }
 
+    override fun isOp(): Boolean {
+        return false
+    }
+
     override fun sendMessage(message: String) {
         commandSender.sendMessage(message)
     }

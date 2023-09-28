@@ -20,6 +20,8 @@ abstract class ChildCommand @JvmOverloads constructor(
     arguments: List<Argument> = listOf(),
     playerOnly: Boolean = false,
     playerOnlyMessage: String = "",
+    opOnly: Boolean = false,
+    opOnlyMessage: String = "",
     usageMessage: String = "",
     permission: String = "",
     permissionMessage: String = "",
@@ -31,6 +33,8 @@ abstract class ChildCommand @JvmOverloads constructor(
         arguments,
         playerOnly,
         playerOnlyMessage,
+        opOnly,
+        opOnlyMessage,
         usageMessage,
         permission,
         permissionMessage
@@ -45,5 +49,7 @@ abstract class ChildCommand @JvmOverloads constructor(
     arguments = childCommandBuilder.arguments,
     usageMessage = childCommandBuilder.usageMessage,
     playerOnly = childCommandBuilder.playerOnly,
-    playerOnlyMessage = childCommandBuilder.playerOnlyMessage
+    playerOnlyMessage = childCommandBuilder.playerOnlyMessage,
+    opOnly = childCommandBuilder.opOnly,
+    opOnlyMessage = childCommandBuilder.opOnlyMessage
 )

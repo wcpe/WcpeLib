@@ -15,6 +15,7 @@ package top.wcpe.wcpelib.common
 enum class Message(val path: String) {
     ShouldPermission("should-permission"),
     PlayerOnly("player-only"),
+    OpOnly("op-only"),
     OptionalFormat("optional-format"),
     RequiredFormat("required-format"),
     UsageMessageFormat("usage-message-format"),
