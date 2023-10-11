@@ -17,8 +17,12 @@ import java.util.function.Consumer
  */
 class Redis {
     private val jedisPool: JedisPool
+    val index: Int
+    val expire: Long
 
     constructor(url: String, port: Int) {
+        this.index = 0
+        this.expire = 43200
         this.jedisPool = JedisPool(url, port)
     }
 
@@ -40,6 +44,8 @@ class Redis {
         port,
         timeOut,
         null,
+        0,
+        43200,
         maxTotal,
         maxIdle,
         minIdle,
@@ -56,6 +62,8 @@ class Redis {
         port: Int,
         timeOut: Int,
         password: String?,
+        index: Int,
+        expire: Long,
         maxTotal: Int,
         maxIdle: Int,
         minIdle: Int,
@@ -66,6 +74,8 @@ class Redis {
         testOnBorrow: Boolean,
         testOnReturn: Boolean
     ) {
+        this.index = index
+        this.expire = expire
         val jedisPoolConfig = JedisPoolConfig()
         jedisPoolConfig.maxTotal = maxTotal
         jedisPoolConfig.maxIdle = maxIdle
@@ -84,23 +94,27 @@ class Redis {
     }
 
     fun getResource(): Jedis {
-        return jedisPool.resource
+        return jedisPool.resource.apply {
+            select(index)
+        }
     }
 
     fun getResource(index: Int): Jedis {
-        return getResource().apply {
+        return jedisPool.resource.apply {
             select(index)
         }
     }
 
     fun getResourceProxy(): ResourceProxy {
-        return ResourceProxy(jedisPool.resource)
+        return ResourceProxy(jedisPool.resource.apply {
+            select(index)
+        }, expire)
     }
 
     fun getResourceProxy(index: Int): ResourceProxy {
-        return ResourceProxy(jedisPool.resource).apply {
+        return ResourceProxy(jedisPool.resource.apply {
             select(index)
-        }
+        }, expire)
     }
 
 

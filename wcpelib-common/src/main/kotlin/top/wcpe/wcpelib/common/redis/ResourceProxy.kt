@@ -15,7 +15,7 @@ import java.io.Closeable
  * @author : WCPE
  * @since  : v1.1.1-alpha-dev-2
  */
-class ResourceProxy(private val jedis: Jedis) : Closeable {
+class ResourceProxy(private val jedis: Jedis, val expire: Long) : Closeable {
 
     fun select(index: Int): String? {
         return jedis.select(index)
@@ -34,7 +34,9 @@ class ResourceProxy(private val jedis: Jedis) : Closeable {
     }
 
     operator fun set(key: String, value: String): String? {
-        return jedis.set(key, value)
+        val result = jedis.set(key, value)
+        jedis.expire(key, expire)
+        return result
     }
 
     fun del(vararg keys: String): Long {

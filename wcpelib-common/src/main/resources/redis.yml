@@ -4,6 +4,10 @@ redis:
   port: 6379
   time-out: 2000
   password: ""
+  index: 0
+  #使用第几个数据库
+  expire: 43200
+  #过期时间 单位 秒
   max-total: 100
   max-idle: 100
   min-idle: 0

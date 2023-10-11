@@ -124,6 +124,8 @@ object WcpeLibCommon {
                 port,
                 configAdapter.getInt("redis.time-out"),
                 configAdapter.getString("redis.password").ifEmpty { null },
+                configAdapter.getInt("redis.index"),
+                configAdapter.getLong("redis.expire"),
                 configAdapter.getInt("redis.max-total"),
                 configAdapter.getInt("redis.max-idle"),
                 configAdapter.getInt("redis.min-idle"),
