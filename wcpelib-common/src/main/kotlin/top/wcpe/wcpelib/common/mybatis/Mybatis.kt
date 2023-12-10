@@ -59,7 +59,7 @@ data class Mybatis(
         return database
     }
 
-    lateinit var sqlSessionFactory: SqlSessionFactory
+    var sqlSessionFactory: SqlSessionFactory
         private set
 
     init {

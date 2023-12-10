@@ -2,6 +2,8 @@ package top.wcpe.wcpelib.bukkit.command.v2
 
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
+import org.bukkit.command.PluginIdentifiableCommand
+import org.bukkit.plugin.Plugin
 import top.wcpe.wcpelib.common.command.v2.AbstractCommand
 
 /**
@@ -16,12 +18,12 @@ import top.wcpe.wcpelib.common.command.v2.AbstractCommand
  * @author : WCPE
  * @since  : v1.2.0-alpha-dev-1
  */
-class BukkitCommand(private val abstractCommand: AbstractCommand) : Command(
+class BukkitCommand(private val abstractCommand: AbstractCommand, private val plugin: Plugin) : Command(
     abstractCommand.name,
     abstractCommand.description,
     abstractCommand.usageMessage,
     abstractCommand.aliases
-) {
+), PluginIdentifiableCommand {
     init {
         permissionMessage = abstractCommand.permission
     }
@@ -34,4 +36,9 @@ class BukkitCommand(private val abstractCommand: AbstractCommand) : Command(
     override fun tabComplete(commandSender: CommandSender, alias: String, args: Array<String>): List<String> {
         return abstractCommand.handleTabComplete(BukkitCommandSender(commandSender), args)
     }
+
+    override fun getPlugin(): Plugin {
+        return plugin
+    }
+
 }

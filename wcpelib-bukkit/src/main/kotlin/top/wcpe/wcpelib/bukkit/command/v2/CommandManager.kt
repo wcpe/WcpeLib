@@ -70,19 +70,9 @@ object CommandManager {
     private val bukkitCommandMap = mutableMapOf<String, BukkitCommand>()
 
     @JvmStatic
-    fun registerBukkitCommand(command: Command, instance: JavaPlugin): Boolean {
-        val commandName = command.name
+    fun registerBukkitCommand(command: Command): Boolean {
         val commandMap = getCommandMap(Bukkit.getServer()) ?: return false
-        val knownCommands = getKnownCommands(commandMap) ?: return false
-
-        knownCommands[commandName] = command
-        knownCommands[commandName.lowercase()] = command
-        knownCommands["${instance.name.lowercase()}:$commandName"] = command
-        for (alias in command.aliases) {
-            knownCommands[alias] = command
-            knownCommands["${commandName.lowercase()}:$alias"] = command
-        }
-        return if (command.register(commandMap)) {
+        return if (commandMap.register(command.name.lowercase(), command)) {
             logger.info("注册指令: ${command.name} 成功!")
             true
         } else {
@@ -103,8 +93,8 @@ object CommandManager {
                 logger.info("注销指令: ${coverBukkitCommand.name} 失败! 您的指令可能并不会生效")
             }
         }
-        val bukkitCommand = BukkitCommand(abstractCommand)
-        return if (registerBukkitCommand(bukkitCommand, instance)) {
+        val bukkitCommand = BukkitCommand(abstractCommand, instance)
+        return if (registerBukkitCommand(bukkitCommand)) {
             bukkitCommandMap[commandName] = bukkitCommand
             true
         } else {
