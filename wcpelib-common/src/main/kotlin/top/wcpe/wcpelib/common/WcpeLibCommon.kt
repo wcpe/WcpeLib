@@ -4,6 +4,8 @@ import top.wcpe.wcpelib.common.adapter.ConfigAdapter
 import top.wcpe.wcpelib.common.adapter.LoggerAdapter
 import top.wcpe.wcpelib.common.commands.wcpelib.WcpeLibParentCommand
 import top.wcpe.wcpelib.common.ktor.Ktor
+import top.wcpe.wcpelib.common.mail.Mail
+import top.wcpe.wcpelib.common.mail.MailConfig
 import top.wcpe.wcpelib.common.mybatis.Mybatis
 import top.wcpe.wcpelib.common.redis.Redis
 
@@ -33,6 +35,7 @@ object WcpeLibCommon {
     private var mysqlConfigAdapter: ConfigAdapter? = null
     private var redisConfigAdapter: ConfigAdapter? = null
     private var ktorConfigAdapter: ConfigAdapter? = null
+    private var mailConfigAdapter: ConfigAdapter? = null
 
     fun init(platformAdapter: PlatformAdapter) {
         this.platformAdapter = platformAdapter
@@ -40,7 +43,7 @@ object WcpeLibCommon {
         loggerAdapter = platformAdapter.createLoggerAdapter()
         mysqlConfigAdapter = platformAdapter.createConfigAdapter("mysql.yml")
         redisConfigAdapter = platformAdapter.createConfigAdapter("redis.yml")
-        ktorConfigAdapter = platformAdapter.createConfigAdapter("ktor.yml")
+        mailConfigAdapter = platformAdapter.createConfigAdapter("mail.yml")
         messageConfigAdapter = platformAdapter.createConfigAdapter("message.yml")
         createCompose()
 
@@ -53,6 +56,7 @@ object WcpeLibCommon {
         mysqlConfigAdapter?.reloadConfig()
         redisConfigAdapter?.reloadConfig()
         ktorConfigAdapter?.reloadConfig()
+        mailConfigAdapter?.reloadConfig()
         messageConfigAdapter?.reloadConfig()
         createCompose()
     }
@@ -60,11 +64,13 @@ object WcpeLibCommon {
     var mybatis: Mybatis? = null
     var redis: Redis? = null
     var ktor: Ktor? = null
+    var mail: Mail? = null
 
     private fun createCompose() {
         createMyBatis()
         createRedis()
         createKtor()
+        createMail()
     }
 
     private fun createMyBatis() {
@@ -149,10 +155,20 @@ object WcpeLibCommon {
         ktor = Ktor(configAdapter.getInt("ktor.port"))
     }
 
+    private fun createMail() {
+        val configAdapter = mailConfigAdapter ?: return
+        val mailSection = configAdapter.getSection("mail") ?: return
+        loggerAdapter.info("Mail 开启! 开始创建邮件配置文件!")
+        val mailConfig = MailConfig.load(mailSection) ?: return
+        loggerAdapter.info("创建邮件配置文件成功!")
+        mail = Mail(mailConfig)
+    }
+
     init {
         createMyBatis()
         createRedis()
         createKtor()
+        createMail()
     }
 
 }

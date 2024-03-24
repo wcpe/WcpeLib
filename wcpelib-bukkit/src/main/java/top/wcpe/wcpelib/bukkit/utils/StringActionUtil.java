@@ -17,21 +17,24 @@ public class StringActionUtil {
      * [ACTION]快捷栏消息
      * [BD]服务器公告
      *
-     * @param stringActionList
+     * @param stringActionList     执行的操作列表
      * @param parserPlaceholderApi 是否解析 PlaceholderApi 注册的变量
-     * @param player
+     * @param player               玩家
      */
     public static void executionCommands(List<String> stringActionList, boolean parserPlaceholderApi, Player player) {
         for (String command : stringActionList) {
-            executionCommands(command, parserPlaceholderApi, player);
+            try {
+                executionCommands(command, parserPlaceholderApi, player);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private static String setPlaceholders(Player p, String text) {
         try {
             Class<?> forName = Class.forName("me.clip.placeholderapi.PlaceholderAPI");
-            text = (String) forName.getMethod("setPlaceholders", Player.class, String.class).invoke(null, p,
-                    text);
+            text = (String) forName.getMethod("setPlaceholders", Player.class, String.class).invoke(null, p, text);
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException |
                  IllegalArgumentException | InvocationTargetException e) {
             e.printStackTrace();
@@ -49,13 +52,17 @@ public class StringActionUtil {
      * [ACTION]快捷栏消息
      * [BD]服务器公告
      *
-     * @param stringAction
+     * @param stringAction         执行的操作列表
      * @param parserPlaceholderApi 是否解析 PlaceholderApi 注册的变量
-     * @param player
+     * @param player               玩家
      */
     public static void executionCommands(String stringAction, boolean parserPlaceholderApi, Player player) {
-        if (player != null)
+        if (stringAction == null) {
+            return;
+        }
+        if (player != null) {
             stringAction = stringAction.replace("%player%", player.getName());
+        }
         if (stringAction.startsWith("[CMD]")) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), stringAction.substring(5));
             return;

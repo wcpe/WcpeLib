@@ -15,7 +15,7 @@ import top.wcpe.wcpelib.common.command.v2.annotation.SingleCommand
  * <p>
  * QQ      : 1837019522
  * @author : WCPE
- * @since  : v
+ * @since  : v1.2.1
  */
 class SingleCommandTest {
     @Test

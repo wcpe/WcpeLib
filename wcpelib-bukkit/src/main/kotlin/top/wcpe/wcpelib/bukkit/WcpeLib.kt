@@ -31,7 +31,7 @@ import java.io.File
  * <p>
  * QQ      : 1837019522
  * @author : WCPE
- * @since  : v
+ * @since  : v1.2.1
  */
 class WcpeLib : JavaPlugin(), PlatformAdapter {
     companion object {
