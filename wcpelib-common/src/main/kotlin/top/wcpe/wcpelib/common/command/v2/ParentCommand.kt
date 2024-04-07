@@ -27,6 +27,7 @@ abstract class ParentCommand @JvmOverloads constructor(
     usageMessage: String = "",
     permission: String = "",
     permissionMessage: String = "",
+    private val opVisibleHelp: Boolean = false,
     parentCommandBuilder: ParentCommandBuilder = ParentCommandBuilder(
         name = name,
         description = description,
@@ -37,8 +38,9 @@ abstract class ParentCommand @JvmOverloads constructor(
         opOnlyMessage = opOnlyMessage,
         usageMessage = usageMessage,
         permission = permission,
-        permissionMessage = permissionMessage
-    )
+        permissionMessage = permissionMessage,
+        opVisibleHelp = opVisibleHelp
+    ),
 ) : AbstractCommand(
     name = parentCommandBuilder.name,
     description = parentCommandBuilder.description,
@@ -105,6 +107,9 @@ abstract class ParentCommand @JvmOverloads constructor(
     private val pageSize = 5
 
     private fun sendHelper(commandSender: CommandSender<*>, page: Int) {
+        if (opVisibleHelp && !commandSender.isOp()) {
+            return
+        }
         val childCommands = childCommandMap.filter { (_, command) ->
             command.shouldDisplay || command.permission == "*" || commandSender.hasPermission(command.permission)
         }.map { it.value }

@@ -26,6 +26,7 @@ class ParentCommandBuilder @JvmOverloads constructor(
     usageMessage: String = "",
     permission: String = "",
     permissionMessage: String = "",
+    val opVisibleHelp: Boolean = false,
 ) {
 
     val description: String = description

@@ -25,4 +25,5 @@ annotation class ParentCommand(
     val usageMessage: String = "",
     val permission: String = "",
     val permissionMessage: String = "",
+    val opVisibleHelp: Boolean = false,
 )

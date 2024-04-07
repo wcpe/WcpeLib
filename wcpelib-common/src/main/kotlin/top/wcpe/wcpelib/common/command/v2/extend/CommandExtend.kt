@@ -28,7 +28,7 @@ inline fun singleCommand(
     permissionMessage: String = "",
     commandExecutor: CommandExecutor? = null,
     tabCompleter: TabCompleter? = null,
-    crossinline runnable: SingleCommand.() -> Unit = {}
+    crossinline runnable: SingleCommand.() -> Unit = {},
 ): SingleCommand {
     return object : SingleCommand(
         name,
@@ -51,7 +51,7 @@ inline fun singleCommand(
 }
 
 inline fun singleCommand(
-    singleCommandBuilder: SingleCommandBuilder, crossinline runnable: SingleCommand.() -> Unit = {}
+    singleCommandBuilder: SingleCommandBuilder, crossinline runnable: SingleCommand.() -> Unit = {},
 ): SingleCommand {
     return singleCommand(
         name = singleCommandBuilder.name,
@@ -81,7 +81,8 @@ inline fun parentCommand(
     usageMessage: String = "",
     permission: String = "",
     permissionMessage: String = "",
-    crossinline runnable: ParentCommand.() -> Unit = {}
+    opVisibleHelp: Boolean = false,
+    crossinline runnable: ParentCommand.() -> Unit = {},
 ): ParentCommand {
     return object : ParentCommand(
         name,
@@ -93,12 +94,13 @@ inline fun parentCommand(
         opOnlyMessage,
         usageMessage,
         permission,
-        permissionMessage
+        permissionMessage,
+        opVisibleHelp
     ) {}.also(runnable)
 }
 
 inline fun parentCommand(
-    parentCommandBuilder: ParentCommandBuilder, crossinline runnable: ParentCommand.() -> Unit = {}
+    parentCommandBuilder: ParentCommandBuilder, crossinline runnable: ParentCommand.() -> Unit = {},
 ): ParentCommand {
     return parentCommand(
         name = parentCommandBuilder.name,
@@ -109,6 +111,7 @@ inline fun parentCommand(
         usageMessage = parentCommandBuilder.usageMessage,
         permission = parentCommandBuilder.permission,
         permissionMessage = parentCommandBuilder.permissionMessage,
+        opVisibleHelp = parentCommandBuilder.opVisibleHelp,
         runnable = runnable
     )
 }
@@ -128,7 +131,7 @@ inline fun ParentCommand.childCommand(
     shouldDisplay: Boolean = false,
     commandExecutor: CommandExecutor? = null,
     tabCompleter: TabCompleter? = null,
-    crossinline runnable: ChildCommand.() -> Unit = {}
+    crossinline runnable: ChildCommand.() -> Unit = {},
 ): ChildCommand {
     return childCommand(
         name,
@@ -149,7 +152,7 @@ inline fun ParentCommand.childCommand(
 }
 
 inline fun ParentCommand.childCommand(
-    childCommandBuilder: ChildCommandBuilder, crossinline runnable: ChildCommand.() -> Unit = {}
+    childCommandBuilder: ChildCommandBuilder, crossinline runnable: ChildCommand.() -> Unit = {},
 ): ChildCommand {
     return childCommand(
         name = childCommandBuilder.name,

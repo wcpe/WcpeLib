@@ -35,31 +35,8 @@ object CommandManager {
         return WcpeLibCommon.platformAdapter?.registerCommand(abstractCommand, pluginInstance) ?: false
     }
 
-
     private fun parseAnnotation(commandClass: KClass<*>): AbstractCommand? {
-        return parseSingleCommand(commandClass) ?: parseParentCommand(commandClass)
-    }
-
-    private fun parseSingleCommand(commandClass: KClass<*>): AbstractCommand? {
-        val singleCommandAnnotation = commandClass.findAnnotation<SingleCommand>() ?: return null
-
-        val newInstance = commandClass.createInstance()
-
-        return singleCommand(
-            singleCommandAnnotation.name,
-            singleCommandAnnotation.description,
-            singleCommandAnnotation.aliases.toList(),
-            singleCommandAnnotation.arguments.map { Argument(it.name, it.required, it.description) }.toList(),
-            singleCommandAnnotation.playerOnly,
-            singleCommandAnnotation.playerOnlyMessage,
-            singleCommandAnnotation.opOnly,
-            singleCommandAnnotation.opOnlyMessage,
-            singleCommandAnnotation.usageMessage,
-            singleCommandAnnotation.permission,
-            singleCommandAnnotation.permissionMessage,
-            newInstance as? CommandExecutor,
-            newInstance as? TabCompleter
-        )
+        return parseSingleCommand(commandClass, commandClass.createInstance()) ?: parseParentCommand(commandClass)
     }
 
     private fun parseParentCommand(commandClass: KClass<*>): AbstractCommand? {
@@ -75,7 +52,8 @@ object CommandManager {
             parentCommandAnnotation.opOnlyMessage,
             parentCommandAnnotation.usageMessage,
             parentCommandAnnotation.permission,
-            parentCommandAnnotation.permissionMessage
+            parentCommandAnnotation.permissionMessage,
+            parentCommandAnnotation.opVisibleHelp
         )
 
         for (nestedClass in commandClass.nestedClasses) {
@@ -86,7 +64,7 @@ object CommandManager {
     }
 
     private fun parseChildCommand(
-        parentInstance: top.wcpe.wcpelib.common.command.v2.ParentCommand, commandClass: KClass<*>
+        parentInstance: top.wcpe.wcpelib.common.command.v2.ParentCommand, commandClass: KClass<*>,
     ): top.wcpe.wcpelib.common.command.v2.ChildCommand? {
         val childCommandAnnotation = commandClass.findAnnotation<ChildCommand>() ?: return null
 
@@ -108,6 +86,40 @@ object CommandManager {
             newInstance as? CommandExecutor,
             newInstance as? TabCompleter
         )
+    }
+
+    private fun parseSingleCommand(commandClass: KClass<*>, classInsatnce: Any): AbstractCommand? {
+        val singleCommandAnnotation = commandClass.findAnnotation<SingleCommand>() ?: return null
+
+        // 生成抽象命令对象并返回
+        return singleCommand(
+            singleCommandAnnotation.name,  // 命令名称
+            singleCommandAnnotation.description,  // 命令描述
+            singleCommandAnnotation.aliases.toList(),  // 命令别名列表
+            // 转换命令参数列表为 Argument 对象列表
+            singleCommandAnnotation.arguments.map { Argument(it.name, it.required, it.description) }.toList(),
+            singleCommandAnnotation.playerOnly,  // 是否只允许玩家执行
+            singleCommandAnnotation.playerOnlyMessage,  // 玩家执行时的提示消息
+            singleCommandAnnotation.opOnly,  // 是否只允许管理员执行
+            singleCommandAnnotation.opOnlyMessage,  // 管理员执行时的提示消息
+            singleCommandAnnotation.usageMessage,  // 使用方法的提示消息
+            singleCommandAnnotation.permission,  // 执行命令所需权限
+            singleCommandAnnotation.permissionMessage,  // 权限不足时的提示消息
+            classInsatnce as? CommandExecutor,  // 命令执行器
+            classInsatnce as? TabCompleter  // Tab 补全器
+        )
+    }
+
+
+    /**
+     * 解析单个命令实例，生成对应的抽象命令对象。
+     *
+     * @param singleInstance 单个命令实例，应为实现了 [CommandExecutor] 和 [TabCompleter] 接口的对象。
+     * @return 抽象命令对象，如果无法解析则返回 null。
+     */
+    @JvmStatic
+    fun parseSingleCommand(singleInstance: Any): AbstractCommand? {
+        return parseSingleCommand(singleInstance::class, singleInstance)
     }
 
 
