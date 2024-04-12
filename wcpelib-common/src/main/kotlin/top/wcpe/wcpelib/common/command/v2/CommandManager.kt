@@ -36,7 +36,7 @@ object CommandManager {
     }
 
     private fun parseAnnotation(commandClass: KClass<*>): AbstractCommand? {
-        return parseSingleCommand(commandClass, commandClass.createInstance()) ?: parseParentCommand(commandClass)
+        return parseSingleCommand(commandClass) ?: parseParentCommand(commandClass)
     }
 
     private fun parseParentCommand(commandClass: KClass<*>): AbstractCommand? {
@@ -88,9 +88,10 @@ object CommandManager {
         )
     }
 
-    private fun parseSingleCommand(commandClass: KClass<*>, classInsatnce: Any): AbstractCommand? {
+    private fun parseSingleCommand(commandClass: KClass<*>, classInstance: Any? = null): AbstractCommand? {
         val singleCommandAnnotation = commandClass.findAnnotation<SingleCommand>() ?: return null
 
+        val instance = classInstance ?: commandClass.createInstance()
         // 生成抽象命令对象并返回
         return singleCommand(
             singleCommandAnnotation.name,  // 命令名称
@@ -105,8 +106,8 @@ object CommandManager {
             singleCommandAnnotation.usageMessage,  // 使用方法的提示消息
             singleCommandAnnotation.permission,  // 执行命令所需权限
             singleCommandAnnotation.permissionMessage,  // 权限不足时的提示消息
-            classInsatnce as? CommandExecutor,  // 命令执行器
-            classInsatnce as? TabCompleter  // Tab 补全器
+            instance as? CommandExecutor,  // 命令执行器
+            instance as? TabCompleter  // Tab 补全器
         )
     }
 
