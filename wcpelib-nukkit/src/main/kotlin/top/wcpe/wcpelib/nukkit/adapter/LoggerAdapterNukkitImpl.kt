@@ -1,5 +1,6 @@
 package top.wcpe.wcpelib.nukkit.adapter
 
+import cn.nukkit.plugin.PluginLogger
 import top.wcpe.wcpelib.common.adapter.LoggerAdapter
 import top.wcpe.wcpelib.nukkit.WcpeLib
 
@@ -14,10 +15,8 @@ import top.wcpe.wcpelib.nukkit.WcpeLib
  *
  * @author WCPE
  */
-class LoggerAdapterNukkitImpl : LoggerAdapter {
-
+class LoggerAdapterNukkitImpl(private val logger: PluginLogger = WcpeLib.getInstance().logger) : LoggerAdapter {
     override fun info(msg: String) {
-        WcpeLib.getInstance().logger.info(msg)
+        logger.info(msg)
     }
-
 }

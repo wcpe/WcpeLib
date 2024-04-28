@@ -153,8 +153,8 @@ public final class WcpeLib extends PluginBase implements PlatformAdapter {
     @Override
     public void onEnable() {
         long start = System.currentTimeMillis();
-        itemConfig = new ConfigAdapterNukkitImpl(new File(this.getDataFolder(), "item.yml"));
-        registerEntityConfig = new ConfigAdapterNukkitImpl(new File(this.getDataFolder(), "register-entity.yml"));
+        itemConfig = new ConfigAdapterNukkitImpl(new File(this.getDataFolder(), "item.yml"), this);
+        registerEntityConfig = new ConfigAdapterNukkitImpl(new File(this.getDataFolder(), "register-entity.yml"), this);
         saveDefaultConfig();
         initPlaceholderExtend();
         reloadOtherConfig();
@@ -207,7 +207,7 @@ public final class WcpeLib extends PluginBase implements PlatformAdapter {
     @NotNull
     @Override
     public ConfigAdapter createConfigAdapter(@NotNull String fileName) {
-        return new ConfigAdapterNukkitImpl(new File(getDataFolder(), fileName));
+        return new ConfigAdapterNukkitImpl(new File(getDataFolder(), fileName), this);
     }
 
     @Override

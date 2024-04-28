@@ -4,6 +4,7 @@ import com.google.common.base.Charsets
 import net.md_5.bungee.config.Configuration
 import net.md_5.bungee.config.ConfigurationProvider
 import net.md_5.bungee.config.YamlConfiguration
+import top.wcpe.wcpelib.bungeecord.BungeeCordPlugin
 import top.wcpe.wcpelib.bungeecord.WcpeLib
 import top.wcpe.wcpelib.common.adapter.ConfigAdapter
 import top.wcpe.wcpelib.common.adapter.SectionAdapter
@@ -21,10 +22,14 @@ import java.nio.file.Path
  * @author : WCPE
  * @since  : v1.1.0-alpha-dev-4
  */
-class ConfigAdapterBungeeCordImpl(private val file: File, private val defaultPath: String) : ConfigAdapter {
+class ConfigAdapterBungeeCordImpl(
+    private val file: File,
+    private val defaultPath: String,
+    private val pluginInstance: BungeeCordPlugin = WcpeLib.instance,
+) : ConfigAdapter {
 
     private fun load(file: File): Configuration {
-        val resource = WcpeLib.instance.getResource(defaultPath)
+        val resource = pluginInstance.getResource(defaultPath)
         return if (resource == null) {
             ConfigurationProvider.getProvider(YamlConfiguration::class.java).load(file)
         } else {
@@ -45,7 +50,7 @@ class ConfigAdapterBungeeCordImpl(private val file: File, private val defaultPat
 
     override fun saveDefaultConfig() {
         if (!file.exists()) {
-            WcpeLib.instance.saveResource(file.name, false)
+            pluginInstance.saveResource(file.name, false)
         }
     }
 

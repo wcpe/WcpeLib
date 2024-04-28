@@ -1,5 +1,6 @@
 package top.wcpe.wcpelib.nukkit.adapter
 
+import cn.nukkit.plugin.Plugin
 import cn.nukkit.utils.Config
 import top.wcpe.wcpelib.common.adapter.ConfigAdapter
 import top.wcpe.wcpelib.common.adapter.SectionAdapter
@@ -18,7 +19,9 @@ import java.nio.file.Path
  *
  * @author WCPE
  */
-class ConfigAdapterNukkitImpl(private val file: File) : ConfigAdapter {
+class ConfigAdapterNukkitImpl(
+    private val file: File, private val pluginInstance: Plugin = WcpeLib.getInstance(),
+) : ConfigAdapter {
 
     private var config: Config = file.let {
         saveDefaultConfig()
@@ -27,7 +30,7 @@ class ConfigAdapterNukkitImpl(private val file: File) : ConfigAdapter {
 
     override fun saveDefaultConfig() {
         if (!file.exists()) {
-            WcpeLib.getInstance().saveResource(file.name, false)
+            pluginInstance.saveResource(file.name, false)
         }
     }
 

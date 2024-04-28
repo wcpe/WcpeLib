@@ -2,6 +2,7 @@ package top.wcpe.wcpelib.bukkit.adapter
 
 import com.google.common.base.Charsets
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.plugin.Plugin
 import top.wcpe.wcpelib.bukkit.WcpeLib
 import top.wcpe.wcpelib.common.adapter.ConfigAdapter
 import top.wcpe.wcpelib.common.adapter.SectionAdapter
@@ -20,7 +21,12 @@ import java.nio.file.Path
  *
  * @author WCPE
  */
-class ConfigAdapterBukkitImpl(private val file: File, private val defaultPath: String) : ConfigAdapter {
+class ConfigAdapterBukkitImpl(
+    private val file: File,
+    private val defaultPath: String,
+    private val pluginInstance: Plugin = WcpeLib.instance,
+) :
+    ConfigAdapter {
 
     private var config: YamlConfiguration = file.let {
         saveDefaultConfig()
@@ -29,7 +35,7 @@ class ConfigAdapterBukkitImpl(private val file: File, private val defaultPath: S
 
     override fun saveDefaultConfig() {
         if (!file.exists()) {
-            WcpeLib.instance.saveResource(file.name, false)
+            pluginInstance.saveResource(file.name, false)
         }
     }
 
@@ -37,7 +43,7 @@ class ConfigAdapterBukkitImpl(private val file: File, private val defaultPath: S
         this.config = YamlConfiguration.loadConfiguration(file)
         this.config.defaults = YamlConfiguration.loadConfiguration(
             InputStreamReader(
-                WcpeLib.instance.getResource(defaultPath),
+                pluginInstance.getResource(defaultPath),
                 Charsets.UTF_8
             )
         )

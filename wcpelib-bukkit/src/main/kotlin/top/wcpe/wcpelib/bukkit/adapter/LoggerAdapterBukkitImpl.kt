@@ -2,6 +2,7 @@ package top.wcpe.wcpelib.bukkit.adapter
 
 import top.wcpe.wcpelib.bukkit.WcpeLib
 import top.wcpe.wcpelib.common.adapter.LoggerAdapter
+import java.util.logging.Logger
 
 /**
  * 由 WCPE 在 2022/1/3 22:56 创建
@@ -14,8 +15,8 @@ import top.wcpe.wcpelib.common.adapter.LoggerAdapter
  *
  * @author WCPE
  */
-class LoggerAdapterBukkitImpl : LoggerAdapter {
+class LoggerAdapterBukkitImpl(private val logger: Logger = WcpeLib.instance.logger) : LoggerAdapter {
     override fun info(msg: String) {
-        WcpeLib.instance.logger.info(msg)
+        logger.info(msg)
     }
 }
