@@ -1,6 +1,7 @@
 package top.wcpe.wcpelib.common.mybatis
 
 import com.alibaba.druid.pool.DruidDataSource
+import org.apache.ibatis.binding.MapperRegistry
 import org.apache.ibatis.mapping.Environment
 import org.apache.ibatis.session.Configuration
 import org.apache.ibatis.session.SqlSession
@@ -44,8 +45,14 @@ data class Mybatis(
     val removeAbandoned: Boolean,
     val removeAbandonedTimeout: Int,
     val logAbandoned: Boolean,
-    val asyncInit: Boolean
+    val asyncInit: Boolean,
 ) {
+    private val mapperRegistryClass = MapperRegistry::class.java
+    private val knownMappersField = mapperRegistryClass.getDeclaredField("knownMappers")
+
+    init {
+        knownMappersField.isAccessible = true
+    }
 
     companion object {
         private val mybatisConfiguration = Configuration()
@@ -110,6 +117,14 @@ data class Mybatis(
         for (clazz in classes) {
             if (clazz == null) continue
             sqlSessionFactory.configuration.addMapper(clazz)
+        }
+    }
+
+    fun removeMapper(vararg classes: Class<*>?) {
+        val getObj = knownMappersField.get(sqlSessionFactory.configuration.mapperRegistry) as? HashMap<*, *> ?: return
+        for (clazz in classes) {
+            if (clazz == null) continue
+            getObj.remove(clazz)
         }
     }
 }

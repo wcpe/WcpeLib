@@ -7,8 +7,6 @@ import top.wcpe.wcpelib.common.command.v2.annotation.SingleCommand
 import top.wcpe.wcpelib.common.command.v2.extend.parentCommand
 import top.wcpe.wcpelib.common.command.v2.extend.singleCommand
 import kotlin.reflect.KClass
-import kotlin.reflect.full.createInstance
-import kotlin.reflect.full.findAnnotation
 
 /**
  * 由 WCPE 在 2023/7/26 13:41 创建
@@ -35,12 +33,27 @@ object CommandManager {
         return WcpeLibCommon.platformAdapter?.registerCommand(abstractCommand, pluginInstance) ?: false
     }
 
-    private fun parseAnnotation(commandClass: KClass<*>): AbstractCommand? {
+    private fun parseAnnotation(commandClass: Class<*>): AbstractCommand? {
         return parseSingleCommand(commandClass) ?: parseParentCommand(commandClass)
     }
 
-    private fun parseParentCommand(commandClass: KClass<*>): AbstractCommand? {
-        val parentCommandAnnotation = commandClass.findAnnotation<ParentCommand>() ?: return null
+    private inline fun <reified T> findAnnotation(commandClass: Class<*>): T? {
+        for (annotation in commandClass.annotations) {
+            if (annotation is T) {
+                return annotation
+            }
+        }
+        return null
+    }
+
+    private fun newInstance(clazz: Class<*>): Any? {
+        val constructor = clazz.getDeclaredConstructor()
+        constructor.isAccessible = true
+        return constructor.newInstance()
+    }
+
+    private fun parseParentCommand(commandClass: Class<*>): AbstractCommand? {
+        val parentCommandAnnotation = findAnnotation<ParentCommand>(commandClass) ?: return null
 
         val parentCommand = parentCommand(
             parentCommandAnnotation.name,
@@ -56,7 +69,7 @@ object CommandManager {
             parentCommandAnnotation.opVisibleHelp
         )
 
-        for (nestedClass in commandClass.nestedClasses) {
+        for (nestedClass in commandClass.getDeclaredClasses()) {
             parentCommand.addChildCommand(parseChildCommand(parentCommand, nestedClass) ?: continue)
         }
 
@@ -64,11 +77,11 @@ object CommandManager {
     }
 
     private fun parseChildCommand(
-        parentInstance: top.wcpe.wcpelib.common.command.v2.ParentCommand, commandClass: KClass<*>,
+        parentInstance: top.wcpe.wcpelib.common.command.v2.ParentCommand, commandClass: Class<*>,
     ): top.wcpe.wcpelib.common.command.v2.ChildCommand? {
-        val childCommandAnnotation = commandClass.findAnnotation<ChildCommand>() ?: return null
+        val childCommandAnnotation = findAnnotation<ChildCommand>(commandClass) ?: return null
 
-        val newInstance = commandClass.createInstance()
+        val newInstance = newInstance(commandClass)
 
         return parentInstance.childCommand(
             childCommandAnnotation.name,
@@ -88,10 +101,10 @@ object CommandManager {
         )
     }
 
-    private fun parseSingleCommand(commandClass: KClass<*>, classInstance: Any? = null): AbstractCommand? {
-        val singleCommandAnnotation = commandClass.findAnnotation<SingleCommand>() ?: return null
+    private fun parseSingleCommand(commandClass: Class<*>, classInstance: Any? = null): AbstractCommand? {
+        val singleCommandAnnotation = findAnnotation<SingleCommand>(commandClass) ?: return null
 
-        val instance = classInstance ?: commandClass.createInstance()
+        val instance = classInstance ?: newInstance(commandClass)
         // 生成抽象命令对象并返回
         return singleCommand(
             singleCommandAnnotation.name,  // 命令名称
@@ -120,7 +133,7 @@ object CommandManager {
      */
     @JvmStatic
     fun parseSingleCommand(singleInstance: Any): AbstractCommand? {
-        return parseSingleCommand(singleInstance::class, singleInstance)
+        return parseSingleCommand(singleInstance::class.java, singleInstance)
     }
 
 
@@ -145,7 +158,7 @@ object CommandManager {
      */
     @JvmStatic
     fun registerCommand(commandClass: KClass<*>, pluginInstance: Any): Boolean {
-        val parseAnnotation = parseAnnotation(commandClass) ?: return false
+        val parseAnnotation = parseAnnotation(commandClass.java) ?: return false
         return registerCommand(parseAnnotation, pluginInstance)
     }
 }
