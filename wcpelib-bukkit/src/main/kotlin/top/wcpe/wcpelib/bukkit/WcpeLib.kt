@@ -1,5 +1,9 @@
 package top.wcpe.wcpelib.bukkit
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import org.bukkit.plugin.java.JavaPlugin
 import top.wcpe.wcpelib.bukkit.adapter.ConfigAdapterBukkitImpl
 import top.wcpe.wcpelib.bukkit.adapter.LoggerAdapterBukkitImpl
@@ -81,8 +85,12 @@ class WcpeLib : JavaPlugin(), PlatformAdapter {
 
         @JvmStatic
         fun getServerName(): String {
-            return instance.getConfig().getString("server-name")
+            return instance.config.getString("server-name")
         }
+
+        @JvmStatic
+        val pluginScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
     }
 
 
@@ -150,5 +158,9 @@ class WcpeLib : JavaPlugin(), PlatformAdapter {
             abstractCommand,
             pluginInstance
         )
+    }
+
+    override fun onDisable() {
+        pluginScope.cancel()
     }
 }
