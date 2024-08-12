@@ -60,6 +60,7 @@ object StringActionTool {
         }
     }
 
+    @JvmStatic
     fun compatibleEval(stringAction: String, parserPlaceholderApi: Boolean, player: Player?) {
         WcpeLib.pluginScope.launch {
             eval(stringAction, parserPlaceholderApi, player)

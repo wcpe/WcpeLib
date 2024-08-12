@@ -2,7 +2,6 @@ package top.wcpe.wcpelib.common.redis
 
 import redis.clients.jedis.Jedis
 import redis.clients.jedis.JedisPool
-import redis.clients.jedis.JedisPoolConfig
 import java.util.function.Consumer
 
 /**
@@ -15,79 +14,17 @@ import java.util.function.Consumer
  * @author : WCPE
  * @since  : v1.0.7-alpha-dev-1
  */
-class Redis {
-    private val jedisPool: JedisPool
-    val index: Int
-    val expire: Long
+object Redis {
+    private lateinit var jedisPool: JedisPool
 
-    constructor(url: String, port: Int) {
-        this.index = 0
-        this.expire = 43200
-        this.jedisPool = JedisPool(url, port)
+
+    fun init(redisInstance: RedisInstance): Redis {
+        this.redisInstance = redisInstance
+        jedisPool = redisInstance.build()
+        return this
     }
 
-    constructor(
-        url: String,
-        port: Int,
-        timeOut: Int,
-        maxTotal: Int,
-        maxIdle: Int,
-        minIdle: Int,
-        jmxEnabled: Boolean,
-        testOnCreate: Boolean,
-        blockWhenExhausted: Boolean,
-        maxWaitMillis: Int,
-        testOnBorrow: Boolean,
-        testOnReturn: Boolean
-    ) : this(
-        url,
-        port,
-        timeOut,
-        null,
-        0,
-        43200,
-        maxTotal,
-        maxIdle,
-        minIdle,
-        jmxEnabled,
-        testOnCreate,
-        blockWhenExhausted,
-        maxWaitMillis,
-        testOnBorrow,
-        testOnReturn
-    )
-
-    constructor(
-        url: String,
-        port: Int,
-        timeOut: Int,
-        password: String?,
-        index: Int,
-        expire: Long,
-        maxTotal: Int,
-        maxIdle: Int,
-        minIdle: Int,
-        jmxEnabled: Boolean,
-        testOnCreate: Boolean,
-        blockWhenExhausted: Boolean,
-        maxWaitMillis: Int,
-        testOnBorrow: Boolean,
-        testOnReturn: Boolean
-    ) {
-        this.index = index
-        this.expire = expire
-        val jedisPoolConfig = JedisPoolConfig()
-        jedisPoolConfig.maxTotal = maxTotal
-        jedisPoolConfig.maxIdle = maxIdle
-        jedisPoolConfig.minIdle = minIdle
-        jedisPoolConfig.jmxEnabled = jmxEnabled
-        jedisPoolConfig.testOnCreate = testOnCreate
-        jedisPoolConfig.blockWhenExhausted = blockWhenExhausted
-        jedisPoolConfig.maxWaitMillis = maxWaitMillis.toLong()
-        jedisPoolConfig.testOnBorrow = testOnBorrow
-        jedisPoolConfig.testOnReturn = testOnReturn
-        this.jedisPool = JedisPool(jedisPoolConfig, url, port, timeOut, password)
-    }
+    private lateinit var redisInstance: RedisInstance
 
     fun close() {
         jedisPool.close()
@@ -95,7 +32,7 @@ class Redis {
 
     fun getResource(): Jedis {
         return jedisPool.resource.apply {
-            select(index)
+            select(redisInstance.index)
         }
     }
 
@@ -107,14 +44,14 @@ class Redis {
 
     fun getResourceProxy(): ResourceProxy {
         return ResourceProxy(jedisPool.resource.apply {
-            select(index)
-        }, expire)
+            select(redisInstance.index)
+        }, redisInstance.expire)
     }
 
     fun getResourceProxy(index: Int): ResourceProxy {
         return ResourceProxy(jedisPool.resource.apply {
             select(index)
-        }, expire)
+        }, redisInstance.expire)
     }
 
 

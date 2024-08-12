@@ -24,7 +24,7 @@ public class StringActionUtil {
      * @param player               玩家
      */
     public static void executionCommands(@NotNull List<String> stringActionList, boolean parserPlaceholderApi, @Nullable Player player) {
-        StringActionTool.INSTANCE.eval(stringActionList, parserPlaceholderApi, player);
+        StringActionTool.eval(stringActionList, parserPlaceholderApi, player);
     }
 
     /**
@@ -40,6 +40,6 @@ public class StringActionUtil {
      * @param player               玩家
      */
     public static void executionCommands(@NotNull String stringAction, boolean parserPlaceholderApi, @Nullable Player player) {
-        StringActionTool.INSTANCE.compatibleEval(stringAction, parserPlaceholderApi, player);
+        StringActionTool.compatibleEval(stringAction, parserPlaceholderApi, player);
     }
 }
