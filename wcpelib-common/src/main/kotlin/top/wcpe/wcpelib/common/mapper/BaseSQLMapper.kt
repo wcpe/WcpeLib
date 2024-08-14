@@ -58,7 +58,7 @@ interface BaseSQLMapper {
         """
         SELECT
         CASE
-        WHEN COUNT(*) > 1
+        WHEN COUNT(*) >= 1
         THEN 1
         ELSE 0
         END

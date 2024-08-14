@@ -15,12 +15,21 @@ import java.util.function.Consumer
  * @since  : v1.0.7-alpha-dev-1
  */
 object Mybatis {
+
     fun init(mybatisInstance: MybatisInstance): Mybatis {
         this.mybatisInstance = mybatisInstance
+        this.database = mybatisInstance.database
         return this
     }
 
+
     private lateinit var mybatisInstance: MybatisInstance
+
+    lateinit var database: String
+
+    fun getDatabaseName(): String {
+        return mybatisInstance.database
+    }
 
     val sqlSessionFactory by lazy {
         mybatisInstance.sqlSessionFactory
