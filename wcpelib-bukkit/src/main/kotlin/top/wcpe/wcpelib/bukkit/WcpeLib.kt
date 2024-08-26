@@ -11,6 +11,7 @@ import top.wcpe.wcpelib.bukkit.command.v2.CommandManager
 import top.wcpe.wcpelib.bukkit.data.IDataManager
 import top.wcpe.wcpelib.bukkit.data.impl.MySQLDataManager
 import top.wcpe.wcpelib.bukkit.data.impl.NullDataManager
+import top.wcpe.wcpelib.bukkit.hook.PlaceholderAPIHook
 import top.wcpe.wcpelib.bukkit.version.VersionManager.versionInfo
 import top.wcpe.wcpelib.common.PlatformAdapter
 import top.wcpe.wcpelib.common.WcpeLibCommon.init
@@ -115,6 +116,7 @@ class WcpeLib : JavaPlugin(), PlatformAdapter {
         logger.info("load version: ${server.version}")
         logger.info("nms version: ${versionInfo.nmsClassPath}")
         logger.info("obc version: ${versionInfo.obcClassPath}")
+        logger.info("Hook PlaceholderAPI: ${PlaceholderAPIHook.getPlugin()}")
     }
 
     private fun initDefaultMapper() {
@@ -127,12 +129,13 @@ class WcpeLib : JavaPlugin(), PlatformAdapter {
             return
         }
         dataManager = MySQLDataManager(mybatis)
-        logger.info("始化默认 Mapper 完成 耗时:" + (System.currentTimeMillis() - start) + " Ms")
+        logger.info("始化默认 Mapper 完成 耗时:${(System.currentTimeMillis() - start)} Ms")
     }
 
     override fun reloadAllConfig(): Boolean {
         return try {
             reloadConfig()
+            PlaceholderAPIHook.getPlugin()
             true
         } catch (e: Exception) {
             false

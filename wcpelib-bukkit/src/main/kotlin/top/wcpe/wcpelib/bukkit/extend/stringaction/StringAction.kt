@@ -1,6 +1,7 @@
 package top.wcpe.wcpelib.bukkit.extend.stringaction
 
 import org.bukkit.entity.Player
+import top.wcpe.wcpelib.bukkit.tools.StringActionTool
 import top.wcpe.wcpelib.bukkit.utils.StringActionUtil
 
 /**
@@ -19,4 +20,8 @@ fun String.executionCommands(parserPlaceholderApi: Boolean, player: Player) {
 
 fun List<String>.executionCommands(parserPlaceholderApi: Boolean, player: Player) {
     StringActionUtil.executionCommands(this, parserPlaceholderApi, player)
+}
+
+fun List<String>.evalActions(parserPlaceholderApi: Boolean, player: Player) {
+    StringActionTool.eval(this, parserPlaceholderApi, player)
 }

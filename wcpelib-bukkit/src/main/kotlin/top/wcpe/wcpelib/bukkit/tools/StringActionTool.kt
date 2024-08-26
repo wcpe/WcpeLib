@@ -1,11 +1,13 @@
 package top.wcpe.wcpelib.bukkit.tools
 
+import io.ktor.util.reflect.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import top.wcpe.wcpelib.bukkit.WcpeLib
 import top.wcpe.wcpelib.bukkit.extend.plugin.runTask
+import top.wcpe.wcpelib.bukkit.extend.setPlaceholders
 import java.util.logging.Level
 
 /**
@@ -49,15 +51,33 @@ object StringActionTool {
         }
     }
 
-    private fun setPlaceholders(player: Player?, text: String): String {
-        return try {
-            val forName = Class.forName("me.clip.placeholderapi.PlaceholderAPI")
-            val method = forName.getMethod("setPlaceholders", Player::class.java, String::class.java)
-            method.invoke(null, player, text) as String
-        } catch (e: Exception) {
-            logger.log(Level.WARNING, "无法获取 PlaceholderAPI !", e)
-            text
+    /**
+     * 解析执行操作列表
+     *
+     * @param stringActions 单个操作字符串
+     * @param parserPlaceholderApi 是否解析 PlaceholderApi 注册的变量
+     * @param player 玩家
+     * @param consumerSingleAction 消费单个操作字符串
+     */
+    @JvmStatic
+    fun eval(
+        stringActions: List<String>,
+        parserPlaceholderApi: Boolean,
+        player: Player?,
+        consumerSingleAction: (String) -> String,
+    ) {
+        WcpeLib.pluginScope.launch {
+            for (action in stringActions) {
+                eval(consumerSingleAction(action), parserPlaceholderApi, player)
+            }
         }
+    }
+
+    private fun setPlaceholders(player: Player?, text: String, parserPlaceholderApi: Boolean): String {
+        if (!parserPlaceholderApi || player == null) {
+            return text
+        }
+        return text.setPlaceholders(player)
     }
 
     @JvmStatic
@@ -66,6 +86,7 @@ object StringActionTool {
             eval(stringAction, parserPlaceholderApi, player)
         }
     }
+
 
     /**
      * 解析并执行单个操作
@@ -82,8 +103,6 @@ object StringActionTool {
             stringAction
         }
         try {
-
-
             when {
                 action.startsWith("[DELAY]") -> {
                     val pattern = """\[DELAY](\d+)([smh]?)""".toRegex()
@@ -104,51 +123,65 @@ object StringActionTool {
 
 
                 action.startsWith("[CMD]") -> {
+                    val actionStr = action.substring(5)
+                    val result = setPlaceholders(player, actionStr, parserPlaceholderApi)
                     WcpeLib.instance.runTask {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), action.substring(5))
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), result)
                     }
                 }
 
                 action.startsWith("[BD]") -> {
-                    Bukkit.broadcastMessage(
-                        if (parserPlaceholderApi) setPlaceholders(
-                            player,
-                            action.substring(4)
-                        ) else action.substring(4)
-                    )
+                    val actionStr = action.substring(4)
+                    val result = setPlaceholders(player, actionStr, parserPlaceholderApi)
+                    Bukkit.broadcastMessage(result)
                 }
 
                 action.startsWith("[PLAYER]") -> {
-                    WcpeLib.instance.runTask {
-                        player?.let { Bukkit.dispatchCommand(it, action.substring(8)) }
+                    player?.let { confirmPlayer ->
+                        val actionStr = action.substring(8)
+                        val result = setPlaceholders(player, actionStr, parserPlaceholderApi)
+                        WcpeLib.instance.runTask {
+                            Bukkit.dispatchCommand(confirmPlayer, result)
+                        }
                     }
                 }
 
                 action.startsWith("[CHAT]") -> {
-                    WcpeLib.instance.runTask {
-                        player?.chat(
-                            if (parserPlaceholderApi) setPlaceholders(
-                                player,
-                                action.substring(6)
-                            ) else action.substring(6)
+                    player?.run {
+                        WcpeLib.instance.runTask {
+                            val actionStr = action.substring(6)
+                            val result = setPlaceholders(player, actionStr, parserPlaceholderApi)
+                            chat(result)
+                        }
+                    }
+
+                }
+
+                action.startsWith("[TITLE]") -> {
+                    player?.run {
+                        val actionStr = action.substring(7)
+                        val result = setPlaceholders(player, actionStr, parserPlaceholderApi)
+                        val origin = result.split(";")
+                        val title = origin[3]
+                        val subTitle = origin[4]
+                        val fadeIn = origin[0].toIntOrNull() ?: 10
+                        val stay = origin[1].toIntOrNull() ?: 70
+                        val fadeOut = origin[2].toIntOrNull() ?: 20
+
+                        sendTitle(
+                            title,
+                            subTitle,
+                            fadeIn,
+                            stay,
+                            fadeOut
                         )
                     }
                 }
 
-                action.startsWith("[TITLE]") -> {
-                    val split = action.substring(7).split(";")
-                    player?.sendTitle(
-                        if (parserPlaceholderApi) setPlaceholders(player, split[3]) else split[3],
-                        if (parserPlaceholderApi) setPlaceholders(player, split[4]) else split[4],
-                        split[0].toInt(),
-                        split[1].toInt(),
-                        split[2].toInt()
-                    )
-                }
-
                 else -> {
-                    WcpeLib.instance.runTask {
-                        player?.sendMessage(if (parserPlaceholderApi) setPlaceholders(player, action) else action)
+                    player?.run {
+                        val result = setPlaceholders(player, action, parserPlaceholderApi)
+                        sendMessage(result)
                     }
                 }
             }
