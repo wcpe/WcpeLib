@@ -22,9 +22,9 @@ object Mybatis {
         return this
     }
 
-
-    private lateinit var mybatisInstance: MybatisInstance
-
+    @JvmStatic
+    lateinit var mybatisInstance: MybatisInstance
+    @JvmStatic
     lateinit var database: String
 
     fun getDatabaseName(): String {
