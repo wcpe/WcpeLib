@@ -24,8 +24,9 @@ object Mybatis {
 
     @JvmStatic
     lateinit var mybatisInstance: MybatisInstance
-    @JvmStatic
+
     lateinit var database: String
+
 
     fun getDatabaseName(): String {
         return mybatisInstance.database
@@ -33,6 +34,10 @@ object Mybatis {
 
     val sqlSessionFactory by lazy {
         mybatisInstance.sqlSessionFactory
+    }
+
+    val dataSource by lazy {
+        mybatisInstance.dataSource
     }
 
 

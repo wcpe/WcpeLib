@@ -4,3 +4,5 @@ version: "${version}"
 author: "WCPE 1837019522@qq.com"
 api: [ "1.0.9" ]
 description: "emmm this is plugin lib"
+softdepend:
+  - WcpeLibrary

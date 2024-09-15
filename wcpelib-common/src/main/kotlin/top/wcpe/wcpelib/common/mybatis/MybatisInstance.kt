@@ -11,6 +11,7 @@ import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory
 import top.wcpe.wcpelib.common.adapter.ConfigAdapter
 import top.wcpe.wcpelib.common.mapper.BaseSQLMapper
 import java.util.function.Consumer
+import javax.sql.DataSource
 
 /**
  * 由 WCPE 在 2024/8/8 16:45 创建
@@ -22,7 +23,7 @@ import java.util.function.Consumer
  * <p>
  * QQ      : 1837019522
  * @author : WCPE
- * @since  : v
+ * @since  : v1.8.0
  */
 data class MybatisInstance(
     val url: String,
@@ -125,33 +126,35 @@ data class MybatisInstance(
         knownMappersField.isAccessible = true
     }
 
-    val dataSource = DruidDataSource()
+    val dataSource: DataSource
 
     init {
-        dataSource.url = "jdbc:mysql://${url}:${port}/${database}?${parameter}"
+        val druidDataSource = DruidDataSource()
+        druidDataSource.url = "jdbc:mysql://${url}:${port}/${database}?${parameter}"
 
-        dataSource.username = user
-        dataSource.password = password
+        druidDataSource.username = user
+        druidDataSource.password = password
 
-        dataSource.setFilters(filters)
-        dataSource.maxActive = maxActive
-        dataSource.initialSize = initialSize
-        dataSource.maxWait = maxWait
-        dataSource.minIdle = minIdle
-        dataSource.timeBetweenEvictionRunsMillis = timeBetweenEvictionRunsMillis
-        dataSource.minEvictableIdleTimeMillis = minEvictableIdleTimeMillis
-        dataSource.validationQuery = validationQuery
-        dataSource.isTestWhileIdle = testWhileIdle
-        dataSource.isTestOnBorrow = testOnBorrow
-        dataSource.isTestOnReturn = testOnReturn
-        dataSource.isPoolPreparedStatements = poolPreparedStatements
-        dataSource.maxOpenPreparedStatements = maxOpenPreparedStatements
-        dataSource.isRemoveAbandoned = removeAbandoned
-        dataSource.removeAbandonedTimeout = removeAbandonedTimeout
-        dataSource.isLogAbandoned = logAbandoned
-        dataSource.isAsyncInit = asyncInit
+        druidDataSource.setFilters(filters)
+        druidDataSource.maxActive = maxActive
+        druidDataSource.initialSize = initialSize
+        druidDataSource.maxWait = maxWait
+        druidDataSource.minIdle = minIdle
+        druidDataSource.timeBetweenEvictionRunsMillis = timeBetweenEvictionRunsMillis
+        druidDataSource.minEvictableIdleTimeMillis = minEvictableIdleTimeMillis
+        druidDataSource.validationQuery = validationQuery
+        druidDataSource.isTestWhileIdle = testWhileIdle
+        druidDataSource.isTestOnBorrow = testOnBorrow
+        druidDataSource.isTestOnReturn = testOnReturn
+        druidDataSource.isPoolPreparedStatements = poolPreparedStatements
+        druidDataSource.maxOpenPreparedStatements = maxOpenPreparedStatements
+        druidDataSource.isRemoveAbandoned = removeAbandoned
+        druidDataSource.removeAbandonedTimeout = removeAbandonedTimeout
+        druidDataSource.isLogAbandoned = logAbandoned
+        druidDataSource.isAsyncInit = asyncInit
+        dataSource = druidDataSource
         val environment = Environment(
-            "development", JdbcTransactionFactory(), dataSource
+            "development", JdbcTransactionFactory(), druidDataSource
         )
         mybatisConfiguration.environment = environment
         this.sqlSessionFactory = SqlSessionFactoryBuilder().build(mybatisConfiguration)
