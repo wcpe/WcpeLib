@@ -24,7 +24,9 @@ object Redis {
         return this
     }
 
-    private lateinit var redisInstance: RedisInstance
+    @JvmStatic
+    lateinit var redisInstance: RedisInstance
+
 
     fun close() {
         jedisPool.close()
