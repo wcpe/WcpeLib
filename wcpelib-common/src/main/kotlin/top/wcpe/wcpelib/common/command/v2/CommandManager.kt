@@ -30,7 +30,8 @@ object CommandManager {
      */
     @JvmStatic
     fun registerCommand(abstractCommand: AbstractCommand, pluginInstance: Any): Boolean {
-        return WcpeLibCommon.platformAdapter?.registerCommand(abstractCommand, pluginInstance) ?: false
+        val platformAdapter = WcpeLibCommon.platformAdapter ?: return false
+        return platformAdapter.registerCommand(abstractCommand, pluginInstance)
     }
 
     private fun parseAnnotation(commandClass: Class<*>): AbstractCommand? {

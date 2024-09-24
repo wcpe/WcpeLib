@@ -29,6 +29,13 @@ class BukkitCommand(private val abstractCommand: AbstractCommand, private val pl
     }
 
     override fun execute(commandSender: CommandSender, commandLabel: String, args: Array<String?>): Boolean {
+        if (args.isNotEmpty()) {
+            val arg0 = args[0]
+            if (arg0 == "silent") {
+                abstractCommand.handleExecute(SilentBukkitCommandSender(commandSender), args.drop(1).toTypedArray())
+                return false
+            }
+        }
         abstractCommand.handleExecute(BukkitCommandSender(commandSender), args)
         return false
     }

@@ -1,7 +1,7 @@
 image: gradle:jdk8
 
 stages:
-  - shadowJar
+  - build
   - publish
 
 before_script:
@@ -14,11 +14,11 @@ cache:
   paths:
     - .gradle/wrapper
     - .gradle/caches
-shadowJar:
-  stage: shadowJar
+build:
+  stage: build
   script:
     - chmod +x ./gradlew
-    - ./gradlew shadowJar
+    - ./gradlew build
   artifacts:
     when: on_success
     paths:

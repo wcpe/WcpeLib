@@ -26,7 +26,7 @@ abstract class AbstractCommand(
     val playerOnly: Boolean,
     val playerOnlyMessage: String,
     val opOnly: Boolean,
-    val opOnlyMessage: String
+    val opOnlyMessage: String,
 ) {
 
     var commandExecutor: CommandExecutor? = null
@@ -42,7 +42,7 @@ abstract class AbstractCommand(
     }
 
     private fun requiredArgs(
-        argsStrings: Array<String?>, arguments: List<Argument>
+        argsStrings: Array<String?>, arguments: List<Argument>,
     ): List<Argument> {
         val result = mutableListOf<Argument>()
         for ((i, value) in arguments.withIndex()) {
