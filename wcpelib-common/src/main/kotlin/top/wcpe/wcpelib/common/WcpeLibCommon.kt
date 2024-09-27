@@ -2,7 +2,8 @@ package top.wcpe.wcpelib.common
 
 import top.wcpe.wcpelib.common.adapter.ConfigAdapter
 import top.wcpe.wcpelib.common.adapter.LoggerAdapter
-import top.wcpe.wcpelib.common.commands.wcpelib.WcpeLibParentCommand
+import top.wcpe.wcpelib.common.command.v2.CommandManager
+import top.wcpe.wcpelib.common.commands.WcpeLibCommands
 import top.wcpe.wcpelib.common.ktor.Ktor
 import top.wcpe.wcpelib.common.mail.Mail
 import top.wcpe.wcpelib.common.mail.MailConfig
@@ -50,12 +51,13 @@ object WcpeLibCommon {
         messageConfigAdapter = platformAdapter.createConfigAdapter("message.yml")
         createCompose()
 
-        WcpeLibParentCommand().register(platformAdapter)
+        CommandManager.registerCommand(WcpeLibCommands::class.java, platformAdapter)
 
         loggerAdapter.info("初始化 WcpeLibCommon 完成...")
     }
 
     fun reloadOnlyConfig() {
+        platformAdapter?.reloadAllConfig()
         mysqlConfigAdapter?.reloadConfig()
         redisConfigAdapter?.reloadConfig()
         ktorConfigAdapter?.reloadConfig()

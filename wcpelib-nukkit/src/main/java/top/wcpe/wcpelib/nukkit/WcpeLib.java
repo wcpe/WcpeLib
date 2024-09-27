@@ -186,6 +186,7 @@ public final class WcpeLib extends PluginBase implements PlatformAdapter {
     public boolean reloadAllConfig() {
         try {
             reloadConfig();
+            reloadOtherConfig();
             return true;
         } catch (Exception e) {
             return false;
