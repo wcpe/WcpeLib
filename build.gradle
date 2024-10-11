@@ -17,12 +17,14 @@ buildscript {
             url "https://plugins.gradle.org/m2/"
         }
     }
-    dependencies {
+     dependencies {
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 allprojects {
+    apply plugin: 'com.github.johnrengelman.shadow'
     apply plugin: 'maven-publish'
     repositories {
         mavenLocal()
@@ -65,6 +67,12 @@ subprojects {
 
     jar {
         from {
+            project(':wcpelib-common').sourceSets.main.output
+        }
+    }
+    shadowJar {
+        relocate 'io.netty', 'top.wcpe.lib.io.netty'
+         from {
             project(':wcpelib-common').sourceSets.main.output
         }
     }
