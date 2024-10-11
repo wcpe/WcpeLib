@@ -1,6 +1,7 @@
 package top.wcpe.wcpelib.common.command.v2
 
 import top.wcpe.wcpelib.common.Message
+import top.wcpe.wcpelib.common.command.v2.extend.simpleJoinToString
 import top.wcpe.wcpelib.common.utils.string.StringUtil
 import kotlin.math.max
 
@@ -137,13 +138,7 @@ abstract class ParentCommand @JvmOverloads constructor(
                 Message.CommandHelpFormat.toLocalization(
                     "%space%" to space,
                     "%command_name%" to command.name,
-                    "%arguments%" to command.arguments.joinToString(" ") {
-                        if (it.required) {
-                            Message.RequiredFormat.toLocalization("%command_name%" to it.name)
-                        } else {
-                            Message.OptionalFormat.toLocalization("%command_name%" to it.name)
-                        }
-                    },
+                    "%arguments%" to command.arguments.simpleJoinToString(),
                     "%description%" to command.description,
                     "%permission%" to command.permission
                 )

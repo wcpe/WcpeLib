@@ -1,6 +1,7 @@
 package top.wcpe.wcpelib.common.command.v2
 
 import top.wcpe.wcpelib.common.Message
+import top.wcpe.wcpelib.common.command.v2.extend.simpleJoinToString
 import top.wcpe.wcpelib.common.command.v2.extend.singleCommand
 
 /**
@@ -48,13 +49,7 @@ class SingleCommandBuilder @JvmOverloads constructor(
         get() {
             return field.ifEmpty {
                 Message.UsageMessageFormat.toLocalization(
-                    "%command_name%" to name, "%arguments%" to arguments.joinToString(" ") {
-                        if (it.required) {
-                            Message.RequiredFormat.toLocalization("%command_name%" to it.name)
-                        } else {
-                            Message.OptionalFormat.toLocalization("%command_name%" to it.name)
-                        }
-                    }, "%argument_tip%" to Message.ArgumentTip.toLocalization()
+                    "%command_name%" to name, "%arguments%" to arguments.simpleJoinToString(), "%argument_tip%" to Message.ArgumentTip.toLocalization()
                 )
             }
         }

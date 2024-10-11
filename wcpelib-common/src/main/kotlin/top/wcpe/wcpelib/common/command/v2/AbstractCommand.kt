@@ -120,7 +120,10 @@ abstract class AbstractCommand(
                 Message.CommandArgsError.toLocalization("%arguments%" to requiredArgResult.joinToString(
                     " "
                 ) {
-                    Message.RequiredFormat.toLocalization("%command_name%" to it.name)
+                    Message.RequiredFormat.toLocalization(
+                        "%argument_name%" to it.name,
+                        "%argument_description%" to it.description
+                    )
                 })
             )
             return false

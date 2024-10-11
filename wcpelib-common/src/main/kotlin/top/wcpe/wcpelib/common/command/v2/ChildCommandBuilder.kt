@@ -2,6 +2,7 @@ package top.wcpe.wcpelib.common.command.v2
 
 import top.wcpe.wcpelib.common.Message
 import top.wcpe.wcpelib.common.command.v2.extend.childCommand
+import top.wcpe.wcpelib.common.command.v2.extend.simpleJoinToString
 
 /**
  * 由 WCPE 在 2023/7/26 14:53 创建
@@ -29,7 +30,7 @@ class ChildCommandBuilder @JvmOverloads constructor(
     permission: String = "",
     permissionMessage: String = "",
     val commandExecutor: CommandExecutor? = null,
-    val tabCompleter: TabCompleter? = null
+    val tabCompleter: TabCompleter? = null,
 ) {
 
     val description: String = description
@@ -58,13 +59,7 @@ class ChildCommandBuilder @JvmOverloads constructor(
             return field.ifEmpty {
                 Message.UsageMessageFormat.toLocalization(
                     "%command_name%" to parentCommand.name,
-                    "%arguments%" to arguments.joinToString(" ", prefix = "$name ") {
-                        if (it.required) {
-                            Message.RequiredFormat.toLocalization("%command_name%" to it.name)
-                        } else {
-                            Message.OptionalFormat.toLocalization("%command_name%" to it.name)
-                        }
-                    },
+                    "%arguments%" to "$name ${arguments.simpleJoinToString()}",
                     "%argument_tip%" to Message.ArgumentTip.toLocalization()
                 )
             }

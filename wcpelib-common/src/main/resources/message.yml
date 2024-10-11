@@ -1,8 +1,8 @@
 should-permission: "需要权限 %permission% 才能执行此命令!"
 player-only: "执行人必须是玩家!"
 op-only: "执行人必须是管理员!"
-optional-format: "§e[§8%command_name%§e]"
-required-format: "§e<§6%command_name%§e>"
+optional-format: "§e[§8%argument_name%§e:§8%argument_description%§e]"
+required-format: "§e<§6%argument_name%§e:§6%argument_description%§e>"
 usage-message-format:
   - '§e使用方式: §b/%command_name% %arguments%'
   - '%argument_tip%'

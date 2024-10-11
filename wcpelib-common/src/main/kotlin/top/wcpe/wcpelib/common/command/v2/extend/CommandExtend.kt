@@ -1,5 +1,6 @@
 package top.wcpe.wcpelib.common.command.v2.extend
 
+import top.wcpe.wcpelib.common.Message
 import top.wcpe.wcpelib.common.command.v2.*
 
 /**
@@ -174,4 +175,20 @@ inline fun arguments(crossinline block: ArgumentsBuilder.() -> Unit): List<Argum
     val builder = ArgumentsBuilder()
     builder.block()
     return builder.arguments
+}
+
+fun List<Argument>.simpleJoinToString(): String {
+    return joinToString(" ") {
+        if (it.required) {
+            Message.RequiredFormat.toLocalization(
+                "%argument_name%" to it.name,
+                "%argument_description%" to it.description
+            )
+        } else {
+            Message.OptionalFormat.toLocalization(
+                "%argument_name%" to it.name,
+                "%argument_description%" to it.description
+            )
+        }
+    }
 }
