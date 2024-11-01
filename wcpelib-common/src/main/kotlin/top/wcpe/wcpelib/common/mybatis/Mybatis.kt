@@ -1,6 +1,8 @@
 package top.wcpe.wcpelib.common.mybatis
 
 import org.apache.ibatis.session.SqlSession
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 import java.util.function.Consumer
 
 
@@ -19,6 +21,7 @@ object Mybatis {
     fun init(mybatisInstance: MybatisInstance): Mybatis {
         this.mybatisInstance = mybatisInstance
         this.database = mybatisInstance.database
+        TransactionManager.defaultDatabase =  Database.connect(mybatisInstance.dataSource)
         return this
     }
 
