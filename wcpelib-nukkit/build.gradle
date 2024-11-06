@@ -1,6 +1,6 @@
 dependencies {
     compileOnly project(':wcpelib-common')
-    compileOnly "cn.nukkit:nukkit:1.0.0"
+    compileOnly("top.wcpe:nukkit:1.0.0-SNAPSHOT")
     compileOnly "me.onebone:economyapi:2.0.0"
 }
 

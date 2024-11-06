@@ -32,4 +32,8 @@ class NukkitCommand(private val abstractCommand: AbstractCommand) : Command(
         return false
     }
 
+    override fun tabComplete(commandSender: CommandSender, alias: String, args: Array<String>): List<String> {
+        return abstractCommand.handleTabComplete(NukkitCommandSender(commandSender), args)
+    }
+
 }
