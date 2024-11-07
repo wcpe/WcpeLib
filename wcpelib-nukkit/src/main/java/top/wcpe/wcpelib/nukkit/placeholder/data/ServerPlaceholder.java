@@ -1,6 +1,7 @@
 package top.wcpe.wcpelib.nukkit.placeholder.data;
 
 import cn.nukkit.Player;
+import lombok.val;
 import top.wcpe.wcpelib.nukkit.WcpeLib;
 import top.wcpe.wcpelib.nukkit.placeholder.PlaceholderExtend;
 
@@ -28,7 +29,11 @@ public class ServerPlaceholder extends PlaceholderExtend {
             case "name":
                 return WcpeLib.getServerName();
             case "view_name":
-                return WcpeLib.getServerInfo(WcpeLib.getServerName()).getViewName();
+                val serverInfo = WcpeLib.getServerInfo(WcpeLib.getServerName());
+                if (serverInfo == null) {
+                    return null;
+                }
+                return serverInfo.getViewName();
         }
         return null;
     }
