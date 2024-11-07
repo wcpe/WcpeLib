@@ -2,8 +2,8 @@ package top.wcpe.wcpelib.nukkit;
 
 
 import cn.nukkit.plugin.PluginBase;
-import cn.nukkit.utils.ConfigSection;
 import lombok.Getter;
+import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import top.wcpe.wcpelib.common.PlatformAdapter;
 import top.wcpe.wcpelib.common.WcpeLibCommon;
@@ -46,6 +46,7 @@ public final class WcpeLib extends PluginBase implements PlatformAdapter {
     private static WcpeLib instance;
     private static ConfigAdapter itemConfig;
     private static ConfigAdapter registerEntityConfig;
+    private static ConfigAdapter serverInfoConfig;
 
     @Deprecated
     public static boolean isEnableMysql() {
@@ -111,6 +112,7 @@ public final class WcpeLib extends PluginBase implements PlatformAdapter {
         super.saveDefaultConfig();
         itemConfig.saveDefaultConfig();
         registerEntityConfig.saveDefaultConfig();
+        serverInfoConfig.saveDefaultConfig();
     }
 
     @Override
@@ -118,16 +120,23 @@ public final class WcpeLib extends PluginBase implements PlatformAdapter {
         super.reloadConfig();
         itemConfig.reloadConfig();
         registerEntityConfig.reloadConfig();
+        serverInfoConfig.reloadConfig();
     }
 
     public void reloadOtherConfig() {
         getLogger().info("开始读取各个服务器信息");
         serverInfoMap.clear();
-        ConfigSection serverInfoCfg = getConfig().getSection("server.server-info");
-        for (String key : serverInfoCfg.getKeys(false)) {
-            ConfigSection serverInfoCfgSection = serverInfoCfg.getSection(key);
-            serverInfoMap.put(key, new ServerInfo(key, serverInfoCfgSection.getString("host"), serverInfoCfgSection.getInt("port"), serverInfoCfgSection.getString("view-name", key)));
-            getLogger().info(key + ":" + serverInfoCfgSection.getString("view-name", key) + " -> " + serverInfoCfgSection.getString("host") + ":" + serverInfoCfgSection.getInt("port"));
+        for (String key : serverInfoConfig.getKeys()) {
+            val serverInfoCfgSection = serverInfoConfig.getSection(key);
+            if (serverInfoCfgSection == null) {
+                continue;
+            }
+            val host = serverInfoCfgSection.getString("host");
+            val port = serverInfoCfgSection.getInt("port");
+            val viewName = serverInfoCfgSection.getString("view-name");
+
+            serverInfoMap.put(key, new ServerInfo(key, host, port, viewName));
+            getLogger().info(key + ":" + viewName + " -> " + host + ":" + port);
         }
         getLogger().info("开始读取注册实体信息");
         registerEntityInfoMap.clear();
@@ -155,6 +164,7 @@ public final class WcpeLib extends PluginBase implements PlatformAdapter {
         long start = System.currentTimeMillis();
         itemConfig = new ConfigAdapterNukkitImpl(new File(this.getDataFolder(), "item.yml"), this);
         registerEntityConfig = new ConfigAdapterNukkitImpl(new File(this.getDataFolder(), "register-entity.yml"), this);
+        serverInfoConfig = new ConfigAdapterNukkitImpl(new File(this.getDataFolder(), "server-info.yml"), this);
         saveDefaultConfig();
         initPlaceholderExtend();
         reloadOtherConfig();
