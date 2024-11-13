@@ -27,10 +27,11 @@ class WcpeLibPlaceholder : PlaceholderExpansion() {
         return "1.0.0"
     }
 
-    //%WcpeLib_serverName%
+    //%WcpeLib_server_name%
+    //%WcpeLib_display_name%
     override fun onRequest(p: OfflinePlayer, identifier: String): String {
         when (identifier) {
-            "server_ame" -> return WcpeLib.getServerName()
+            "server_name" -> return WcpeLib.getServerName()
             "display_name" -> return WcpeLib.getDisplayName()
         }
         return ""
