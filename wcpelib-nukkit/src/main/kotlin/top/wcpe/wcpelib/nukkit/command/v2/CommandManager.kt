@@ -23,6 +23,8 @@ object CommandManager {
 
     @JvmStatic
     fun registerCommand(abstractCommand: AbstractCommand, instance: PluginBase): Boolean {
-        return commandMap.register(instance.name, NukkitCommand(abstractCommand))
+        val nukkitCommand = NukkitCommand(abstractCommand)
+        commandMap.unregister(nukkitCommand)
+        return commandMap.register(instance.name, nukkitCommand)
     }
 }
