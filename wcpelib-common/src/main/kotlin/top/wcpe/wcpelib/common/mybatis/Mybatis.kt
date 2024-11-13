@@ -20,8 +20,8 @@ object Mybatis {
 
     fun init(mybatisInstance: MybatisInstance): Mybatis {
         this.mybatisInstance = mybatisInstance
-        this.database = mybatisInstance.database
-        TransactionManager.defaultDatabase =  Database.connect(mybatisInstance.dataSource)
+        this.database = mybatisInstance.getDatabaseName()
+        TransactionManager.defaultDatabase = Database.connect(mybatisInstance.dataSource)
         return this
     }
 
@@ -32,7 +32,7 @@ object Mybatis {
 
 
     fun getDatabaseName(): String {
-        return mybatisInstance.database
+        return mybatisInstance.getDatabaseName()
     }
 
     val sqlSessionFactory by lazy {
