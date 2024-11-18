@@ -15,7 +15,7 @@ import javax.sql.DataSource
  * QQ      : 1837019522
  * @author : WCPE
  */
-open class DataSourceConfig(
+open class MySQLDataSourceConfig(
     val url: String,
     val port: Int,
     val database: String,
@@ -44,7 +44,7 @@ open class DataSourceConfig(
     companion object {
 
         @JvmStatic
-        fun load(configAdapter: ConfigAdapter): DataSourceConfig {
+        fun load(configAdapter: ConfigAdapter): MySQLDataSourceConfig {
             val url = configAdapter.getString("mysql.url")
             val port = configAdapter.getInt("mysql.port")
             val database = configAdapter.getString("mysql.database")
@@ -69,7 +69,7 @@ open class DataSourceConfig(
             val logAbandoned = configAdapter.getBoolean("mysql.logAbandoned")
             val asyncInit = configAdapter.getBoolean("mysql.asyncInit")
 
-            return DataSourceConfig(
+            return MySQLDataSourceConfig(
                 url = url,
                 port = port,
                 database = database,

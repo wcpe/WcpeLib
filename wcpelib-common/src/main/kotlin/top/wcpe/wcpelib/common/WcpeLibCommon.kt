@@ -9,6 +9,9 @@ import top.wcpe.wcpelib.common.mail.Mail
 import top.wcpe.wcpelib.common.mail.MailConfig
 import top.wcpe.wcpelib.common.mybatis.Mybatis
 import top.wcpe.wcpelib.common.mybatis.MybatisInstance
+import top.wcpe.wcpelib.common.mysql.MySQL
+import top.wcpe.wcpelib.common.mysql.MySQLDataSourceConfig
+import top.wcpe.wcpelib.common.mysql.MySQLDataSourceInstance
 import top.wcpe.wcpelib.common.redis.Redis
 import top.wcpe.wcpelib.common.redis.RedisInstance
 
@@ -70,31 +73,62 @@ object WcpeLibCommon {
         createCompose()
     }
 
+    var mysql: MySQL? = null
     var mybatis: Mybatis? = null
     var redis: Redis? = null
     var ktor: Ktor? = null
     var mail: Mail? = null
 
     private fun createCompose() {
+        createMySQL()
         createMyBatis()
         createRedis()
         createKtor()
         createMail()
     }
 
-    private fun createMyBatis() {
-        val configAdapter = mysqlConfigAdapter ?: return
+    private fun createMySQL() {
+        val mysqlDataSourceInstance = createMySQLDataSourceConfig() ?: return
+        try {
+            mysql = MySQL.init(mysqlDataSourceInstance)
+            loggerAdapter.info("MySQL 链接成功!")
+        } catch (e: Exception) {
+            loggerAdapter.info("无法链接数据库! 请确认数据库开启，并且 WcpeLib/mysql.yml 配置文件中的数据配置填写正确!")
+            e.printStackTrace()
+        }
+    }
+
+    private fun createMySQLDataSourceConfig(): MySQLDataSourceInstance? {
+        val configAdapter = mysqlConfigAdapter ?: return null
         if (!configAdapter.getBoolean("mysql.enable")) {
-            loggerAdapter.info("Mybatis 未开启! 无法连接数据库!")
+            loggerAdapter.info("MySQL 未开启! 无法连接数据库!")
+            return null
+        }
+        val load = MySQLDataSourceConfig.load(configAdapter)
+
+        return try {
+            MySQLDataSourceInstance(load, load.build())
+        } catch (e: Exception) {
+            loggerAdapter.info("链接数据源出现错误!")
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun createMyBatis() {
+        val currentMySQL = mysql
+        if (currentMySQL == null) {
+            loggerAdapter.info("MySQL 无法连接, Mybatis 客户端创建失败!")
             return
         }
         loggerAdapter.info("Mybatis 开启! 开始连接数据库!")
         val start = System.currentTimeMillis()
         try {
-            mybatis = Mybatis.init(MybatisInstance.load(configAdapter))
-            loggerAdapter.info("Mybatis 链接成功! 共耗时:${(System.currentTimeMillis() - start)}Ms")
+            val mybatisInstance = MybatisInstance(currentMySQL.mysqlDataSourceInstance)
+            mybatis = Mybatis.init(mybatisInstance)
+            loggerAdapter.info("Mybatis 客户端创建成功! 共耗时:${(System.currentTimeMillis() - start)}Ms")
         } catch (e: Exception) {
-            loggerAdapter.info("无法链接数据库! 请确认数据库开启，并且 WcpeLib/mysql.yml 配置文件中的数据配置填写正确!")
+            loggerAdapter.info("创建 Mybatis 客户端出现错误! 请确认数据库开启，并且 WcpeLib/mysql.yml 配置文件中的数据配置填写正确!")
             e.printStackTrace()
         }
     }
@@ -128,13 +162,6 @@ object WcpeLibCommon {
         val mailConfig = MailConfig.load(mailSection) ?: return
         loggerAdapter.info("创建邮件配置文件成功!")
         mail = Mail(mailConfig)
-    }
-
-    init {
-        createMyBatis()
-        createRedis()
-        createKtor()
-        createMail()
     }
 
 }

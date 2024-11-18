@@ -71,12 +71,6 @@ subprojects {
             project(':wcpelib-common').sourceSets.main.output
         }
     }
-    shadowJar {
-        relocate 'io.netty', 'top.wcpe.lib.io.netty'
-        from {
-            project(':wcpelib-common').sourceSets.main.output
-        }
-    }
 
     compileKotlin {
         kotlinOptions {

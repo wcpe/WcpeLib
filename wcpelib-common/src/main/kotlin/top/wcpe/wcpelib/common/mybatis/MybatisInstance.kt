@@ -7,9 +7,8 @@ import org.apache.ibatis.session.SqlSession
 import org.apache.ibatis.session.SqlSessionFactory
 import org.apache.ibatis.session.SqlSessionFactoryBuilder
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory
-import top.wcpe.wcpelib.common.adapter.ConfigAdapter
 import top.wcpe.wcpelib.common.mapper.BaseSQLMapper
-import top.wcpe.wcpelib.common.mysql.DataSourceConfig
+import top.wcpe.wcpelib.common.mysql.MySQLDataSourceInstance
 import java.util.function.Consumer
 import javax.sql.DataSource
 
@@ -26,18 +25,9 @@ import javax.sql.DataSource
  * @since  : v1.8.0
  */
 data class MybatisInstance(
-    private val dataSourceConfig: DataSourceConfig,
+    private val mysqlDataSourceInstance: MySQLDataSourceInstance,
 ) {
 
-    companion object {
-
-        @JvmStatic
-        fun load(configAdapter: ConfigAdapter): MybatisInstance {
-            val load = DataSourceConfig.load(configAdapter)
-
-            return MybatisInstance(load)
-        }
-    }
 
     private val mybatisConfiguration = Configuration()
 
@@ -49,7 +39,7 @@ data class MybatisInstance(
     private val knownMappersField = mapperRegistryClass.getDeclaredField("knownMappers")
 
     fun getDatabaseName(): String {
-        return dataSourceConfig.database
+        return mysqlDataSourceInstance.mysqlDataSourceConfig.database
     }
 
     val sqlSessionFactory: SqlSessionFactory
@@ -58,13 +48,11 @@ data class MybatisInstance(
         knownMappersField.isAccessible = true
     }
 
-    val dataSource: DataSource
+    val dataSource: DataSource = mysqlDataSourceInstance.dataSource
 
     init {
-        val druidDataSource = dataSourceConfig.build()
-        dataSource = druidDataSource
         val environment = Environment(
-            "development", JdbcTransactionFactory(), druidDataSource
+            "development", JdbcTransactionFactory(), dataSource
         )
         mybatisConfiguration.environment = environment
         this.sqlSessionFactory = SqlSessionFactoryBuilder().build(mybatisConfiguration)

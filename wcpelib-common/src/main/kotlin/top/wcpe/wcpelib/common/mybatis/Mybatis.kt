@@ -21,7 +21,6 @@ object Mybatis {
     fun init(mybatisInstance: MybatisInstance): Mybatis {
         this.mybatisInstance = mybatisInstance
         this.database = mybatisInstance.getDatabaseName()
-        TransactionManager.defaultDatabase = Database.connect(mybatisInstance.dataSource)
         return this
     }
 
