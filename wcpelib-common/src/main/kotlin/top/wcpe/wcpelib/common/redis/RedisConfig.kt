@@ -16,7 +16,7 @@ import top.wcpe.wcpelib.common.adapter.ConfigAdapter
  * @author : WCPE
  * @since  : v
  */
-data class RedisInstance(
+data class RedisConfig(
     val url: String,
     val port: Int,
     val timeOut: Int,
@@ -36,11 +36,11 @@ data class RedisInstance(
     companion object {
 
         @JvmStatic
-        fun load(configAdapter: ConfigAdapter): RedisInstance {
+        fun load(configAdapter: ConfigAdapter): RedisConfig {
 
             val url = configAdapter.getString("redis.url")
             val port = configAdapter.getInt("redis.port")
-            return RedisInstance(
+            return RedisConfig(
                 url,
                 port,
                 configAdapter.getInt("redis.time-out"),

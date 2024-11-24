@@ -13,7 +13,9 @@ import top.wcpe.wcpelib.common.mysql.MySQL
 import top.wcpe.wcpelib.common.mysql.MySQLDataSourceConfig
 import top.wcpe.wcpelib.common.mysql.MySQLDataSourceInstance
 import top.wcpe.wcpelib.common.redis.Redis
-import top.wcpe.wcpelib.common.redis.RedisInstance
+import top.wcpe.wcpelib.common.redis.RedisConfig
+import top.wcpe.wcpelib.common.redisson.Redisson
+import top.wcpe.wcpelib.common.redisson.RedissonInstance
 
 /**
  * 由 WCPE 在 2022/1/3 22:16 创建
@@ -76,6 +78,7 @@ object WcpeLibCommon {
     var mysql: MySQL? = null
     var mybatis: Mybatis? = null
     var redis: Redis? = null
+    var redisson: Redisson? = null
     var ktor: Ktor? = null
     var mail: Mail? = null
 
@@ -83,6 +86,7 @@ object WcpeLibCommon {
         createMySQL()
         createMyBatis()
         createRedis()
+        createRedisson()
         createKtor()
         createMail()
     }
@@ -142,13 +146,33 @@ object WcpeLibCommon {
         loggerAdapter.info("Redis 开启! 开始链接!")
         val start = System.currentTimeMillis()
         try {
-            redis = Redis.init(RedisInstance.load(configAdapter))
+            redis = Redis.init(RedisConfig.load(configAdapter))
             loggerAdapter.info("Redis 链接成功! 共耗时:${(System.currentTimeMillis() - start)}Ms")
         } catch (e: Exception) {
             loggerAdapter.info("无法链接 Redis ! 请确认 Redis 开启, 并且 WcpeLib/redis.yml 配置文件中的 Redis 配置填写正确!")
             e.printStackTrace()
         }
     }
+
+
+    private fun createRedisson() {
+        val currentRedis = redis
+        if (currentRedis == null) {
+            loggerAdapter.info("Redis 无法连接, Redisson 客户端创建失败!")
+            return
+        }
+        loggerAdapter.info("Redisson 开启! 开始连接!")
+        val start = System.currentTimeMillis()
+        try {
+            val redissonInstance = RedissonInstance(currentRedis.redisConfig)
+            redisson = Redisson.init(redissonInstance)
+            loggerAdapter.info("Redisson 客户端创建成功! 共耗时:${(System.currentTimeMillis() - start)}Ms")
+        } catch (e: Exception) {
+            loggerAdapter.info("创建 Redisson 客户端出现错误! 请确认 Redis 开启，并且 WcpeLib/redis.yml  配置文件中的 Redis 配置填写正确!")
+            e.printStackTrace()
+        }
+    }
+
 
     private fun createKtor() {
         val configAdapter = ktorConfigAdapter ?: return

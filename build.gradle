@@ -19,13 +19,11 @@ buildscript {
         }
     }
     dependencies {
-        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 allprojects {
-    apply plugin: 'com.github.johnrengelman.shadow'
     apply plugin: 'maven-publish'
     repositories {
         mavenLocal()
@@ -43,7 +41,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'kotlin'
 
-    version = '1.9.0'
+    version = '1.10.0-SNAPSHOT'
     group 'top.wcpe'
     processResources {
         def props = [version: version]
@@ -89,6 +87,7 @@ subprojects {
     dependencies {
         implementation 'org.msgpack:msgpack-core:0.9.3'
         implementation 'redis.clients:jedis:5.1.2'
+        implementation("org.redisson:redisson:3.38.1")
         implementation 'org.slf4j:slf4j-api:1.7.33'
         implementation "ch.qos.logback:logback-core:$logback_version"
         implementation "ch.qos.logback:logback-classic:$logback_version"

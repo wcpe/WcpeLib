@@ -18,14 +18,14 @@ object Redis {
     private lateinit var jedisPool: JedisPool
 
 
-    fun init(redisInstance: RedisInstance): Redis {
-        this.redisInstance = redisInstance
+    fun init(redisInstance: RedisConfig): Redis {
+        this.redisConfig = redisInstance
         jedisPool = redisInstance.build()
         return this
     }
 
     @JvmStatic
-    lateinit var redisInstance: RedisInstance
+    lateinit var redisConfig: RedisConfig
 
 
     fun close() {
@@ -34,7 +34,7 @@ object Redis {
 
     fun getResource(): Jedis {
         return jedisPool.resource.apply {
-            select(redisInstance.index)
+            select(redisConfig.index)
         }
     }
 
@@ -46,14 +46,14 @@ object Redis {
 
     fun getResourceProxy(): ResourceProxy {
         return ResourceProxy(jedisPool.resource.apply {
-            select(redisInstance.index)
-        }, redisInstance.expire)
+            select(redisConfig.index)
+        }, redisConfig.expire)
     }
 
     fun getResourceProxy(index: Int): ResourceProxy {
         return ResourceProxy(jedisPool.resource.apply {
             select(index)
-        }, redisInstance.expire)
+        }, redisConfig.expire)
     }
 
 
