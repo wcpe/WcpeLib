@@ -5,6 +5,7 @@ import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
+import top.wcpe.wcpelib.bukkit.WcpeLibPlaceholder
 
 /**
  * 由 WCPE 在 2024/8/24 12:12 创建
@@ -24,6 +25,9 @@ object PlaceholderAPIHook {
     @JvmStatic
     fun getPlugin(): Plugin? {
         plugin = Bukkit.getPluginManager().getPlugin("PlaceholderAPI")
+        if (plugin != null) {
+            WcpeLibPlaceholder().register()
+        }
         return plugin
     }
 

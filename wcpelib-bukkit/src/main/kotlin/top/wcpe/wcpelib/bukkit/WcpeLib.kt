@@ -109,7 +109,6 @@ class WcpeLib : JavaPlugin(), PlatformAdapter {
         val start = System.currentTimeMillis()
         initDefaultMapper()
         saveDefaultConfig()
-        WcpeLibPlaceholder().register()
         server.pluginManager.registerEvents(WcpeLibListener(), this)
         logger.info("load time: ${System.currentTimeMillis() - start} ms")
         server.consoleSender.sendMessage("§a  _       __                          __     _     __  ")
