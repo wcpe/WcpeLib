@@ -5,7 +5,7 @@ mysql:
   port: 3306
   password: "root"
   database: "test"
-  parameter: "useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC"
+  parameter: "useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai"
   filters: "stat,wall,slf4j"
   maxActive: 128
   initialSize: 8
