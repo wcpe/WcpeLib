@@ -4,7 +4,6 @@ import org.redisson.Redisson
 import org.redisson.api.RedissonClient
 import org.redisson.config.Config
 import top.wcpe.wcpelib.common.redis.RedisConfig
-import java.io.Closeable
 
 /**
  * 由 WCPE 在 2024/11/19 20:03 创建
@@ -19,9 +18,9 @@ import java.io.Closeable
  */
 class RedissonInstance(
     redisConfig: RedisConfig,
-) : Closeable {
+) {
 
-    val redissonClient: RedissonClient
+    val client: RedissonClient
 
     init {
         val url = redisConfig.url
@@ -33,13 +32,13 @@ class RedissonInstance(
         val maxTotal = redisConfig.maxTotal
         val config = Config()
         config.useSingleServer().setAddress("redis://${url}:$port").setPassword(password).setTimeout(timeOut)
-            .setDatabase(index).setConnectionMinimumIdleSize(minIdle).setConnectionPoolSize(maxTotal)
+            .setDatabase(index).setConnectionMinimumIdleSize(minIdle).connectionPoolSize = maxTotal
 
-        redissonClient = Redisson.create(config)
+        client = Redisson.create(config)
     }
 
-    override fun close() {
-        redissonClient.shutdown()
+    fun shutdown() {
+        client.shutdown()
     }
 
 }

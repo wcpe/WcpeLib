@@ -1,6 +1,7 @@
 package top.wcpe.wcpelib.common.redisson
 
 import org.redisson.api.RedissonClient
+import top.wcpe.wcpelib.common.exception.RedissonInstanceNotFoundException
 
 /**
  * 由 WCPE 在 2024/11/19 20:21 创建
@@ -15,19 +16,32 @@ import org.redisson.api.RedissonClient
  */
 @Suppress("unused")
 object Redisson {
-    @JvmStatic
-    lateinit var redissonInstance: RedissonInstance
-        private set
+    private var redissonInstance: RedissonInstance? = null
 
+    /**
+     * 获取 RedissonInstance 实例
+     */
     @JvmStatic
-    lateinit var client: RedissonClient
-        private set
+    fun getInstance(): RedissonInstance {
+        val current = redissonInstance
+        if (current == null) {
+            throw RedissonInstanceNotFoundException("Redisson 未找到请尝试重载 WcpeLib 或者重启服务器")
+        }
+        return current
+    }
 
+    /**
+     * 获取 Redisson 客户端实例
+     */
+    @JvmStatic
+    fun getClient(): RedissonClient {
+        return getInstance().client
+    }
 
     @JvmStatic
     fun init(redissonInstance: RedissonInstance): Redisson {
+        this.redissonInstance?.shutdown()
         this.redissonInstance = redissonInstance
-        this.client = redissonInstance.redissonClient
         return this
     }
 
