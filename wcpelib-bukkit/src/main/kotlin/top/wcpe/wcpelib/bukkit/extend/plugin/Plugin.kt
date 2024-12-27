@@ -1,6 +1,10 @@
 package top.wcpe.wcpelib.bukkit.extend.plugin
 
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeout
 import org.bukkit.Bukkit
+import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitTask
 
@@ -68,5 +72,25 @@ inline fun <I : JavaPlugin> I.runTaskTimer(
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, { runnable(this) }, startTick, repeatTick)
     } else {
         Bukkit.getScheduler().runTaskTimer(this, { runnable(this) }, startTick, repeatTick)
+    }
+}
+
+suspend fun <T> Plugin.runTaskAndWait(task: () -> T?): T? {
+    return suspendCancellableCoroutine { continuation ->
+        val bukkitTask = server.scheduler.runTask(this) {
+            continuation.resumeWith(Result.runCatching {
+                task()
+            })
+        }
+        continuation.invokeOnCancellation {
+            bukkitTask.cancel()
+        }
+    }
+}
+
+@Throws(TimeoutCancellationException::class)
+suspend fun <T> Plugin.runTaskAndWait(timeoutMillis: Long, task: () -> T?): T? {
+    return withTimeout(timeoutMillis) {
+        runTaskAndWait(task)
     }
 }
