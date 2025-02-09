@@ -106,7 +106,6 @@ subprojects {
     tasks {
         test {
             useJUnitPlatform()
-            enabled = false
         }
 
         withType<JavaCompile> {

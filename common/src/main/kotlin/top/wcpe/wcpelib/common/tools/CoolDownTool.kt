@@ -1,11 +1,11 @@
-package top.wcpe.wcpelib.common.utils
+package top.wcpe.wcpelib.common.tools
 
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * 由 WCPE 在 2024/11/7 14:03 创建
+ * 由 WCPE 在 2025/2/9 19:29 创建
  * <p>
- * Created by WCPE on 2024/11/7 14:03
+ * Created by WCPE on 2025/2/9 19:29
  * <p>
  * <p>
  * GitHub  : <a href="https://github.com/wcpe">wcpe 's GitHub</a>
@@ -14,8 +14,7 @@ import java.util.concurrent.ConcurrentHashMap
  * @author : WCPE
  */
 @Suppress("unused")
-object CoolDownUtil {
-    @JvmStatic
+class CoolDownTool {
     private val coolDownMap = ConcurrentHashMap<String, Long>()
 
     /**
@@ -23,7 +22,6 @@ object CoolDownUtil {
      * @param key 键
      * @return 是否冷却中
      */
-    @JvmStatic
     fun checkCoolDown(key: String): Boolean {
         val lng = coolDownMap[key]
         if (lng == null) {
@@ -43,7 +41,6 @@ object CoolDownUtil {
      * @param key 键
      * @param milliSecond 冷却时间 毫秒
      */
-    @JvmStatic
     fun setCoolDown(key: String, milliSecond: Long) {
         coolDownMap[key] = System.currentTimeMillis() + milliSecond
     }
@@ -53,7 +50,6 @@ object CoolDownUtil {
      * @param key 键
      * @return 剩余冷却时间 毫秒
      */
-    @JvmStatic
     fun getRemainingCoolDown(key: String): Long {
         val lng = coolDownMap[key]
         if (lng == null) {
@@ -68,7 +64,6 @@ object CoolDownUtil {
      * 清除冷却时间
      * @param key 键
      */
-    @JvmStatic
     fun clearCoolDown(key: String) {
         coolDownMap.remove(key)
     }
@@ -76,7 +71,6 @@ object CoolDownUtil {
     /**
      * 清除所有冷却时间
      */
-    @JvmStatic
     fun clearAllCoolDown() {
         coolDownMap.clear()
     }
@@ -85,7 +79,6 @@ object CoolDownUtil {
      * 获取所有冷却时间
      * @return 所有冷却时间
      */
-    @JvmStatic
     fun getAllCoolDown(): Map<String, Long> {
         return coolDownMap
 
