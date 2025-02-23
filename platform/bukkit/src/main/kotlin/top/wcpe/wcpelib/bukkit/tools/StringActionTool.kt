@@ -1,6 +1,5 @@
 package top.wcpe.wcpelib.bukkit.tools
 
-import io.ktor.util.reflect.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
@@ -22,6 +21,7 @@ import java.util.logging.Level
  * @author : WCPE
  * @since  : v1.8.0-SNAPSHOT
  */
+@Deprecated("请使用 [top.wcpe.wcpelib.bukkit.tools.v2.StringActionTool]")
 object StringActionTool {
 
 
@@ -42,6 +42,7 @@ object StringActionTool {
      * @param parserPlaceholderApi 是否解析 PlaceholderApi 注册的变量
      * @param player 玩家
      */
+    @Deprecated("请使用 [top.wcpe.wcpelib.bukkit.tools.v2.StringActionTool]")
     @JvmStatic
     fun eval(stringActions: List<String>, parserPlaceholderApi: Boolean, player: Player?) {
         WcpeLib.pluginScope.launch {
@@ -59,6 +60,7 @@ object StringActionTool {
      * @param player 玩家
      * @param consumerSingleAction 消费单个操作字符串
      */
+    @Deprecated("请使用 [top.wcpe.wcpelib.bukkit.tools.v2.StringActionTool]")
     @JvmStatic
     fun eval(
         stringActions: List<String>,
@@ -80,6 +82,7 @@ object StringActionTool {
         return text.setPlaceholders(player)
     }
 
+    @Deprecated("请使用 [top.wcpe.wcpelib.bukkit.tools.v2.StringActionTool]")
     @JvmStatic
     fun compatibleEval(stringAction: String, parserPlaceholderApi: Boolean, player: Player?) {
         WcpeLib.pluginScope.launch {
@@ -95,6 +98,7 @@ object StringActionTool {
      * @param parserPlaceholderApi 是否解析 PlaceholderApi 注册的变量
      * @param player 玩家
      */
+    @Deprecated("请使用 [top.wcpe.wcpelib.bukkit.tools.v2.StringActionTool]")
     @JvmStatic
     suspend fun eval(stringAction: String, parserPlaceholderApi: Boolean, player: Player?) {
         val action = if (player != null) {
