@@ -40,7 +40,7 @@ object PlaceholderAPIHook {
     }
 
     @JvmStatic
-    fun setPlaceholders(player: OfflinePlayer, text: String): String {
+    fun setPlaceholders(player: OfflinePlayer?, text: String): String {
         if (plugin == null) {
             return text
         }
