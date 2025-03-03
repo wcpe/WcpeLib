@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import org.bukkit.plugin.java.JavaPlugin
+import org.slf4j.LoggerFactory
 import top.wcpe.wcpelib.bukkit.adapter.ConfigAdapterBukkitImpl
 import top.wcpe.wcpelib.bukkit.adapter.LoggerAdapterBukkitImpl
 import top.wcpe.wcpelib.bukkit.command.v2.CommandManager
@@ -100,6 +101,8 @@ class WcpeLib : JavaPlugin(), PlatformAdapter {
     }
 
 
+    private val logger = LoggerFactory.getLogger(javaClass)
+
     override fun onLoad() {
         instance = this
         init(this)
@@ -143,6 +146,7 @@ class WcpeLib : JavaPlugin(), PlatformAdapter {
             PlaceholderAPIHook.getPlugin()
             true
         } catch (e: Exception) {
+            logger.error("重载配置文件失败", e)
             false
         }
     }

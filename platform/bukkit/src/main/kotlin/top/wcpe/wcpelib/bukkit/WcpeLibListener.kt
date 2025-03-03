@@ -1,5 +1,6 @@
 package top.wcpe.wcpelib.bukkit
 
+import kotlinx.coroutines.launch
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
@@ -22,30 +23,32 @@ class WcpeLibListener : Listener {
 
     @EventHandler
     fun listenerPlayerJoinEvent(e: PlayerJoinEvent) {
-        val player = e.player
-        val firstPlayed = player.firstPlayed
+        WcpeLib.pluginScope.launch {
+            val player = e.player
+            val firstPlayed = player.firstPlayed
 
-        val playerData = WcpeLib.dataManager.getPlayerDataByName(player.name)
-        if (playerData == null) {
-            logger.info("由于玩家: [${player.name}] 未上线过 自动读取本地 firstPlayed: [$firstPlayed] 填入")
-            WcpeLib.dataManager.savePlayerData(
-                PlayerData(
-                    playerName = player.name,
-                    uuid = player.uniqueId.toString(),
-                    firstLoginTime = if (firstPlayed <= 0) {
-                        logger.info("firstPlayed 为空以当前时间为注册时间!")
-                        System.currentTimeMillis()
-                    } else {
-                        logger.info("firstPlayed 为 [${firstPlayed}] 以这个时间为注册时间!")
-                        firstPlayed
-                    }
+            val playerData = WcpeLib.dataManager.getPlayerDataByName(player.name)
+            if (playerData == null) {
+                logger.info("由于玩家: [${player.name}] 未上线过 自动读取本地 firstPlayed: [$firstPlayed] 填入")
+                WcpeLib.dataManager.savePlayerData(
+                    PlayerData(
+                        playerName = player.name,
+                        uuid = player.uniqueId.toString(),
+                        firstLoginTime = if (firstPlayed <= 0) {
+                            logger.info("firstPlayed 为空以当前时间为注册时间!")
+                            System.currentTimeMillis()
+                        } else {
+                            logger.info("firstPlayed 为 [${firstPlayed}] 以这个时间为注册时间!")
+                            firstPlayed
+                        }
+                    )
                 )
-            )
-            return
+                return@launch
+            }
+            logger.info("玩家: [${player.name}] 上一次进入的服务器: [${playerData.lastServerName}]")
+            playerData.lastServerName = WcpeLib.getServerName()
+            playerData.lastLoginTime = System.currentTimeMillis()
+            WcpeLib.dataManager.savePlayerData(playerData)
         }
-        logger.info("玩家: [${player.name}] 上一次进入的服务器: [${playerData.lastServerName}]")
-        playerData.lastServerName = WcpeLib.getServerName()
-        playerData.lastLoginTime = System.currentTimeMillis()
-        WcpeLib.dataManager.savePlayerData(playerData)
     }
 }
