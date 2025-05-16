@@ -34,7 +34,10 @@ interface PlayerDataMapper {
     @Insert("INSERT INTO `wpcelib_player_data` (player_name, uuid, last_server_name, first_login_time, last_login_time) VALUES (#{playerName}, #{uuid}, #{lastServerName}, #{firstLoginTime}, #{lastLoginTime})")
     fun insertPlayerData(player: PlayerData): Int
 
-    @Update("UPDATE `wpcelib_player_data` SET uuid = #{uuid}, last_server_name = #{lastServerName} WHERE player_name = #{playerName}")
+    @Update("UPDATE `wpcelib_player_data` SET uuid = #{uuid}," +
+            " last_server_name = #{lastServerName}," +
+            " last_login_time = #{lastLoginTime}" +
+            " WHERE player_name = #{playerName}")
     fun updatePlayerByName(playerData: PlayerData): Int
 
     @Select("SELECT * FROM `wpcelib_player_data` WHERE player_name = #{playerName}")
