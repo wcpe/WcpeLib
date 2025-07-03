@@ -10,6 +10,7 @@ import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory
 import top.wcpe.wcpelib.common.mapper.BaseSQLMapper
 import top.wcpe.wcpelib.common.mysql.MySQLDataSourceInstance
 import java.util.function.Consumer
+import java.util.function.Function
 import javax.sql.DataSource
 
 /**
@@ -70,6 +71,19 @@ data class MybatisInstance(
         }
     }
 
+    fun <R> useSessionForResult(callBack: Function<SqlSession, R>): R {
+        sqlSessionFactory.openSession().use {
+            try {
+                val result = callBack.apply(it)
+                it.commit()
+                return result
+            } catch (e: Exception) {
+                e.printStackTrace()
+                it.rollback()
+                throw e
+            }
+        }
+    }
 
     fun addMapper(vararg classes: Class<*>?) {
         for (clazz in classes) {

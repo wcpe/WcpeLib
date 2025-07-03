@@ -1,9 +1,8 @@
 package top.wcpe.wcpelib.common.mybatis
 
 import org.apache.ibatis.session.SqlSession
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.transactions.TransactionManager
 import java.util.function.Consumer
+import java.util.function.Function
 
 
 /**
@@ -45,6 +44,10 @@ object Mybatis {
 
     fun useSession(callBack: Consumer<SqlSession>) {
         mybatisInstance.useSession(callBack)
+    }
+
+    fun <R> useSessionForResult(callBack: Function<SqlSession, R>): R {
+        return mybatisInstance.useSessionForResult(callBack)
     }
 
     fun addMapper(vararg classes: Class<*>?) {
