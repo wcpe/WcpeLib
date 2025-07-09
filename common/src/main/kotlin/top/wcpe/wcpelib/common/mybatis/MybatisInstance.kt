@@ -8,8 +8,12 @@ import org.apache.ibatis.session.SqlSessionFactory
 import org.apache.ibatis.session.SqlSessionFactoryBuilder
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory
 import top.wcpe.wcpelib.common.mapper.BaseSQLMapper
+import top.wcpe.wcpelib.common.mybatis.typehandler.MapTypeHandler
+import top.wcpe.wcpelib.common.mybatis.typehandler.UUIDTypeHandler
 import top.wcpe.wcpelib.common.mysql.MySQLDataSourceInstance
+import java.util.UUID
 import java.util.function.Consumer
+import java.util.function.Function
 import javax.sql.DataSource
 
 /**
@@ -56,6 +60,8 @@ data class MybatisInstance(
         )
         mybatisConfiguration.environment = environment
         this.sqlSessionFactory = SqlSessionFactoryBuilder().build(mybatisConfiguration)
+        this.sqlSessionFactory.configuration.typeHandlerRegistry.register(UUID::class.java, UUIDTypeHandler::class.java)
+        this.sqlSessionFactory.configuration.typeHandlerRegistry.register(Map::class.java, MapTypeHandler::class.java)
     }
 
     fun useSession(callBack: Consumer<SqlSession>) {
@@ -70,6 +76,19 @@ data class MybatisInstance(
         }
     }
 
+    fun <R> useSessionForResult(callBack: Function<SqlSession, R>): R {
+        sqlSessionFactory.openSession().use {
+            try {
+                val result = callBack.apply(it)
+                it.commit()
+                return result
+            } catch (e: Exception) {
+                e.printStackTrace()
+                it.rollback()
+                throw e
+            }
+        }
+    }
 
     fun addMapper(vararg classes: Class<*>?) {
         for (clazz in classes) {
