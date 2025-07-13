@@ -31,6 +31,11 @@ object SchedulerUtil {
      */
     @JvmStatic
     fun sync(plugin: Plugin, task: Runnable) {
+        //如果是主线程直接执行任务
+        if (Server.getInstance().isPrimaryThread) {
+            task.run()
+            return
+        }
         Server.getInstance().scheduler.scheduleTask(plugin, task)
     }
 
@@ -70,6 +75,10 @@ object SchedulerUtil {
         InterruptedException::class
     )
     fun <T> awaitSync(plugin: Plugin, task: Supplier<T>): T? {
+        //如果是主线程直接执行任务
+        if (Server.getInstance().isPrimaryThread) {
+            return task.get()
+        }
         val future = CompletableFuture<T>()
         Server.getInstance().scheduler.scheduleTask(plugin) {
             try {
@@ -87,7 +96,10 @@ object SchedulerUtil {
     /**
      * 异步到主线程执行任务并等待完成
      * @param plugin 插件实例
+     * @param timeout 超时时间
+     * @param unit 时间单位
      * @param task 待执行的任务
+     * @param timeoutCallback 超时回调
      * @return 任务执行结果
      * @throws CancellationException 任务被取消
      * @throws ExecutionException 执行出现异常
@@ -106,6 +118,10 @@ object SchedulerUtil {
         task: Supplier<T>,
         timeoutCallback: Runnable = Runnable { },
     ): T? {
+         //如果是主线程直接执行任务
+        if (Server.getInstance().isPrimaryThread) {
+            return task.get()
+        }
         val future = CompletableFuture<T>()
         Server.getInstance().scheduler.scheduleTask(plugin) {
             try {

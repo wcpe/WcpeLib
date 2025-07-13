@@ -101,6 +101,11 @@ suspend fun <T> PluginBase.runTaskAndWait(timeoutMillis: Long, task: () -> T?): 
  * @param task 待执行的任务
  */
 fun Plugin.sync(task: Runnable) {
+    //如果是主线程直接执行任务
+    if (Server.getInstance().isPrimaryThread) {
+        task.run()
+        return
+    }
     Server.getInstance().scheduler.scheduleTask(this, task)
 }
 
